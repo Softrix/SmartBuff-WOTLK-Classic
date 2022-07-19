@@ -1,0 +1,3299 @@
+<Ui xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd" xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="localization.en.lua" />
+	<Script file="localization.de.lua" />
+	<Script file="localization.fr.lua" />
+	<Script file="localization.es.lua" />
+	<Script file="localization.ru.lua" />
+	<Script file="localization.tw.lua" />
+	<Script file="localization.cn.lua" />
+	<Script file="SmartBuff.buffs.lua" />
+	<Script file="SmartBuff.lua" />
+	<Button name="SmartBuff_ActionButtonTemplate" inherits="SecureActionButtonTemplate" virtual="true" hidden="true">
+		<Size>
+			<AbsDimension x="32" y="32" />
+		</Size>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture setAllPoints="true">
+					<Color r="0.2" g="0" b="0" a="0.3" />
+				</Texture>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnLoad>
+				        self.title = self:CreateFontString(nil, "OVERLAY");
+				        self.title:SetFontObject("GameFontNormal");
+				        self.title:SetAllPoints(self);
+				        self.title:SetText("");
+			</OnLoad>
+		</Scripts>
+	</Button>
+	<Frame name="SmartBuffFrame">
+		<Scripts>
+			<OnLoad>
+				  Mixin(self, BackdropTemplateMixin);
+				  self:SetBackdrop({
+					  bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
+					  edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border",
+				  });
+				  SMARTBUFF_OnLoad(self);
+			</OnLoad>
+			<OnEvent>
+				        SMARTBUFF_OnEvent(self, event, ...);
+			</OnEvent>
+			<OnUpdate>
+				        SMARTBUFF_OnUpdate(self, elapsed);
+			</OnUpdate>
+		</Scripts>
+	</Frame>
+	<GameTooltip name="SmartBuffTooltip" inherits="GameTooltipTemplate">
+		<Scripts>
+			<OnLoad>
+				        self:SetOwner(SmartBuffFrame, "ANCHOR_NONE");
+			</OnLoad>
+		</Scripts>
+	</GameTooltip>
+	<MessageFrame name="SmartBuffSplashFrame" parent="UIParent" toplevel="true" movable="true" frameStrata="MEDIUM" insertMode="TOP">
+		<Size>
+			<AbsDimension x="420" y="100" />
+		</Size>
+		<Anchors>
+			<Anchor point="TOPLEFT">
+				<Offset x="0" y="0" />
+			</Anchor>
+		</Anchors>
+		<Scripts>
+			<OnLoad>
+				  Mixin(self, BackdropTemplateMixin);
+				  self:SetBackdrop(nil);
+				  self:RegisterForDrag("LeftButton");
+				  self:EnableMouse(false);
+				  self:EnableKeyboard(false);
+				  self:EnableMouseWheel(false);
+				  SMARTBUFF_Splash_Hide();
+			</OnLoad>
+			<OnMouseUp>
+				        if(SmartBuffOptionsFrame:IsVisible()) then
+				          self:StopMovingOrSizing();
+				        end
+			</OnMouseUp>
+			<OnDragStart>
+				        if(SmartBuffOptionsFrame:IsVisible()) then
+				          SMARTBUFF_Splash_ChangeFont(1);
+				          self:StartMoving();
+				        end
+			</OnDragStart>
+			<OnDragStop>
+				        if(SmartBuffOptionsFrame:IsVisible()) then
+				          SMARTBUFF_Splash_ChangePos();
+				          SMARTBUFF_Splash_ChangeFont(1);
+				          self:StopMovingOrSizing();
+				        end
+			</OnDragStop>
+			<OnEnter>
+				        if(SmartBuffOptionsFrame:IsVisible()) then
+				          SMARTBUFF_Splash_ChangeFont(1);
+				        end
+			</OnEnter>
+			<OnLeave>
+				        if(SmartBuffOptionsFrame:IsVisible()) then
+				          SMARTBUFF_Splash_ChangeFont(1);
+				        end
+			</OnLeave>
+		</Scripts>
+		<FontString inherits="NumberFontNormalHuge" outline="NORMAL">
+			<Color r="1" g="1" b="1" />
+		</FontString>
+	</MessageFrame>
+	<Frame name="SmartBuffSplashFrameOptions" hidden="true" parent="SmartBuffSplashFrame" toplevel="true" movable="true" frameStrata="DIALOG" enableMouse="true">
+		<Size>
+			<AbsDimension x="420" y="100" />
+		</Size>
+		<Anchors>
+			<Anchor point="TOPLEFT" relativeTo="$parent" relativePoint="BOTTOMLEFT">
+				<Offset>
+					<AbsDimension x="0" y="-2" />
+				</Offset>
+			</Anchor>
+		</Anchors>
+		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" />
+		<Frames>
+			<Button name="$parent_btnFontStyle" parentKey="fontstyle" inherits="OptionsButtonTemplate" text="SMARTBUFF_OFT_FONTSTYLE">
+				<Size>
+					<AbsDimension x="72" y="21" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parent" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="22" y="-22" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						            SMARTBUFF_Splash_ChangeFont(2);
+					</OnClick>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_OFTT_SPLASHSTYLE, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</Button>
+			<Slider name="$parent_sldSize" parentKey="size" inherits="OptionsSliderTemplate" minValue="0" maxValue="0">
+				<Size>
+					<AbsDimension x="142" y="16" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parent_btnFontStyle" relativePoint="TOPRIGHT">
+						<Offset>
+							<AbsDimension x="4" y="-6" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						  SmartBuffOptionsFrameSlider_OnLoad(self, 4, 48, 1);
+						  BackdropTemplateMixin.OnBackdropLoaded(self);
+					</OnLoad>
+					<OnShow>
+						            local o = SMARTBUFF_Options;
+						            if (o and o.CurrentFontSize) then
+						              SmartBuff_SetSliderText(self, SMARTBUFF_OFT_FONTSIZE, o.CurrentFontSize, "%d", true);
+						            end
+					</OnShow>
+					<OnValueChanged>
+						            local p = SmartBuffSplashFrame;
+						            if (not p) then return end
+
+						            local o = SMARTBUFF_Options;
+						            local f = p:GetFontObject();
+						            local fName, fHeight, fFlags = f:GetFont();
+						            local n = self:GetValue();
+
+						            if (o and n ~= o.CurrentFontSize) then
+						              SmartBuff_SetSliderText(self, SMARTBUFF_OFT_FONTSIZE, n, "%d");
+						              f:SetFont(fName, n, fFlags)
+						              o.CurrentFontSize = n;
+						              SMARTBUFF_Splash_ChangeFont(1);
+						            end
+					</OnValueChanged>
+				</Scripts>
+			</Slider>
+			<Slider name="$parent_sldIconSize" parentKey="iconsize" inherits="OptionsSliderTemplate" minValue="0" maxValue="0">
+				<Size>
+					<AbsDimension x="120" y="16" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parent_sldSize" relativePoint="TOPRIGHT">
+						<Offset>
+							<AbsDimension x="4" y="0" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						  SmartBuffOptionsFrameSlider_OnLoad(self, 0, 64, 4);
+						  BackdropTemplateMixin.OnBackdropLoaded(self);
+					</OnLoad>
+					<OnShow>
+						            local o = SMARTBUFF_Options;
+						            if (o and o.SplashIconSize) then
+						              SmartBuff_SetSliderText(self, SMARTBUFF_OFT_ICONSIZE, o.SplashIconSize, "%d", true);
+						            end
+					</OnShow>
+					<OnValueChanged>
+						            local o = SMARTBUFF_Options;
+						            local n = self:GetValue();
+						            if (o and o.SplashIconSize ~= n) then
+						              SmartBuff_SetSliderText(self, SMARTBUFF_OFT_ICONSIZE, n, "%d");
+						              o.SplashIconSize = n;
+						              SMARTBUFF_Splash_ChangeFont(1);
+						            end
+					</OnValueChanged>
+				</Scripts>
+			</Slider>
+			<CheckButton name="$parent_cbIcon" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parent_btnFontStyle" relativePoint="BOTTOMLEFT">
+						<Offset>
+							<AbsDimension x="0" y="-4" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText(SMARTBUFF_OFT_SPLASHICON);
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnShow>
+						            local o = SMARTBUFF_OptionsGlobal;
+						            if (o) then self:SetChecked(o.SplashIcon or false) end
+					</OnShow>
+					<OnClick>
+						            local o = SMARTBUFF_OptionsGlobal;
+						            if (o) then
+						              o.SplashIcon = not o.SplashIcon;
+						              SMARTBUFF_Splash_ChangeFont(1);
+						            end
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parent_cbMsgShort" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parent_cbIcon" relativePoint="TOPRIGHT">
+						<Offset>
+							<AbsDimension x="140" y="0" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText(SMARTBUFF_OFT_SPLASHMSGSHORT);
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnShow>
+						            local o = SMARTBUFF_OptionsGlobal;
+						            if (o) then self:SetChecked(o.SplashMsgShort or false) end
+					</OnShow>
+					<OnClick>
+						            local o = SMARTBUFF_OptionsGlobal;
+						            if (o) then
+						              o.SplashMsgShort = not o.SplashMsgShort;
+						              SMARTBUFF_Splash_ChangeFont(1);
+						            end
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<ColorSelect name="$parent_csFont" enableMouse="true">
+				<Size>
+					<AbsDimension x="50" y="50" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPRIGHT" relativeTo="$parent" relativePoint="TOPRIGHT">
+						<Offset>
+							<AbsDimension x="-5" y="60" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnShow>
+						if(SMARTBUFF_Options) then
+							self:SetColorRGB(SMARTBUFF_Options.ColSplashFont.r, SMARTBUFF_Options.ColSplashFont.g, SMARTBUFF_Options.ColSplashFont.b);
+						end;
+					</OnShow>
+					<OnColorSelect>
+						local o = SMARTBUFF_Options;
+						local r, g, b = self:GetColorRGB();
+						if (o and (r ~= o.ColSplashFont.r or g ~= o.ColSplashFont.g or b ~= o.ColSplashFont.r)) then
+							o.ColSplashFont.r = r;
+							o.ColSplashFont.g = g;
+							o.ColSplashFont.b = b;
+						end;
+					</OnColorSelect>
+					<OnMouseUp>
+						SMARTBUFF_Splash_ChangeFont(1);
+					</OnMouseUp>
+				</Scripts>
+				<ColorWheelTexture name="$parentPickerWheel">
+					<Size>
+						<AbsDimension x="50" y="50" />
+					</Size>
+				</ColorWheelTexture>
+				<ColorWheelThumbTexture file="Interface\Buttons\UI-ColorPicker-Buttons">
+					<Size>
+						<AbsDimension x="10" y="10" />
+					</Size>
+					<TexCoords left="0" right="0.15625" top="0" bottom="0.625" />
+				</ColorWheelThumbTexture>
+			</ColorSelect>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				        self:EnableKeyboard(false);
+				        self:EnableMouseWheel(false);
+			</OnLoad>
+			<OnShow>
+				  Mixin(self, BackdropTemplateMixin);
+				  self:SetBackdrop({
+					  bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
+					  edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border",
+					  insets = {left = 12, right = 12, top = 12, bottom = 11},
+				  });
+				  SmartBuffSplashFrame:SetBackdrop({
+					  bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
+					  edgeFile = nil,
+				  });
+				  SmartBuffSplashFrame:SetBackdropColor(0, 0, 0, 1)
+				  self:ClearAllPoints();
+				  self:SetPoint("TOPLEFT", self:GetParent(), "BOTTOMLEFT", 0, -2);
+			</OnShow>
+			<OnHide>
+				  SmartBuffSplashFrame:SetBackdrop({
+				  bgFile = nil,
+				  edgeFile = nil,
+				  })
+			</OnHide>
+			<OnEnter>
+				        if(self:IsVisible()) then
+				          SMARTBUFF_Splash_ChangeFont(1);
+				        end
+			</OnEnter>
+			<OnLeave>
+				        if(self:IsVisible()) then
+				          SMARTBUFF_Splash_ChangeFont(1);
+				        end
+			</OnLeave>
+		</Scripts>
+	</Frame>
+	<Button name="SmartBuff_MiniMapButton" hidden="true" parent="Minimap" toplevel="true" frameStrata="MEDIUM">
+		<Size>
+			<AbsDimension x="32" y="32" />
+		</Size>
+		<Anchors>
+			<Anchor point="CENTER" relativeTo="Minimap" relativePoint="RIGHT">
+				<Offset>
+					<AbsDimension x="5" y="0" />
+				</Offset>
+			</Anchor>
+		</Anchors>
+		<Scripts>
+			<OnLoad>
+				        self:RegisterForClicks("LeftButtonUp", "RightButtonUp");
+				        self:RegisterForDrag("LeftButton");
+				        self.isMoving = false;
+			</OnLoad>
+			<OnClick>
+				if (button == "LeftButton" and IsAltKeyDown()) then
+				if (IsAddOnLoaded("SmartDebuff")) then
+				SMARTDEBUFF_ToggleSF();
+				end
+				elseif (button == "LeftButton") then
+				SMARTBUFF_OptionsFrame_Toggle();
+				elseif (button == "RightButton") then
+				SMARTBUFF_OToggle();
+				SMARTBUFF_BROKER_SetIcon();
+				if(SmartBuffOptionsFrame:IsVisible()) then
+				SMARTBUFF_Options_OnShow();
+				end
+				end
+			</OnClick>
+			<OnUpdate>
+				        if (self.isMoving) then
+				          SMARTBUFF_MinimapButton_OnUpdate(self, self.isMoving);
+				        end
+			</OnUpdate>
+			<OnEnter>
+				        GameTooltip:SetOwner(self, "ANCHOR_LEFT");
+				        GameTooltip:SetText(SMARTBUFF_TITLE);
+				        GameTooltip:AddLine(SMARTBUFF_MINIMAP_TT, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+				        GameTooltip:AppendText("");
+			</OnEnter>
+			<OnLeave>
+				        GameTooltip:Hide();
+			</OnLeave>
+			<OnMouseUp>
+
+			</OnMouseUp>
+			<OnDragStart>
+				        if (button == "LeftButton" and IsShiftKeyDown()) then
+				          self.isMoving = true;
+				        end
+			</OnDragStart>
+			<OnDragStop>
+				        self.isMoving = false;
+			</OnDragStop>
+		</Scripts>
+		<NormalTexture file="Interface\AddOns\SmartBuff\Icons\MiniMapButtonEnabled" />
+		<PushedTexture file="Interface\AddOns\SmartBuff\Icons\MiniMapButtonEnabled" alphaMode="ADD" />
+		<HighlightTexture file="Interface\Minimap\UI-Minimap-ZoomButton-Highlight" alphaMode="ADD" />
+	</Button>
+	<Button name="SmartBuff_KeyButton" inherits="SecureActionButtonTemplate" hidden="true" parent="UIParent" toplevel="true" movable="true" frameStrata="LOW">
+		<Size>
+			<AbsDimension x="32" y="32" />
+		</Size>
+		<Anchors>
+			<Anchor point="CENTER">
+				<Offset x="0" y="100" />
+			</Anchor>
+		</Anchors>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture setAllPoints="true">
+					<Color r="0.2" g="0" b="0" a="0.3" />
+				</Texture>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnLoad>
+				        self:EnableMouse(true);
+				        self:EnableKeyboard(false);
+				        self:RegisterForDrag("LeftButton");
+				        self:RegisterForClicks("LeftButtonUp", "RightButtonUp");
+
+				        self:SetScript("PreClick", SMARTBUFF_OnPreClick);
+				        self:SetScript("PostClick", SMARTBUFF_OnPostClick);
+
+				        self.title = self:CreateFontString(nil, "OVERLAY");
+				        self.title:SetFontObject("GameFontNormal");
+				        self.title:SetAllPoints(self);
+				        self.title:SetText("SB");
+
+				        self:SetAttribute("type", "spell");
+				        self:SetAttribute("unit", nil);
+				        self:SetAttribute("spell", nil);
+				        self:SetAttribute("item", nil);
+				        self:SetAttribute("target-slot", nil);
+			</OnLoad>
+			<OnDragStart>
+				        if (button == "LeftButton" and IsShiftKeyDown()) then
+				          self:StartMoving();
+				        end
+			</OnDragStart>
+			<OnDragStop>
+				        self:StopMovingOrSizing();
+				        SMARTBUFF_SetButtonPos(self);
+			</OnDragStop>
+		</Scripts>
+		<NormalTexture file="Interface\Icons\Spell_Nature_Purge" />
+	</Button>
+	<Frame name="SmartBuffOptionsFrame" hidden="true" parent="UIParent" toplevel="true" movable="true" frameStrata="DIALOG" enableMouse="true">
+		<Size>
+			<AbsDimension x="500" y="630" />
+		</Size>
+		<Anchors>
+			<Anchor point="CENTER"/>
+		</Anchors>
+		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+			<BackgroundInsets>
+				<AbsInset left="11" right="12" top="12" bottom="11" />
+			</BackgroundInsets>
+			<TileSize>
+				<AbsValue val="32" />
+			</TileSize>
+			<EdgeSize>
+				<AbsValue val="32" />
+			</EdgeSize>
+		</Backdrop>
+		<Layers>
+			<Layer>
+				<Texture name="SmartBuffOptionsFrameHeader" file="Interface\DialogFrame\UI-DialogBox-Header">
+					<Size>
+						<AbsDimension x="460" y="65" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOP">
+							<Offset x="-1" y="12" />
+						</Anchor>
+					</Anchors>
+				</Texture>
+				<FontString inherits="GameFontNormal" text="SMARTBUFF_OPTIONS_TITLE">
+					<Anchors>
+						<Anchor point="TOP" relativeTo="SmartBuffOptionsFrameHeader">
+							<Offset>
+								<AbsDimension x="0" y="-14" />
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Button name="SmartBuffOptionsFrame_btnClose" inherits="UIPanelCloseButton">
+				<Anchors>
+					<Anchor point="TOPRIGHT" relativeTo="SmartBuffOptionsFrame">
+						<Offset>
+							<AbsDimension x="-2" y="-2" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+			</Button>
+			<CheckButton name="SmartBuffOptionsFrame_cbSB" inherits="OptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="20" y="-24" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText(SMARTBUFF_OFT);
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SMARTBUFF_OToggle();
+					</OnClick>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_OFTT, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuffOptionsFrame_cbAuto" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="24" y="24" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbSB" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="10" y="-28" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText(SMARTBUFF_OFT_AUTO);
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SMARTBUFF_OToggleAuto();
+					</OnClick>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_OFTT_AUTO, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<Slider name="SmartBuffOptionsFrameAutoTimer" inherits="OptionsSliderTemplate" minValue="0" maxValue="0">
+				<Size>
+					<AbsDimension x="108" y="16" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbAuto" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="110" y="-10" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						  SmartBuffOptionsFrameSlider_OnLoad(self, 1, 60, 1);
+						  BackdropTemplateMixin.OnBackdropLoaded(self);
+					</OnLoad>
+					<OnShow>
+						            local o = SMARTBUFF_Options;
+						            if (o and o.AutoTimer) then
+						              SmartBuff_SetSliderText(self, SMARTBUFF_OFT_AUTOTIMER, o.AutoTimer, INT_SPELL_DURATION_SEC, true);
+						            end
+					</OnShow>
+					<OnValueChanged>
+						            local o = SMARTBUFF_Options;
+						            local n = self:GetValue();
+						            if (o and o.AutoTimer ~= n) then
+						              SmartBuff_SetSliderText(self, SMARTBUFF_OFT_AUTOTIMER, n, INT_SPELL_DURATION_SEC);
+						              o.AutoTimer = n;
+						            end
+					</OnValueChanged>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_OFTT_AUTOTIMER, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</Slider>
+			<CheckButton name="SmartBuffOptionsFrame_cbAutoCombat" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbAuto" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="10" y="-20" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText(SMARTBUFF_OFT_AUTOCOMBAT);
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SMARTBUFF_OToggleAutoCombat();
+					</OnClick>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_OFTT_AUTOCOMBAT, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuffOptionsFrame_cbAutoChat" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbAutoCombat" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="-15" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText(SMARTBUFF_OFT_AUTOCHAT);
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SMARTBUFF_OToggleAutoChat();
+					</OnClick>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_OFTT_AUTOCHAT, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuffOptionsFrame_cbAutoSplash" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbAutoChat" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="70" y="0" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText(SMARTBUFF_OFT_AUTOSPLASH);
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SMARTBUFF_OToggleAutoSplash();
+					</OnClick>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_OFTT_AUTOSPLASH, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuffOptionsFrame_cbAutoSound" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbAutoSplash" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="70" y="0" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText(SMARTBUFF_OFT_AUTOSOUND);
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SMARTBUFF_OToggleAutoSound();
+					</OnClick>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_OFTT_AUTOSOUND, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<Slider name="SmartBuffOptionsFrame_sldCharges" inherits="OptionsSliderTemplate" minValue="0" maxValue="0">
+				<Size>
+					<AbsDimension x="96" y="16" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbAutoChat" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="10" y="-32" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						  SmartBuffOptionsFrameSlider_OnLoad(self, 0, 10, 1);
+						  BackdropTemplateMixin.OnBackdropLoaded(self);
+					</OnLoad>
+					<OnShow>
+						            local o = SMARTBUFF_Options;
+						            if (o and o.MinCharges) then
+						              SmartBuff_SetSliderText(self, SMARTBUFF_MSG_CHARGES, o.MinCharges, "%d", true);
+						            end
+					</OnShow>
+					<OnValueChanged>
+						            local o = SMARTBUFF_Options;
+						            local n = self:GetValue();
+						            if (o and o.MinCharges ~= n) then
+						              SmartBuff_SetSliderText(self, SMARTBUFF_MSG_CHARGES, n, "%d");
+						              o.MinCharges = n;
+						              if (n == 0) then
+						                o.CheckCharges = false;
+						              else
+						                o.CheckCharges = true;
+						              end
+						            end
+					</OnValueChanged>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_OFTT_CHECKCHARGES, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</Slider>
+			<Slider name="SmartBuffOptionsFrame_sldSplashDuration" inherits="OptionsSliderTemplate" minValue="0" maxValue="0">
+				<Size>
+					<AbsDimension x="96" y="16" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_sldCharges" relativePoint="TOPRIGHT">
+						<Offset>
+							<AbsDimension x="8" y="0" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						  SmartBuffOptionsFrameSlider_OnLoad(self, 0, 5, 0.2);
+						  BackdropTemplateMixin.OnBackdropLoaded(self);
+					</OnLoad>
+					<OnShow>
+						            local o = SMARTBUFF_Options;
+						            if (o and o.SplashDuration) then
+						              SmartBuff_SetSliderText(self, "Splash", o.SplashDuration, SPELL_DURATION_SEC, true);
+						            end
+					</OnShow>
+					<OnValueChanged>
+						            local o = SMARTBUFF_Options;
+						            local n = self:GetValue();
+						            if (o and o.SplashDuration ~= n) then
+						              SmartBuff_SetSliderText(self, "Splash", n, SPELL_DURATION_SEC);
+						              o.SplashDuration = n;
+						            end
+					</OnValueChanged>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_OFTT_SPLASHDURATION, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</Slider>
+			<Slider name="SmartBuffOptionsFrameRebuffTimer" inherits="OptionsSliderTemplate" minValue="0" maxValue="0">
+				<Size>
+					<AbsDimension x="200" y="16" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_sldCharges" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="-35" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						  SmartBuffOptionsFrameSlider_OnLoad(self, 0, 600, 10);
+						  BackdropTemplateMixin.OnBackdropLoaded(self);
+					</OnLoad>
+					<OnShow>
+						            local o = SMARTBUFF_Options;
+						            if (o and o.RebuffTimer) then
+						              SmartBuff_SetSliderText(self, SMARTBUFF_OFT_REBUFFTIMER, o.RebuffTimer, INT_SPELL_DURATION_SEC, true);
+						            end
+					</OnShow>
+					<OnValueChanged>
+						            local o = SMARTBUFF_Options;
+						            local n = self:GetValue();
+						            if (o and o.RebuffTimer ~= n) then
+						              SmartBuff_SetSliderText(self, SMARTBUFF_OFT_REBUFFTIMER, n, INT_SPELL_DURATION_SEC);
+						              o.RebuffTimer = n;
+						            end
+					</OnValueChanged>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_OFTT_REBUFFTIMER, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</Slider>
+			<CheckButton name="SmartBuffOptionsFrame_cbAutoSwitchTmp" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="24" y="24" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrameRebuffTimer" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="-20" y="-28" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText(SMARTBUFF_OFT_AUTOSWITCHTMP);
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SMARTBUFF_OAutoSwitchTmp();
+					</OnClick>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_OFTT_AUTOSWITCHTMP, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuffOptionsFrame_cbAutoSwitchTmpInst" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="24" y="24" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbAutoSwitchTmp" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="130" y="0" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText(SMARTBUFF_OFT_AUTOSWITCHTMPINST);
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SMARTBUFF_OAutoSwitchTmpInst();
+					</OnClick>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_OFTT_AUTOSWITCHTMPINST, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuffOptionsFrame_cbLinkGrpBuffCheck" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="24" y="24" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbAutoSwitchTmp" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="-20" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText(SMARTBUFF_OFT_LINKGRPBUFFCHECK);
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SMARTBUFF_OLinkGrpBuffCheck();
+					</OnClick>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_OFTT_LINKGRPBUFFCHECK, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuffOptionsFrame_cbAntiDaze" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="24" y="24" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbAutoSwitchTmp" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="-20" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText(SMARTBUFF_OFT_ANTIDAZE);
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SMARTBUFF_OAntiDaze();
+					</OnClick>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_OFTT_ANTIDAZE, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuffOptionsFrame_cbLinkSelfBuffCheck" inherits="OptionsCheckButtonTemplate" hidden="true">
+				<Size>
+					<AbsDimension x="24" y="24" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbLinkGrpBuffCheck" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="130" y="0" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText(SMARTBUFF_OFT_LINKSELFBUFFCHECK);
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SMARTBUFF_OLinkSelfBuffCheck();
+					</OnClick>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_OFTT_LINKSELFBUFFCHECK, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuffOptionsFrame_cbBuffPvP" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="24" y="24" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbLinkGrpBuffCheck" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="-20" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText(SMARTBUFF_OFT_BUFFPVP);
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SMARTBUFF_OBuffPvP();
+					</OnClick>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_OFTT_BUFFPVP, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuffOptionsFrame_cbBuffTarget" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="24" y="24" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbBuffPvP" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="130" y="0" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText(SMARTBUFF_OFT_BUFFTARGET);
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SMARTBUFF_OBuffTarget();
+					</OnClick>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_OFTT_BUFFTARGET, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuffOptionsFrame_cbScrollWheelUp" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="24" y="24" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbBuffPvP" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="-20" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText(SMARTBUFF_OFT_SCROLLWHEELUP);
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SMARTBUFF_OScrollWheelUp();
+					</OnClick>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_OFTT_SCROLLWHEELUP, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuffOptionsFrame_cbScrollWheelDown" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="24" y="24" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbScrollWheelUp" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="160" y="0" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText(SMARTBUFF_OFT_SCROLLWHEELDOWN);
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SMARTBUFF_OScrollWheelDown();
+					</OnClick>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_OFTT_SCROLLWHEELDOWN, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuffOptionsFrame_cbBuffInCities" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="24" y="24" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbScrollWheelUp" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="-20" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText(SMARTBUFF_OFT_BUFFINCITIES);
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SMARTBUFF_OBuffInCities();
+					</OnClick>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_OFTT_BUFFINCITIES, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuffOptionsFrame_cbInShapeshift" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="24" y="24" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbBuffInCities" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="130" y="0" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText(SMARTBUFF_OFT_INSHAPESHIFT);
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SMARTBUFF_OInShapeshift();
+					</OnClick>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_OFTT_INSHAPESHIFT, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuffOptionsFrame_cbInCombat" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="24" y="24" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbBuffInCities" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="-20" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText(SMARTBUFF_OFT_INCOMBAT);
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SMARTBUFF_OInCombat();
+					</OnClick>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_OFTT_INCOMBAT, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<Slider name="SmartBuffOptionsFrameBLDuration" inherits="OptionsSliderTemplate" minValue="0" maxValue="0">
+				<Size>
+					<AbsDimension x="64" y="16" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbInCombat" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="160" y="-18" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						  SmartBuffOptionsFrameSlider_OnLoad(self, 0, 40, 1);
+						  BackdropTemplateMixin.OnBackdropLoaded(self);
+					</OnLoad>
+					<OnValueChanged>
+						            local o = SMARTBUFF_Options;
+						            local n = self:GetValue();
+						            if (o and o.BlacklistTimer ~= n) then
+						              SmartBuff_SetSliderText(self, SMARTBUFF_OFT_BLDURATION, n, INT_SPELL_DURATION_SEC);
+						              o.BlacklistTimer = n;
+						            end
+					</OnValueChanged>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_OFTT_BLDURATION, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</Slider>
+			<CheckButton name="SmartBuffOptionsFrame_cbMsgNormal" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbInCombat" relativePoint="BOTTOMLEFT">
+						<Offset>
+							<AbsDimension x="0" y="-36" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Layers>
+					<Layer level="OVERLAY">
+						<FontString inherits="GameFontHighlightSmall" text="SMARTBUFF_OFT_MESSAGES">
+							<Anchors>
+								<Anchor point="BOTTOMLEFT" relativeTo="$parent" relativePoint="TOPLEFT">
+									<Offset>
+										<AbsDimension x="0" y="0" />
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText(SMARTBUFF_OFT_MSGNORMAL);
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SMARTBUFF_OToggleMsgNormal();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuffOptionsFrame_cbMsgError" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbMsgNormal" relativePoint="TOPRIGHT">
+						<Offset>
+							<AbsDimension x="45" y="0" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText(SMARTBUFF_OFT_MSGERROR);
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SMARTBUFF_OToggleMsgError();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuffOptionsFrame_cbMsgWarning" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbMsgError" relativePoint="TOPRIGHT">
+						<Offset>
+							<AbsDimension x="40" y="0" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText(SMARTBUFF_OFT_MSGWARNING);
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SMARTBUFF_OToggleMsgWarning();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuffOptionsFrame_cbHideMmButton" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbMsgNormal" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="-20" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText(SMARTBUFF_OFT_HIDEMMBUTTON);
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SMARTBUFF_OHideMmButton();
+					</OnClick>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_OFTT_HIDEMMBUTTON, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuffOptionsFrame_cbHideSAButton" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbHideMmButton" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="-15" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText(SMARTBUFF_OFT_HIDESABUTTON);
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SMARTBUFF_OHideSAButton();
+					</OnClick>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_OFTT_HIDESABUTTON, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<Button name="SmartBuffOptionsFrame_ddTemplates" inherits="UIDropDownMenuTemplate">
+				<Size>
+					<AbsDimension x="160" y="16" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="260" y="-26" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnShow>
+						            SMARTBUFF_DropDownTemplate_OnShow(self);
+					</OnShow>
+					<OnClick>
+						            ToggleDropDownMenu(1, nil, self);
+					</OnClick>
+				</Scripts>
+			</Button>
+			<ScrollFrame name="SmartBuffOptionsFrame_ScrollFrameBuffs" inherits="FauxScrollFrameTemplate">
+				<Size>
+					<AbsDimension x="176" y="451" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="282" y="-80" />
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer level="OVERLAY">
+						<FontString inherits="GameFontHighlightSmall" text="SMARTBUFF_OFT_BUFFS">
+							<Anchors>
+								<Anchor point="BOTTOMLEFT" relativeTo="$parent" relativePoint="TOPLEFT">
+									<Offset>
+										<AbsDimension x="0" y="2" />
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnVerticalScroll>
+						            FauxScrollFrame_OnVerticalScroll(self, offset, 18, SMARTBUFF_BuffOrderOnScroll);
+					</OnVerticalScroll>
+					<OnShow>
+						            SMARTBUFF_BuffOrderOnScroll(self);
+					</OnShow>
+				</Scripts>
+			</ScrollFrame>
+			<Button name="SmartBuffOptionsFrameRBT" inherits="OptionsButtonTemplate" text="SMARTBUFF_OFT_RBT">
+				<Anchors>
+					<Anchor point="BOTTOMLEFT" relativeTo="$parent" relativePoint="BOTTOMLEFT">
+						<Offset>
+							<AbsDimension x="30" y="22" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						            SMARTBUFF_ResetBuffTimers();
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="SmartBuffOptionsFrameResetAll" inherits="OptionsButtonTemplate" text="SMARTBUFF_OFT_RESETALL">
+				<Anchors>
+					<Anchor point="BOTTOMLEFT" relativeTo="$parent" relativePoint="BOTTOMLEFT">
+						<Offset x="126" y="22" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						            SMARTBUFF_OptionsFrame_Toggle();
+						            StaticPopup_Show("SMARTBUFF_DATA_PURGE");
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="SmartBuffOptionsFrameResetOrder" inherits="OptionsButtonTemplate" text="SMARTBUFF_OFT_RESETLIST">
+				<Anchors>
+					<Anchor point="BOTTOMLEFT" relativeTo="$parent" relativePoint="BOTTOMLEFT">
+						<Offset x="222" y="22" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						            SMARTBUFF_BuffOrderReset();
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="SmartBuffOptionsFrameDone" inherits="OptionsButtonTemplate" text="SMARTBUFF_OFT_DONE">
+				<Anchors>
+					<Anchor point="BOTTOMRIGHT" relativeTo="$parent" relativePoint="BOTTOMRIGHT">
+						<Offset>
+							<AbsDimension x="-25" y="22" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						            SMARTBUFF_OptionsFrame_Toggle();
+					</OnClick>
+				</Scripts>
+			</Button>
+			<EditBox name="SmartBuffOptionsCredits_lblText" letters="2000" multiLine="true" autoFocus="false">
+				<Size>
+					<AbsDimension x="240" y="178" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parent" relativePoint="TOPLEFT">
+						<Offset x="30" y="-420" />
+					</Anchor>
+				</Anchors>
+				<FontString inherits="GameFontNormalSmall" justifyH="LEFT" />
+			</EditBox>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				  Mixin(self, BackdropTemplateMixin)
+				  self:SetBackdrop({
+					  bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
+					  edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border",
+					  insets = {left = 12, right = 12, top = 12, bottom = 11},
+				  });
+				  SMARTBUFF_Options_OnLoad(self);
+			</OnLoad>
+			<OnShow>
+				        SMARTBUFF_Options_OnShow();
+				        --SmartBuff_MiniGroup:Hide();
+			</OnShow>
+			<OnHide>
+				        self:StopMovingOrSizing();
+				        SMARTBUFF_Options_OnHide();
+				        --SMARTBUFF_MiniGroup_Show();
+			</OnHide>
+			<OnMouseDown>
+				        if (button == "LeftButton") then
+				          self:StartMoving();
+				        end
+			</OnMouseDown>
+			<OnMouseUp>
+				        if (button == "LeftButton") then
+				          self:StopMovingOrSizing();
+				        end
+			</OnMouseUp>
+		</Scripts>
+	</Frame>
+	<Frame name="SmartBuff_BuffSetup" hidden="true" parent="SmartBuffOptionsFrame" toplevel="true" frameStrata="DIALOG" enableMouse="true">
+		<Size>
+			<AbsDimension x="251" y="630" />
+		</Size>
+		<Anchors>
+			<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame" relativePoint="TOPRIGHT">
+				<Offset>
+					<AbsDimension x="-4" y="0" />
+				</Offset>
+			</Anchor>
+		</Anchors>
+		<Backdrop name="SmartBuff_BuffSetup_Backdrop" bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+			<BackgroundInsets>
+				<AbsInset left="11" right="12" top="12" bottom="11" />
+			</BackgroundInsets>
+			<TileSize>
+				<AbsValue val="32" />
+			</TileSize>
+			<EdgeSize>
+				<AbsValue val="32" />
+			</EdgeSize>
+		</Backdrop>
+		<Frames>
+			<EditBox name="SmartBuff_BuffSetup_BuffText" letters="200" multiLine="true" autoFocus="false">
+				<Size>
+					<AbsDimension x="126" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="16" y="-16" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						            self:EnableMouse(false);
+						            self:EnableKeyboard(false);
+					</OnLoad>
+				</Scripts>
+				<FontString inherits="GameFontHighlightSmall" />
+			</EditBox>
+			<Button name="SmartBuff_BuffSetup_BuffIcon1">
+				<Size>
+					<AbsDimension x="32" y="32" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="64" y="-30" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            SmartBuff_BuffSetup_ToolTip(1);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+				<NormalTexture file="Interface\\Icons\\INV_Misc_PocketWatch_01" />
+			</Button>
+			<Button name="SmartBuff_BuffSetup_BuffIcon2">
+				<Size>
+					<AbsDimension x="32" y="32" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_BuffIcon1" relativePoint="TOPRIGHT">
+						<Offset>
+							<AbsDimension x="8" y="0" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            SmartBuff_BuffSetup_ToolTip(2);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+				<NormalTexture file="Interface\\Icons\\INV_Misc_PocketWatch_01" />
+			</Button>
+			<CheckButton justifyH="LEFT" name="SmartBuff_BuffSetup_cbSelf" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="16" y="-68" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText(SMARTBUFF_BST_SELFONLY);
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SmartBuff_BuffSetup_OnClick();
+					</OnClick>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_BSTT_SELFONLY, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton justifyH="LEFT" name="SmartBuff_BuffSetup_cbSelfNot" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_cbSelf" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="-16" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText(SMARTBUFF_BST_SELFNOT);
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SmartBuff_BuffSetup_OnClick();
+					</OnClick>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_BSTT_SELFNOT, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton justifyH="LEFT" name="SmartBuff_BuffSetup_cbCombatIn" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_cbSelfNot" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="-16" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText(SMARTBUFF_BST_COMBATIN);
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SmartBuff_BuffSetup_OnClick();
+					</OnClick>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_BSTT_COMBATIN, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton justifyH="LEFT" name="SmartBuff_BuffSetup_cbCombatOut" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_cbCombatIn" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="-16" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText(SMARTBUFF_BST_COMBATOUT);
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SmartBuff_BuffSetup_OnClick();
+					</OnClick>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_BSTT_COMBATOUT, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<EditBox name="SmartBuff_BuffSetup_txtManaLimit" inherits="InputBoxTemplate" letters="5" numeric="true" autoFocus="false">
+				<Size>
+					<AbsDimension x="40" y="16" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_cbCombatOut" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="8" y="-24" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer level="BACKGROUND">
+						<FontString name="$parentText" inherits="GameFontNormalSmall" text="SMARTBUFF_BST_MANALIMIT">
+							<Anchors>
+								<Anchor point="BOTTOMLEFT" relativePoint="BOTTOMRIGHT">
+									<Offset>
+										<AbsDimension x="2" y="2" />
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnLoad>
+						            self:SetFontObject(GameFontHighlightSmall);
+						            self:SetJustifyH("LEFT");
+						            self:SetJustifyV("MIDDLE");
+					</OnLoad>
+					<OnTabPressed>
+						            SmartBuff_BuffSetup_txtManaLimit:SetFocus();
+					</OnTabPressed>
+					<OnEnterPressed>
+						            self:ClearFocus();
+					</OnEnterPressed>
+					<OnTextChanged>
+						            SmartBuff_BuffSetup_ManaLimitChanged(self);
+					</OnTextChanged>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_BSTT_MANALIMIT, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</EditBox>
+			<CheckButton justifyH="LEFT" name="SmartBuff_BuffSetup_cbMH" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_cbCombatOut" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="-16" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText(SMARTBUFF_BST_MAINHAND);
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SmartBuff_BuffSetup_OnClick();
+					</OnClick>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_BSTT_MAINHAND, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton justifyH="LEFT" name="SmartBuff_BuffSetup_cbOH" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_cbMH" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="-16" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText(SMARTBUFF_BST_OFFHAND);
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SmartBuff_BuffSetup_OnClick();
+					</OnClick>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_BSTT_OFFHAND, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton justifyH="LEFT" name="SmartBuff_BuffSetup_cbRH" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_cbOH" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="-16" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText(SMARTBUFF_BST_RANGED);
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SmartBuff_BuffSetup_OnClick();
+					</OnClick>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_BSTT_RANGED, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton justifyH="LEFT" name="SmartBuff_BuffSetup_cbReminder" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_cbRH" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="-16" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText(SMARTBUFF_BST_REMINDER);
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SmartBuff_BuffSetup_OnClick();
+					</OnClick>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_BSTT_REMINDER, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<Button name="SmartBuff_BuffSetup_btnPriorityList" inherits="OptionsButtonTemplate" text="A">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_cbReminder" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="2" y="-22" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						            SmartBuff_PS_Show(1);
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="SmartBuff_BuffSetup_btnIgnoreList" inherits="OptionsButtonTemplate" text="I">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="LEFT" relativeTo="SmartBuff_BuffSetup_btnPriorityList" relativePoint="RIGHT">
+						<Offset>
+							<AbsDimension x="2" y="0" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						            SmartBuff_PS_Show(2);
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="SmartBuff_BuffSetup_ClassIcon1">
+				<Size>
+					<AbsDimension x="24" y="24" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_cbReminder" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="-50" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_CLASSES[1], SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+				<NormalTexture file="Interface\AddOns\SmartBuff\Icons\Druid" />
+			</Button>
+			<Button name="SmartBuff_BuffSetup_ClassIcon2">
+				<Size>
+					<AbsDimension x="24" y="24" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_ClassIcon1" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="-28" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_CLASSES[2], SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+				<NormalTexture file="Interface\AddOns\SmartBuff\Icons\Hunter" />
+			</Button>
+			<Button name="SmartBuff_BuffSetup_ClassIcon3">
+				<Size>
+					<AbsDimension x="24" y="24" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_ClassIcon2" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="-28" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_CLASSES[3], SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+				<NormalTexture file="Interface\AddOns\SmartBuff\Icons\Mage" />
+			</Button>
+			<Button name="SmartBuff_BuffSetup_ClassIcon4">
+				<Size>
+					<AbsDimension x="24" y="24" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_ClassIcon3" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="-28" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_CLASSES[4], SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+				<NormalTexture file="Interface\AddOns\SmartBuff\Icons\Paladin" />
+			</Button>
+			<Button name="SmartBuff_BuffSetup_ClassIcon5">
+				<Size>
+					<AbsDimension x="24" y="24" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_ClassIcon4" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="-28" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_CLASSES[5], SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+				<NormalTexture file="Interface\AddOns\SmartBuff\Icons\Priest" />
+			</Button>
+			<Button name="SmartBuff_BuffSetup_ClassIcon6">
+				<Size>
+					<AbsDimension x="24" y="24" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_ClassIcon5" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="-28" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_CLASSES[6], SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+				<NormalTexture file="Interface\AddOns\SmartBuff\Icons\Rogue" />
+			</Button>
+			<Button name="SmartBuff_BuffSetup_ClassIcon7">
+				<Size>
+					<AbsDimension x="24" y="24" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_ClassIcon6" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="-28" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_CLASSES[7], SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+				<NormalTexture file="Interface\AddOns\SmartBuff\Icons\Shaman" />
+			</Button>
+			<Button name="SmartBuff_BuffSetup_ClassIcon8">
+				<Size>
+					<AbsDimension x="24" y="24" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_ClassIcon7" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="-28" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_CLASSES[8], SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+				<NormalTexture file="Interface\AddOns\SmartBuff\Icons\Warlock" />
+			</Button>
+			<Button name="SmartBuff_BuffSetup_ClassIcon9">
+				<Size>
+					<AbsDimension x="24" y="24" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_ClassIcon8" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="-28" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_CLASSES[9], SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+				<NormalTexture file="Interface\AddOns\SmartBuff\Icons\Warrior" />
+			</Button>
+			<Button name="SmartBuff_BuffSetup_ClassIcon10">
+				<Size>
+					<AbsDimension x="24" y="24" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_ClassIcon9" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="-28" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_CLASSES[10], SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+				<NormalTexture file="Interface\AddOns\SmartBuff\Icons\Deathknight" />
+			</Button>
+			<Button name="SmartBuff_BuffSetup_ClassIcon11">
+				<Size>
+					<AbsDimension x="24" y="24" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_ClassIcon1" relativePoint="TOPLEFT">
+						<Offset x="50" y="-84" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_CLASSES[11], SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+				<NormalTexture file="Interface\AddOns\SmartBuff\Icons\Monk" />
+			</Button>
+			<Button name="SmartBuff_BuffSetup_ClassIcon12">
+				<Size>
+					<AbsDimension x="24" y="24" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_ClassIcon11" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="-28" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_CLASSES[12], SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+				<NormalTexture file="Interface\AddOns\SmartBuff\Icons\Demonhunter" />
+			</Button>
+			<Button name="SmartBuff_BuffSetup_ClassIcon16">
+				<Size>
+					<AbsDimension x="24" y="24" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_ClassIcon4" relativePoint="TOPLEFT">
+						<Offset x="50" y="84" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						            t = self:GetNormalTexture();
+						            t:SetTexCoord(0.0, 19/64, 22/64, 41/64);
+					</OnLoad>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_CLASSES[16], SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+				<NormalTexture file="Interface\LFGFrame\UI-LFG-ICON-PORTRAITROLES" />
+			</Button>
+			<Button name="SmartBuff_BuffSetup_ClassIcon17">
+				<Size>
+					<AbsDimension x="24" y="24" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_ClassIcon16" relativePoint="TOPLEFT">
+						<Offset x="83" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						            t = self:GetNormalTexture();
+						            t:SetTexCoord(20/64, 39/64, 1/64, 20/64);
+					</OnLoad>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_CLASSES[17], SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+				<NormalTexture file="Interface\LFGFrame\UI-LFG-ICON-PORTRAITROLES" />
+			</Button>
+			<Button name="SmartBuff_BuffSetup_ClassIcon18">
+				<Size>
+					<AbsDimension x="24" y="24" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_ClassIcon17" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="-28" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						            t = self:GetNormalTexture();
+						            t:SetTexCoord(20/64, 39/64, 22/64, 41/64);
+					</OnLoad>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_CLASSES[18], SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+				<NormalTexture file="Interface\LFGFrame\UI-LFG-ICON-PORTRAITROLES" />
+			</Button>
+			<Button name="SmartBuff_BuffSetup_ClassIcon13" hidden="true">
+				<Size>
+					<AbsDimension x="24" y="24" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_ClassIcon8" relativePoint="TOPLEFT">
+						<Offset x="50" y="168" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_CLASSES[13], SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+				<NormalTexture file="Interface\AddOns\SmartBuff\Icons\HunterPet" />
+			</Button>
+			<Button name="SmartBuff_BuffSetup_ClassIcon14" hidden="true">
+				<Size>
+					<AbsDimension x="24" y="24" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_ClassIcon13" relativePoint="TOPLEFT">
+						<Offset y="-168" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_CLASSES[14], SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+				<NormalTexture file="Interface\AddOns\SmartBuff\Icons\WarlockPet" />
+			</Button>
+			<Button name="SmartBuff_BuffSetup_ClassIcon15" hidden="true">
+				<Size>
+					<AbsDimension x="24" y="24" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_ClassIcon14" relativePoint="TOPLEFT">
+						<Offset y="-56" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_CLASSES[15], SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+				<NormalTexture file="Interface\AddOns\SmartBuff\Icons\DeathknightPet" />
+			</Button>
+			<CheckButton name="SmartBuff_BuffSetup_cbClass1" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_ClassIcon1" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="24" y="-2" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnClick>
+						            SmartBuff_BuffSetup_OnClick();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuff_BuffSetup_cbClass2" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_ClassIcon2" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="24" y="-2" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnClick>
+						            SmartBuff_BuffSetup_OnClick();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuff_BuffSetup_cbClass3" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_ClassIcon3" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="24" y="-2" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnClick>
+						            SmartBuff_BuffSetup_OnClick();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuff_BuffSetup_cbClass4" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_ClassIcon4" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="24" y="-2" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnClick>
+						            SmartBuff_BuffSetup_OnClick();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuff_BuffSetup_cbClass5" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_ClassIcon5" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="24" y="-2" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnClick>
+						            SmartBuff_BuffSetup_OnClick();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuff_BuffSetup_cbClass6" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_ClassIcon6" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="24" y="-2" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnClick>
+						            SmartBuff_BuffSetup_OnClick();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuff_BuffSetup_cbClass7" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_ClassIcon7" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="24" y="-2" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnClick>
+						            SmartBuff_BuffSetup_OnClick();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuff_BuffSetup_cbClass8" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_ClassIcon8" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="24" y="-2" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnClick>
+						            SmartBuff_BuffSetup_OnClick();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuff_BuffSetup_cbClass9" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_ClassIcon9" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="24" y="-2" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnClick>
+						            SmartBuff_BuffSetup_OnClick();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuff_BuffSetup_cbClass10" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_ClassIcon10" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="24" y="-2" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnClick>
+						            SmartBuff_BuffSetup_OnClick();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuff_BuffSetup_cbClass11" inherits="OptionsCheckButtonTemplate" hidden="true">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_ClassIcon11" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="24" y="-2" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnClick>
+						            SmartBuff_BuffSetup_OnClick();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuff_BuffSetup_cbClass12" inherits="OptionsCheckButtonTemplate" hidden="true">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_ClassIcon12" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="24" y="-2" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnClick>
+						            SmartBuff_BuffSetup_OnClick();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuff_BuffSetup_cbClass13" inherits="OptionsCheckButtonTemplate" hidden="true">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_ClassIcon13" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="24" y="-2" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnClick>
+						            SmartBuff_BuffSetup_OnClick();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuff_BuffSetup_cbClass14" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_ClassIcon14" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="24" y="-2" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnClick>
+						            SmartBuff_BuffSetup_OnClick();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuff_BuffSetup_cbClass15" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_ClassIcon15" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="24" y="-2" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnClick>
+						            SmartBuff_BuffSetup_OnClick();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuff_BuffSetup_cbClass16" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_ClassIcon16" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="24" y="-2" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnClick>
+						            SmartBuff_BuffSetup_OnClick();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuff_BuffSetup_cbClass17" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_ClassIcon17" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="24" y="-2" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnClick>
+						            SmartBuff_BuffSetup_OnClick();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuff_BuffSetup_cbClass18" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup_ClassIcon18" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="24" y="-2" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnClick>
+						            SmartBuff_BuffSetup_OnClick();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<Slider name="SmartBuff_BuffSetup_RBTime" inherits="OptionsSliderTemplate" minValue="0" maxValue="0">
+				<Size>
+					<AbsDimension x="155" y="17" />
+				</Size>
+				<Anchors>
+					<Anchor point="BOTTOMRIGHT" relativeTo="$parent" relativePoint="BOTTOMRIGHT">
+						<Offset x="-56" y="32" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						BackdropTemplateMixin.OnBackdropLoaded(self);
+						SmartBuffOptionsFrameSlider_OnLoad(self, 0, 3600, 10, true);
+					</OnLoad>
+					<OnValueChanged>
+						            SmartBuff_BuffSetup_RBTime_OnValueChanged(self);
+					</OnValueChanged>
+					<OnEnter>
+						            GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						            GameTooltip:SetText(SMARTBUFF_BSTT_REBUFFTIMER, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						            GameTooltip:Hide();
+						            SmartBuff_BuffSetup_OnClick();
+					</OnLeave>
+				</Scripts>
+			</Slider>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				  Mixin(self, BackdropTemplateMixin);
+				  self:SetBackdrop({
+					  bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
+					  edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border",
+					  insets = {left = 12, right = 12, top = 12, bottom = 11},
+				  });
+				  SMARTBUFF_Options_OnLoad(self);
+			</OnLoad>
+		</Scripts>
+	</Frame>
+	<Frame name="SmartBuff_PlayerSetup" hidden="true" parent="SmartBuffOptionsFrame" toplevel="true" frameStrata="DIALOG" enableMouse="true">
+		<Size>
+			<AbsDimension x="218" y="630" />
+		</Size>
+		<Anchors>
+			<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup" relativePoint="TOPRIGHT">
+				<Offset>
+					<AbsDimension x="-4" y="0" />
+				</Offset>
+			</Anchor>
+		</Anchors>
+		<Backdrop name="SmartBuff_PlayerSetup_Backdrop" bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+			<BackgroundInsets>
+				<AbsInset left="11" right="12" top="12" bottom="11" />
+			</BackgroundInsets>
+			<TileSize>
+				<AbsValue val="32" />
+			</TileSize>
+			<EdgeSize>
+				<AbsValue val="32" />
+			</EdgeSize>
+		</Backdrop>
+		<Frames>
+			<EditBox name="SmartBuff_PlayerSetup_Title" letters="200" multiLine="true" autoFocus="false">
+				<Size>
+					<AbsDimension x="126" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="20" y="-16" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						            self:EnableMouse(false);
+						            self:EnableKeyboard(false);
+					</OnLoad>
+				</Scripts>
+				<FontString inherits="GameFontHighlightSmall" />
+			</EditBox>
+			<Button name="SmartBuff_PlayerSetup_Add" inherits="OptionsButtonTemplate" text="+">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="20" y="-30" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						            SmartBuff_PS_AddPlayer();
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="SmartBuff_PlayerSetup_Remove" inherits="OptionsButtonTemplate" text="-">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_PlayerSetup_Add" relativePoint="TOPRIGHT">
+						<Offset>
+							<AbsDimension x="0" y="0" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						            SmartBuff_PS_RemovePlayer();
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="SmartBuff_PlayerSetup_Up" inherits="OptionsButtonTemplate" text="^">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_PlayerSetup_Remove" relativePoint="TOPRIGHT">
+						<Offset>
+							<AbsDimension x="4" y="0" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						            SmartBuff_PS_SelectPlayer(-1);
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="SmartBuff_PlayerSetup_Down" inherits="OptionsButtonTemplate" text="v">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuff_PlayerSetup_Up" relativePoint="TOPRIGHT">
+						<Offset>
+							<AbsDimension x="0" y="0" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						            SmartBuff_PS_SelectPlayer(1);
+					</OnClick>
+				</Scripts>
+			</Button>
+			<ScrollFrame name="SmartBuff_PlayerSetup_ScrollFrame" inherits="UIPanelScrollFrameTemplate" toplevel="true">
+				<Size>
+					<AbsDimension x="152" y="498" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="20" y="-60" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<ScrollChild>
+					<EditBox name="SmartBuff_PlayerSetup_EditBox" letters="2000" multiLine="true" autoFocus="false">
+						<Size>
+							<AbsDimension x="90" y="400" />
+						</Size>
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset>
+									<AbsDimension x="0" y="0" />
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnLoad>
+								                self:EnableMouse(false);
+								                self:EnableKeyboard(false);
+							</OnLoad>
+						</Scripts>
+						<FontString inherits="GameFontNormal">
+							<Color r="1" g="0.82" b="0" />
+							<Shadow>
+								<Offset>
+									<AbsDimension x="1" y="-1" />
+								</Offset>
+								<Color r="0" g="0" b="0" />
+							</Shadow>
+						</FontString>
+					</EditBox>
+				</ScrollChild>
+			</ScrollFrame>
+		</Frames>
+		<Scripts>
+			<OnShow>
+				Mixin(self, BackdropTemplateMixin);
+				self:SetBackdrop({
+					bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
+					edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border",
+					insets = {left = 12, right = 12, top = 12, bottom = 11},
+				});
+				SmartBuffSplashFrame:SetBackdrop({
+					bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
+					edgeFile = nil,
+				});
+				SmartBuff_PlayerSetup_OnShow();
+			</OnShow>
+			<OnHide>
+				        SmartBuff_PlayerSetup_OnHide();
+			</OnHide>
+		</Scripts>
+	</Frame>
+	<Frame name="SmartBuff_MiniGroup" hidden="true" parent="UIParent" toplevel="true" movable="true" frameStrata="MEDIUM" enableMouse="true">
+		<Size>
+			<AbsDimension x="188" y="32" />
+		</Size>
+		<Anchors>
+			<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup" relativePoint="TOPRIGHT">
+				<Offset>
+					<AbsDimension x="-4" y="0" />
+				</Offset>
+			</Anchor>
+		</Anchors>
+		<Backdrop name="$parent_Backdrop" bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+			<BackgroundInsets>
+				<AbsInset left="1" right="1" top="1" bottom="1" />
+			</BackgroundInsets>
+			<TileSize>
+				<AbsValue val="8" />
+			</TileSize>
+			<EdgeSize>
+				<AbsValue val="8" />
+			</EdgeSize>
+		</Backdrop>
+		<Frames>
+			<Button name="$parent_btnClose" inherits="UIPanelCloseButton">
+				<Size>
+					<AbsDimension x="18" y="18" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPRIGHT" relativeTo="$parent">
+						<Offset>
+							<AbsDimension x="2" y="2" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+			</Button>
+			<EditBox name="$parent_Title" letters="200" multiLine="true" autoFocus="false">
+				<Size>
+					<AbsDimension x="126" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="8" y="-4" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						self:SetText("SmartBuff subgroups");
+						self:EnableMouse(false);
+						self:EnableKeyboard(false);
+					</OnLoad>
+				</Scripts>
+				<FontString inherits="GameFontHighlightSmall" justifyH="LEFT" />
+			</EditBox>
+			<CheckButton name="$parent_cbGrp1" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="16" y="16" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="6" y="-14" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText("1");
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SMARTBUFF_OToggleGrp(1);
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parent_cbGrp2" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="16" y="16" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parent_cbGrp1" relativePoint="TOPRIGHT">
+						<Offset>
+							<AbsDimension x="6" y="0" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText("2");
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SMARTBUFF_OToggleGrp(2);
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parent_cbGrp3" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="16" y="16" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parent_cbGrp2" relativePoint="TOPRIGHT">
+						<Offset>
+							<AbsDimension x="6" y="0" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText("3");
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SMARTBUFF_OToggleGrp(3);
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parent_cbGrp4" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="16" y="16" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parent_cbGrp3" relativePoint="TOPRIGHT">
+						<Offset>
+							<AbsDimension x="6" y="0" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText("4");
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SMARTBUFF_OToggleGrp(4);
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parent_cbGrp5" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="16" y="16" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parent_cbGrp4" relativePoint="TOPRIGHT">
+						<Offset>
+							<AbsDimension x="6" y="0" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText("5");
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SMARTBUFF_OToggleGrp(5);
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parent_cbGrp6" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="16" y="16" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parent_cbGrp5" relativePoint="TOPRIGHT">
+						<Offset>
+							<AbsDimension x="6" y="0" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText("6");
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SMARTBUFF_OToggleGrp(6);
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parent_cbGrp7" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="16" y="16" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parent_cbGrp6" relativePoint="TOPRIGHT">
+						<Offset>
+							<AbsDimension x="6" y="0" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText("7");
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SMARTBUFF_OToggleGrp(7);
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parent_cbGrp8" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="16" y="16" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parent_cbGrp7" relativePoint="TOPRIGHT">
+						<Offset>
+							<AbsDimension x="6" y="0" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						            getglobal(self:GetName().."Text"):SetText("8");
+						            getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						            SMARTBUFF_OToggleGrp(8);
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				         self:RegisterForDrag("LeftButton");
+			</OnLoad>
+			<OnShow>
+				Mixin(self, BackdropTemplateMixin);
+				SmartBuff_MiniGroup:SetBackdrop({
+					bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
+					edgeFile = nil,
+				});
+				SMARTBUFF_MiniGroup_OnShow();
+			</OnShow>
+			<OnHide>
+				        self:StopMovingOrSizing();
+				        SMARTBUFF_MiniGroup_OnHide();
+			</OnHide>
+			<OnMouseDown>
+				        if (button == "LeftButton" and IsShiftKeyDown()) then
+				          self:StartMoving();
+				        end
+			</OnMouseDown>
+			<OnMouseUp>
+				        if (button == "LeftButton") then
+				          self:StopMovingOrSizing();
+				        end
+			</OnMouseUp>
+		</Scripts>
+	</Frame>
+	<Frame name="SmartBuffWNF" hidden="true" parent="UIParent" toplevel="true" movable="true" frameStrata="DIALOG" enableMouse="true">
+		<Size>
+			<AbsDimension x="330" y="630" />
+		</Size>
+		<Anchors>
+			<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame" relativePoint="TOPRIGHT">
+				<Offset>
+					<AbsDimension x="2" y="0" />
+				</Offset>
+			</Anchor>
+		</Anchors>
+		<Backdrop name="$parent_Backdrop" bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+			<BackgroundInsets>
+				<AbsInset left="11" right="12" top="12" bottom="11" />
+			</BackgroundInsets>
+			<TileSize>
+				<AbsValue val="32" />
+			</TileSize>
+			<EdgeSize>
+				<AbsValue val="32" />
+			</EdgeSize>
+		</Backdrop>
+		<Frames>
+			<EditBox name="$parent_lblText" letters="2000" multiLine="true" autoFocus="false">
+				<Size>
+					<AbsDimension x="291" y="592" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parent" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="16" y="-16" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						self:SetAutoFocus(false);
+						self:SetText("");
+						self:EnableMouse(false);
+						self:EnableKeyboard(false);
+						self:SetHeight(SmartBuffOptionsFrame:GetHeight()-16);
+					</OnLoad>
+				</Scripts>
+				<FontString inherits="GameFontNormalSmall" justifyH="LEFT" />
+			</EditBox>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				self:SetHeight(SmartBuffOptionsFrame:GetHeight());
+				Mixin(self, BackdropTemplateMixin)
+				self:SetBackdrop({bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background", edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border",	insets = {left = 12, right = 12, top = 12, bottom = 11},})
+			</OnLoad>
+			<OnShow>
+
+			</OnShow>
+			<OnHide>
+				self:StopMovingOrSizing();
+			</OnHide>
+			<OnDragStart>
+
+			</OnDragStart>
+			<OnDragStop>
+
+			</OnDragStop>
+			<OnMouseDown>
+
+			</OnMouseDown>
+			<OnMouseUp>
+
+			</OnMouseUp>
+		</Scripts>
+	</Frame>
+</Ui>

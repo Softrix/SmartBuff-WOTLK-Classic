@@ -1,0 +1,20 @@
+## Interface: 11403
+## Title: SmartBuff |cffffffff(Classic)|r by |cff00ff00Codermik & Aeldra|r
+## Version: 21.11403
+## Author: |cff20d2ffCodermik (Mik / Castanova on EU-Mirage Raceway) & Aeldra|r (EU-Proudmoore)
+## Notes: Cast the most important buffs on you or party/raid members/pets. Use  /sbm  for options menu.
+## DefaultState: Enabled
+## LoadOnDemand: 0
+## Notes-deDE: Castet die wichtigsten Buffs auf dich selbst, Gruppe/Raid Mitglieder/Pets. Benutze  /sbm  um das Men� zu �ffnen
+## Notes-frFR: Cast the most important buffs on you or party/raid members/pets. Use  /sbm  for options menu.
+## SavedVariables: SMARTBUFF_OptionsGlobal
+## SavedVariablesPerCharacter: SMARTBUFF_Options, SMARTBUFF_Buffs
+
+lib\LibStub\LibStub.lua
+lib\CallbackHandler-1.0\CallbackHandler-1.0.lua
+lib\LibClassicDurations\LibClassicDurations.xml
+SmartBuff.globals.lua
+SmartBuff.xml
+
+lib\Broker_SmartBuff\LibDataBroker-1.1.lua
+lib\Broker_SmartBuff\Broker_SmartBuff.lua
