@@ -32,10 +32,10 @@ Run the mod when ever you wish, if nothing is buffed, there is no penalty or coo
 ## Usage:
 
 Minimap button:
-Left click: opens SmartBuff options frame
-Right click: enables/disables SmartBuff
-Alt-Left click: SmartDebuff
-Shift-Left click: move minimap button
+- Left click: opens SmartBuff options frame
+- Right click: enables/disables SmartBuff
+- Alt-Left click: SmartDebuff
+- Shift-Left click: move minimap button
 
 
 ## Commands:
@@ -56,8 +56,8 @@ Right click on buff checkbox: opens buff setup frame
 ## Contact / Support
 
 You will find me on:
-	Classic Server: Mik/Castanova/Amarantine/Paramedic on EU-Mirage Raceway
-	Retail: Challenger, Castanova, Paramedic and many others on EU-Aszune
+- Classic Server: Mik/Castanova/Amarantine/Paramedic on EU-Mirage Raceway
+- Retail: Challenger, Castanova, Paramedic and many others on EU-Aszune
 
 Join me on discord to offer feedback, report bugs and much more: https://discord.gg/R6EkZ94TKK
 
