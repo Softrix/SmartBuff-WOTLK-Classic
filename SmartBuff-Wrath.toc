@@ -1,6 +1,6 @@
 ## Interface: 30400
 ## Title: SmartBuff |cffffffff(Classic WOTLK)|r by |cff00ff00Codermik & Aeldra|r
-## Version: 21.30400
+## Version: 22.30400
 ## Author: |cff20d2ffCodermik (Mik / Castanova on EU-Mirage Raceway) & Aeldra|r (EU-Proudmoore)
 ## Notes: Cast the most important buffs on you or party/raid members/pets. Use  /sbm  for options menu.
 ## DefaultState: Enabled

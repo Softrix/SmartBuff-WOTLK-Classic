@@ -1,6 +1,6 @@
 ## Interface: 20504
 ## Title: SmartBuff |cffffffff(Classic TBC)|r by |cff00ff00Codermik & Aeldra|r
-## Version: 21.20504
+## Version: 22.20504
 ## Author: |cff20d2ffCodermik (Mik / Castanova on EU-Mirage Raceway) & Aeldra|r (EU-Proudmoore)
 ## Notes: Cast the most important buffs on you or party/raid members/pets. Use  /sbm  for options menu.
 ## DefaultState: Enabled

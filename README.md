@@ -1,5 +1,6 @@
 # SmartBuff Classic, SoM, TBC Classic & WOTLK CLassic
 
+For clarity, this repository is ONLY for the Classic version of the client as listed above, and it is not the Retail version of the client.
 
 SmartBuff is a buff addon to monitor you, your party or raids buffs easily and quickly allowing you to cast those that are missing - all classes are supported.
 

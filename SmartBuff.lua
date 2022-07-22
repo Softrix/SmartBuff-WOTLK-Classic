@@ -6,8 +6,8 @@
 -- Cast the most important buffs on you, tanks or party/raid members/pets.
 -------------------------------------------------------------------------------
 
-SMARTBUFF_DATE			= "210722";
-SMARTBUFF_VERSION       = "r21."..SMARTBUFF_DATE;
+SMARTBUFF_DATE			= "220722 Dev";
+SMARTBUFF_VERSION       = "r22."..SMARTBUFF_DATE;
 SMARTBUFF_VERSIONMIN	= 11403;			-- min version
 SMARTBUFF_VERSIONNR     = 30400;			-- max version
 SMARTBUFF_TITLE         = "SmartBuff";
@@ -22,7 +22,7 @@ local SmartbuffPrefix = "Smartbuff";
 local SmartbuffSession = true;
 local SmartbuffVerCheck = false;					-- for my use when checking guild users/testers versions  :)
 local buildInfo = select(4, GetBuildInfo())
-local SmartbuffRevision = 21;
+local SmartbuffRevision = 22;
 local SmartbuffVerNotifyList = {}
 
 local LCD = LibStub and LibStub("LibClassicDurations", true)
@@ -2678,9 +2678,16 @@ function SMARTBUFF_doCast(unit, id, spellName, levels, type)
     return 1;
   end
   
-  -- Rangecheck
-  if (type == SMARTBUFF_CONST_GROUP or type == SMARTBUFF_CONST_ITEMGROUP) then  
+  --
+  -- Rangecheck - theres an issue with "IsSpellInRange" under WOTLK as of 22/07/2022
+  -- with causes a group buffing issue - Ive reported the issue to Blizzard along with
+  -- video links which are:
+  --
+  -- https://www.twitch.tv/videos/1535304402
+  -- https://www.twitch.tv/videos/1535304703
+  --
 
+  if (type == SMARTBUFF_CONST_GROUP or type == SMARTBUFF_CONST_ITEMGROUP) then  
 	if (SpellHasRange(spellName)) then 
       if (IsSpellInRange(spellName, unit) ~= 1) then
         return 3;
@@ -2690,7 +2697,6 @@ function SMARTBUFF_doCast(unit, id, spellName, levels, type)
         return 3;
       end
     end
-
   end
   
   -- check if target is to low for this spell
@@ -2868,7 +2874,7 @@ function SMARTBUFF_CheckUnitLevel(unit, spellId, spellLevels)
   local i = spellRank;
   
   --SMARTBUFF_AddMsgD(spellName .. sRank .. ":" .. spellRank .. ", " .. spellLevels[i]);
-  
+
   while (i >= 1) do
     if (uLevel >= (spellLevels[i] - 10)) then
       break;
