@@ -6,7 +6,7 @@
 -- Cast the most important buffs on you, tanks or party/raid members/pets.
 -------------------------------------------------------------------------------
 
-SMARTBUFF_DATE			= "220722 Dev";
+SMARTBUFF_DATE			= "270722";
 SMARTBUFF_VERSION       = "r22."..SMARTBUFF_DATE;
 SMARTBUFF_VERSIONMIN	= 11403;			-- min version
 SMARTBUFF_VERSIONNR     = 30400;			-- max version
@@ -2687,7 +2687,8 @@ function SMARTBUFF_doCast(unit, id, spellName, levels, type)
   -- https://www.twitch.tv/videos/1535304703
   --
 
-  if (type == SMARTBUFF_CONST_GROUP or type == SMARTBUFF_CONST_ITEMGROUP) then  
+  if ((type == SMARTBUFF_CONST_GROUP or type == SMARTBUFF_CONST_ITEMGROUP) and buildInfo ~= 30400) then  -- added a quick hack for wotlk beta until issue is fixed (no range checking)
+
 	if (SpellHasRange(spellName)) then 
       if (IsSpellInRange(spellName, unit) ~= 1) then
         return 3;
@@ -2697,6 +2698,7 @@ function SMARTBUFF_doCast(unit, id, spellName, levels, type)
         return 3;
       end
     end
+
   end
   
   -- check if target is to low for this spell

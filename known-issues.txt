@@ -9,3 +9,6 @@ Try:   IsSpellInRange("Arcane Brilliance", "player") on a mage.
 
 
 Issue also present on priest, checking others.
+
+
+*added a quick hack for wotlk, removed range checking temporary.
