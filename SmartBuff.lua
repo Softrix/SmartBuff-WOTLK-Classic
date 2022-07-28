@@ -6,8 +6,8 @@
 -- Cast the most important buffs on you, tanks or party/raid members/pets.
 -------------------------------------------------------------------------------
 
-SMARTBUFF_DATE			= "270722";
-SMARTBUFF_VERSION       = "r22."..SMARTBUFF_DATE;
+SMARTBUFF_DATE			= "280722 Dev";
+SMARTBUFF_VERSION       = "r23."..SMARTBUFF_DATE;
 SMARTBUFF_VERSIONMIN	= 11403;			-- min version
 SMARTBUFF_VERSIONNR     = 30400;			-- max version
 SMARTBUFF_TITLE         = "SmartBuff";
@@ -22,7 +22,7 @@ local SmartbuffPrefix = "Smartbuff";
 local SmartbuffSession = true;
 local SmartbuffVerCheck = false;					-- for my use when checking guild users/testers versions  :)
 local buildInfo = select(4, GetBuildInfo())
-local SmartbuffRevision = 22;
+local SmartbuffRevision = 23;
 local SmartbuffVerNotifyList = {}
 
 local LCD = LibStub and LibStub("LibClassicDurations", true)
