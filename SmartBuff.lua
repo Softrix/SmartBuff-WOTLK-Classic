@@ -6,8 +6,8 @@
 -- Cast the most important buffs on you, tanks or party/raid members/pets.
 -------------------------------------------------------------------------------
 
-SMARTBUFF_DATE			= "280722";
-SMARTBUFF_VERSION       = "r23."..SMARTBUFF_DATE;
+SMARTBUFF_DATE			= "050822";
+SMARTBUFF_VERSION       = "r24."..SMARTBUFF_DATE;
 SMARTBUFF_VERSIONMIN	= 11403;			-- min version
 SMARTBUFF_VERSIONNR     = 30400;			-- max version
 SMARTBUFF_TITLE         = "SmartBuff";
@@ -16,13 +16,14 @@ SMARTBUFF_DESC          = "Cast the most important buffs on you, tanks, party or
 SMARTBUFF_VERS_TITLE    = SMARTBUFF_TITLE .. " " .. SMARTBUFF_VERSION;
 SMARTBUFF_OPTIONS_TITLE = SMARTBUFF_VERS_TITLE;
 
--- addon name
+-- addon and client information.
 local addonName = ...
 local SmartbuffPrefix = "Smartbuff";
 local SmartbuffSession = true;
-local SmartbuffVerCheck = false;					-- for my use when checking guild users/testers versions  :)
-local buildInfo = select(4, GetBuildInfo())
-local SmartbuffRevision = 23;
+local SmartbuffVerCheck = false;		-- for my use when checking guild users/testers versions  :)
+local wowVersionString, wowBuild, _, wowTOC = GetBuildInfo();
+local isWOTLKC = (_G.WOW_PROJECT_ID == 5 and wowTOC >= 30000);
+local SmartbuffRevision = 24;
 local SmartbuffVerNotifyList = {}
 
 local LCD = LibStub and LibStub("LibClassicDurations", true)
@@ -302,8 +303,11 @@ end
 
 
 local function CS()
-  if (currentSpec == nil) then
-    currentSpec = GetSpecialization();
+  -- dual specification checks, credit: SunNova
+  if isWOTLKC then
+    currentSpec = GetActiveTalentGroup() or nil;
+  else
+    currentSpec = GetSpecialization() or nil;
   end
   if (currentSpec == nil) then
     currentSpec = 1;
@@ -2109,8 +2113,8 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
               --Tracking ability ------------------------------------------------------------------------
 
 			  if (cBuff.Type == SMARTBUFF_CONST_TRACK) then   			        
-				  if buildInfo >= 20502 then  
-					  -- assume we are TBC Classic
+				  if wowTOC >= 20502 then  
+					  -- assume we are TBC Classic or higher
 					  local count = (GetNumTrackingTypes())+1;	-- GetNumTrackingTypes doesnt count "none" so add one to include it.
 					  local trackingFound;
 					  for n = 1, count do 
@@ -2687,7 +2691,7 @@ function SMARTBUFF_doCast(unit, id, spellName, levels, type)
   -- https://www.twitch.tv/videos/1535304703
   --
 
-  if ((type == SMARTBUFF_CONST_GROUP or type == SMARTBUFF_CONST_ITEMGROUP) and buildInfo ~= 30400) then  -- added a quick hack for wotlk beta until issue is fixed (no range checking)
+  if ((type == SMARTBUFF_CONST_GROUP or type == SMARTBUFF_CONST_ITEMGROUP) and wowTOC ~= 30400) then  -- added a quick hack for wotlk beta until issue is fixed (no range checking)
 
 	if (SpellHasRange(spellName)) then 
       if (IsSpellInRange(spellName, unit) ~= 1) then
@@ -3498,8 +3502,8 @@ function SMARTBUFF_Options_Init(self)
   isSyncReq = true;
 
   -- finally, client version check
-  if buildInfo > SMARTBUFF_VERSIONNR or buildInfo < SMARTBUFF_VERSIONMIN then
-	  DEFAULT_CHAT_FRAME:AddMessage("|cff00e0ffSmartbuff : |cffff6060This version was NOT intended for client version ("..buildInfo..") - you may encounter lua errors or other issues so please check for an update! - Join Discord for all the latest information at |cffFFFF00https://discord.gg/R6EkZ94TKK.")
+  if wowTOC > SMARTBUFF_VERSIONNR or wowTOC < SMARTBUFF_VERSIONMIN then
+	  DEFAULT_CHAT_FRAME:AddMessage("|cff00e0ffSmartbuff : |cffff6060This version was NOT intended for client version ("..wowTOC..") - you may encounter lua errors or other issues so please check for an update! - Join Discord for all the latest information at |cffFFFF00https://discord.gg/R6EkZ94TKK.")
   end
 
 end
