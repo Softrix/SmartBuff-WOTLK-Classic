@@ -6,8 +6,8 @@
 -- Cast the most important buffs on you, tanks or party/raid members/pets.
 -------------------------------------------------------------------------------
 
-SMARTBUFF_DATE			= "050822";
-SMARTBUFF_VERSION       = "r25."..SMARTBUFF_DATE;
+SMARTBUFF_DATE			= "300822 Dev";
+SMARTBUFF_VERSION       = "r26."..SMARTBUFF_DATE;
 SMARTBUFF_VERSIONMIN	= 11403;			-- min version
 SMARTBUFF_VERSIONNR     = 30400;			-- max version
 SMARTBUFF_TITLE         = "SmartBuff";
@@ -112,7 +112,7 @@ local cAddUnitList = { };
 local cIgnoreUnitList = { };
 
 local cClasses       = {"DRUID", "HUNTER", "MAGE", "PALADIN", "PRIEST", "ROGUE", "SHAMAN", "WARLOCK", "WARRIOR", "DEATHKNIGHT", "MONK", "DEMONHUNTER", "HPET", "WPET", "DKPET", "TANK", "HEALER", "DAMAGER"};
-local cIgnoreClasses = { 11, 12, 15, 17, 18 };
+local cIgnoreClasses = { 11, 12, 17, 18 };
 local cOrderGrp      = {0, 1, 2, 3, 4, 5, 6, 7, 8};
 local cOrderClass    = {0, "WARRIOR", "PRIEST", "DRUID", "PALADIN", "SHAMAN", "MAGE", "WARLOCK", "HUNTER", "ROGUE", "TANK", "HPET", "WPET", "DKPET"};
 local cFonts         = {"NumberFontNormal", "NumberFontNormalLarge", "NumberFontNormalHuge", "GameFontNormal", "GameFontNormalLarge", "GameFontNormalHuge", "ChatFontNormal", "QuestFont", "MailTextFontNormal", "QuestTitleFont"};

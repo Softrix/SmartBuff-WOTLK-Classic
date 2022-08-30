@@ -6,9 +6,9 @@
 SMARTBUFF_WHATSNEW = "\n\n|cffffffff        Whats new:|r\n\n"
   .."          |cffffffffClassic version by Codermik\n"
   .."          Please report any issues on Curse or Discord.|r\n\n\n"
-  .."          Changes in r25:\n\n"
-  .."             * Corrected an issue under TBC with the recent\n"
-  .."               dual specification code for WOTLK Beta.\n"
+  .."          Changes in r26:\n\n"
+  .."             * Some UI Adjustments\n"
+  .."             * Fixed buff options for DK Pet\n"
   .."\n\n"
   .."          |cffffffffIf you appreciate my work on the various addons\n"
   .."          for wow then please consider supporting me, you\n"
@@ -20,7 +20,7 @@ SMARTBUFF_WHATSNEW = "\n\n|cffffffff        Whats new:|r\n\n"
   .."          |cffffffffbug reports - you have helped a lot!|r\n\n\n"
 
   .."          |cff00e0ffHuge thanks to Aeldra for creating the original\n" 
-  .."          addon and the framework for this release.\n\n"
+  .."          addon and the framework for this working release.\n\n"
 ;
 
 -- addon credits

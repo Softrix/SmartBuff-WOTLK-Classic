@@ -58,9 +58,7 @@
 			<AbsDimension x="420" y="100" />
 		</Size>
 		<Anchors>
-			<Anchor point="TOPLEFT">
-				<Offset x="0" y="0" />
-			</Anchor>
+			<Anchor point="CENTER" />
 		</Anchors>
 		<Scripts>
 			<OnLoad>
@@ -428,7 +426,7 @@
 		</Size>
 		<Anchors>
 			<Anchor point="CENTER">
-				<Offset x="0" y="100" />
+				<Offset y="100" />
 			</Anchor>
 		</Anchors>
 		<Layers>
@@ -473,10 +471,10 @@
 	</Button>
 	<Frame name="SmartBuffOptionsFrame" hidden="true" parent="UIParent" toplevel="true" movable="true" frameStrata="DIALOG" enableMouse="true">
 		<Size>
-			<AbsDimension x="500" y="630" />
+			<AbsDimension x="500" y="820" />
 		</Size>
 		<Anchors>
-			<Anchor point="CENTER"/>
+			<Anchor point="CENTER" />
 		</Anchors>
 		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
 			<BackgroundInsets>
@@ -556,9 +554,7 @@
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbSB" relativePoint="TOPLEFT">
-						<Offset>
-							<AbsDimension x="10" y="-28" />
-						</Offset>
+						<Offset x="10" y="-63" />
 					</Anchor>
 				</Anchors>
 				<HitRectInsets>
@@ -1244,9 +1240,7 @@
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbInCombat" relativePoint="TOPLEFT">
-						<Offset>
-							<AbsDimension x="160" y="-18" />
-						</Offset>
+						<Offset x="160" y="-8" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -1277,9 +1271,7 @@
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbInCombat" relativePoint="BOTTOMLEFT">
-						<Offset>
-							<AbsDimension x="0" y="-36" />
-						</Offset>
+						<Offset y="-31" />
 					</Anchor>
 				</Anchors>
 				<HitRectInsets>
@@ -1424,9 +1416,7 @@
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset>
-							<AbsDimension x="260" y="-26" />
-						</Offset>
+						<Offset x="260" y="-37" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -1440,11 +1430,11 @@
 			</Button>
 			<ScrollFrame name="SmartBuffOptionsFrame_ScrollFrameBuffs" inherits="FauxScrollFrameTemplate">
 				<Size>
-					<AbsDimension x="176" y="451" />
+					<AbsDimension x="164" y="665" />
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="282" y="-80" />
+						<Offset x="282" y="-87" />
 					</Anchor>
 				</Anchors>
 				<Layers>
@@ -1524,11 +1514,11 @@
 			</Button>
 			<EditBox name="SmartBuffOptionsCredits_lblText" letters="2000" multiLine="true" autoFocus="false">
 				<Size>
-					<AbsDimension x="240" y="178" />
+					<AbsDimension x="240" y="168" />
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="$parent" relativePoint="TOPLEFT">
-						<Offset x="30" y="-420" />
+						<Offset x="30" y="-595" />
 					</Anchor>
 				</Anchors>
 				<FontString inherits="GameFontNormalSmall" justifyH="LEFT" />
@@ -1567,7 +1557,7 @@
 	</Frame>
 	<Frame name="SmartBuff_BuffSetup" hidden="true" parent="SmartBuffOptionsFrame" toplevel="true" frameStrata="DIALOG" enableMouse="true">
 		<Size>
-			<AbsDimension x="251" y="630" />
+			<AbsDimension x="251" y="820" />
 		</Size>
 		<Anchors>
 			<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame" relativePoint="TOPRIGHT">
@@ -2779,7 +2769,7 @@
 	</Frame>
 	<Frame name="SmartBuff_PlayerSetup" hidden="true" parent="SmartBuffOptionsFrame" toplevel="true" frameStrata="DIALOG" enableMouse="true">
 		<Size>
-			<AbsDimension x="218" y="630" />
+			<AbsDimension x="218" y="820" />
 		</Size>
 		<Anchors>
 			<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup" relativePoint="TOPRIGHT">
@@ -3226,7 +3216,7 @@
 	</Frame>
 	<Frame name="SmartBuffWNF" hidden="true" parent="UIParent" toplevel="true" movable="true" frameStrata="DIALOG" enableMouse="true">
 		<Size>
-			<AbsDimension x="330" y="630" />
+			<AbsDimension x="330" y="820" />
 		</Size>
 		<Anchors>
 			<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame" relativePoint="TOPRIGHT">
