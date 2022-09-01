@@ -20,7 +20,7 @@ SMARTBUFF_OPTIONS_TITLE = SMARTBUFF_VERS_TITLE;
 local addonName = ...
 local SmartbuffPrefix = "Smartbuff";
 local SmartbuffSession = true;
-local SmartbuffVerCheck = true;		-- for my use when checking guild users/testers versions  :)
+local SmartbuffVerCheck = false;		-- for my use when checking guild users/testers versions  :)
 local wowVersionString, wowBuild, _, wowTOC = GetBuildInfo();
 local isWOTLKC = (_G.WOW_PROJECT_ID == 5 and wowTOC >= 30000);
 local SmartbuffRevision = 26;
