@@ -6,7 +6,7 @@
 -- Cast the most important buffs on you, tanks or party/raid members/pets.
 -------------------------------------------------------------------------------
 
-SMARTBUFF_DATE			= "300822 Dev";
+SMARTBUFF_DATE			= "010922";
 SMARTBUFF_VERSION       = "r26."..SMARTBUFF_DATE;
 SMARTBUFF_VERSIONMIN	= 11403;			-- min version
 SMARTBUFF_VERSIONNR     = 30400;			-- max version
@@ -23,7 +23,7 @@ local SmartbuffSession = true;
 local SmartbuffVerCheck = false;		-- for my use when checking guild users/testers versions  :)
 local wowVersionString, wowBuild, _, wowTOC = GetBuildInfo();
 local isWOTLKC = (_G.WOW_PROJECT_ID == 5 and wowTOC >= 30000);
-local SmartbuffRevision = 25;
+local SmartbuffRevision = 26;
 local SmartbuffVerNotifyList = {}
 
 local LCD = LibStub and LibStub("LibClassicDurations", true)
