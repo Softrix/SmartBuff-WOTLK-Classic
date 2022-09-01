@@ -7,7 +7,7 @@
 -------------------------------------------------------------------------------
 
 SMARTBUFF_DATE			= "010922";
-SMARTBUFF_VERSION       = "r26."..SMARTBUFF_DATE;
+SMARTBUFF_VERSION       = "r27."..SMARTBUFF_DATE;
 SMARTBUFF_VERSIONMIN	= 11403;			-- min version
 SMARTBUFF_VERSIONNR     = 30400;			-- max version
 SMARTBUFF_TITLE         = "SmartBuff";
@@ -20,7 +20,7 @@ SMARTBUFF_OPTIONS_TITLE = SMARTBUFF_VERS_TITLE;
 local addonName = ...
 local SmartbuffPrefix = "Smartbuff";
 local SmartbuffSession = true;
-local SmartbuffVerCheck = false;		-- for my use when checking guild users/testers versions  :)
+local SmartbuffVerCheck = true;		-- for my use when checking guild users/testers versions  :)
 local wowVersionString, wowBuild, _, wowTOC = GetBuildInfo();
 local isWOTLKC = (_G.WOW_PROJECT_ID == 5 and wowTOC >= 30000);
 local SmartbuffRevision = 26;
@@ -303,9 +303,6 @@ end
 
 
 local function CS()
-  -- Slightly modified version of SunNova's code
-  -- to correct an issue under TBC Classic giving
-  -- a lua error and not populating the list.
   if isWOTLKC then
       currentSpec = GetActiveTalentGroup() or nil;
   else
