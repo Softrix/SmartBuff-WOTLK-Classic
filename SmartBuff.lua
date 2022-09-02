@@ -7,7 +7,7 @@
 -------------------------------------------------------------------------------
 
 SMARTBUFF_DATE			= "020922";
-SMARTBUFF_VERSION       = "r28."..SMARTBUFF_DATE;
+SMARTBUFF_VERSION       = "r29."..SMARTBUFF_DATE;
 SMARTBUFF_VERSIONMIN	= 11403;			-- min version
 SMARTBUFF_VERSIONNR     = 30400;			-- max version
 SMARTBUFF_TITLE         = "SmartBuff";
@@ -20,10 +20,10 @@ SMARTBUFF_OPTIONS_TITLE = SMARTBUFF_VERS_TITLE;
 local addonName = ...
 local SmartbuffPrefix = "Smartbuff";
 local SmartbuffSession = true;
-local SmartbuffVerCheck = true;		-- for my use when checking guild users/testers versions  :)
+local SmartbuffVerCheck = false;		-- for my use when checking guild users/testers versions  :)
 local wowVersionString, wowBuild, _, wowTOC = GetBuildInfo();
 local isWOTLKC = (_G.WOW_PROJECT_ID == 5 and wowTOC >= 30000);
-local SmartbuffRevision = 28;
+local SmartbuffRevision = 29;
 local SmartbuffVerNotifyList = {}
 
 local LCD = LibStub and LibStub("LibClassicDurations", true)
