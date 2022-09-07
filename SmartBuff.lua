@@ -6,8 +6,8 @@
 -- Cast the most important buffs on you, tanks or party/raid members/pets.
 -------------------------------------------------------------------------------
 
-SMARTBUFF_DATE			= "020922";
-SMARTBUFF_VERSION       = "r29."..SMARTBUFF_DATE;
+SMARTBUFF_DATE			= "070922 Dev";
+SMARTBUFF_VERSION       = "r30."..SMARTBUFF_DATE;
 SMARTBUFF_VERSIONMIN	= 11403;			-- min version
 SMARTBUFF_VERSIONNR     = 30400;			-- max version
 SMARTBUFF_TITLE         = "SmartBuff";
@@ -20,11 +20,16 @@ SMARTBUFF_OPTIONS_TITLE = SMARTBUFF_VERS_TITLE;
 local addonName = ...
 local SmartbuffPrefix = "Smartbuff";
 local SmartbuffSession = true;
-local SmartbuffVerCheck = false;		-- for my use when checking guild users/testers versions  :)
+local SmartbuffVerCheck = true;		-- for my use when checking guild users/testers versions  :)
 local wowVersionString, wowBuild, _, wowTOC = GetBuildInfo();
 local isWOTLKC = (_G.WOW_PROJECT_ID == 5 and wowTOC >= 30000);
 local SmartbuffRevision = 29;
 local SmartbuffVerNotifyList = {}
+
+-- changed Smartbuff to use LibRangeCheck-2.0 by Mitchnull
+-- https://www.wowace.com/projects/librangecheck-2-0
+
+local LRC = LibStub("LibRangeCheck-2.0", true)
 
 local LCD = LibStub and LibStub("LibClassicDurations", true)
 if LCD then LCD:Register(SMARTBUFF_TITLE) end
@@ -105,6 +110,9 @@ local cBuffTimer = { };
 local cBlacklist = { };
 local cUnits = { };
 local cBuffsCombat = { };
+
+local spellsByName = { };
+local spellsByID = { };
 
 local cScrBtnBO = nil;
 
@@ -1040,13 +1048,6 @@ end
 -- END SMARTBUFF_SetUnits
 
 
-
-
-
-
-
-
-
 -------------------------------------------------------------------------------------------------------------------------------------
 --	SMARTBUFF_GetSpellID 
 --	Read available spells / abilities from spell book including spellid's
@@ -1071,7 +1072,6 @@ function SMARTBUFF_GetSpellID(spellname)
     i = i + 1;
     spellN = GetSpellBookItemName(i, BOOKTYPE_SPELL);
     skillType, spellId = GetSpellBookItemInfo(i, BOOKTYPE_SPELL);
-    --print(spellN.." "..spellId);
 
     if (skillType == "FLYOUT") then
       for j = 1, GetNumFlyouts() do
@@ -1081,7 +1081,6 @@ function SMARTBUFF_GetSpellID(spellname)
           for s = 1, numSlots do
             local flySpellID, overrideSpellID, isKnown, spellN, slotSpecID = GetFlyoutSlotInfo(fid, s);
             if (isKnown and string.lower(spellN) == spellname) then
-              --print(spellname.." "..spellN.." "..flySpellID);
               return flySpellID;
             end
           end
@@ -1194,7 +1193,6 @@ function SMARTBUFF_SetBuff(buff, i, ia)
 
   if (SMARTBUFF_IsSpell(cBuffs[i].Type) or cBuffs[i].Type == SMARTBUFF_CONST_TRACK) then
     cBuffs[i].IDS, cBuffs[i].BookID = SMARTBUFF_GetSpellID(cBuffs[i].BuffS);
---	if cBuffs[i].IDS then print("Id: "..cBuffs[i].IDS.."   BookId:"..cBuffs[i].BookID); end
   end
   
   if (cBuffs[i].IDS == nil and not(SMARTBUFF_IsItem(cBuffs[i].Type))) then
@@ -1376,7 +1374,7 @@ function SMARTBUFF_CheckBuffTimers()
       end
       if (cBuffTimer[subgroup]) then
         cBuffTimer[subgroup] = nil;
-        SMARTBUFF_AddMsgD("Group " .. subgroup .. ": group timer reseted");
+        SMARTBUFF_AddMsgD("Group " .. subgroup .. ": group timer reset");
       end
     end
   end
@@ -1748,7 +1746,8 @@ function SMARTBUFF_Check(mode, force)
       else        
         unitsGrp = units;
       end
-    
+      
+
       -- check group buff
       if (buffs and unitsGrp and not isMounted) then
 
@@ -1926,19 +1925,19 @@ function SMARTBUFF_Check(mode, force)
       if (units) then
         for _, unit in pairs(units) do
           if (isSetBuffs) then break; end
-            
-          local spellName, actionType, slot, buffType, rankText;
-          i, actionType, spellName, slot, _, buffType, rankText = SMARTBUFF_BuffUnit(unit, subgroup, mode);
-
-          if (i <= 1) then
-            if (i == 0 and mode ~= 1) then
-              --tLastCheck = GetTime() - O.AutoTimer + GlobalCd;
-              if (actionType == SMARTBUFF_ACTION_ITEM) then
-                --tLastCheck = tLastCheck + 2;
+          if (UnitInRange(unit)) then
+              local spellName, actionType, slot, buffType, rankText;
+              i, actionType, spellName, slot, _, buffType, rankText = SMARTBUFF_BuffUnit(unit, subgroup, mode);
+              if (i <= 1) then
+                if (i == 0 and mode ~= 1) then
+                  --tLastCheck = GetTime() - O.AutoTimer + GlobalCd;
+                  if (actionType == SMARTBUFF_ACTION_ITEM) then
+                    --tLastCheck = tLastCheck + 2;
+                  end
+                end
+                IsChecking = false;
+                return i, actionType, spellName, slot, unit, buffType, rankText;
               end
-            end
-            IsChecking = false;
-            return i, actionType, spellName, slot, unit, buffType, rankText;
           end
         end
       end
@@ -2684,27 +2683,19 @@ function SMARTBUFF_doCast(unit, id, spellName, levels, type)
     return 1;
   end
   
-  --
-  -- Rangecheck - theres an issue with "IsSpellInRange" under WOTLK as of 22/07/2022
-  -- with causes a group buffing issue - Ive reported the issue to Blizzard along with
-  -- video links which are:
-  --
-  -- https://www.twitch.tv/videos/1535304402
-  -- https://www.twitch.tv/videos/1535304703
-  --
-
-  if ((type == SMARTBUFF_CONST_GROUP or type == SMARTBUFF_CONST_ITEMGROUP) and wowTOC ~= 30400) then  -- added a quick hack for wotlk beta until issue is fixed (no range checking)
-
-	if (SpellHasRange(spellName)) then 
-      if (IsSpellInRange(spellName, unit) ~= 1) then
-        return 3;
-      end
+  -- switched to using the LibRangeCheck-2.0 library by mitchnull for range checking.
+  if ((type == SMARTBUFF_CONST_GROUP or type == SMARTBUFF_CONST_ITEMGROUP)) then
+    local minRange, maxRange = LRC:GetRange(unit)
+	if (UnitInRange(unit)) then
+	    if (SpellHasRange(spellName)) then    
+            if not minRange then
+	            return 3;   -- unit is out of range for spell
+			end
+        end
     else
-      if (UnitInRange(unit) ~= 1) then
+        -- unit is not in range
         return 3;
-      end
-    end
-
+	end
   end
   
   -- check if target is to low for this spell
@@ -2718,7 +2709,7 @@ function SMARTBUFF_doCast(unit, id, spellName, levels, type)
   if (notEnoughMana) then
     return 6;
   end
-  
+
   return 0, rank, rankText;
 end
 -- END SMARTBUFF_doCast
@@ -3346,7 +3337,7 @@ function SMARTBUFF_Options_Init(self)
   if (O.ToggleGrp == nil) then O.ToggleGrp = {true, false, false, false, false, false, false, false}; end
   if (O.ToggleSubGrpChanged == nil) then  O.ToggleSubGrpChanged = false; end  
   
-  if (O.ToggleMsgNormal == nil) then O.ToggleMsgNormal = true; end
+  if (O.ToggleMsgNormal == nil) then O.ToggleMsgNormal = false; end
   if (O.ToggleMsgWarning == nil) then O.ToggleMsgWarning = false; end
   if (O.ToggleMsgError == nil) then O.ToggleMsgError = false; end
   

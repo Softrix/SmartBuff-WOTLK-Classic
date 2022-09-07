@@ -494,7 +494,6 @@ function SMARTBUFF_InitSpellIDs()
   SMARTBUFF_DRINK_SPELL     = GetSpellInfo(430);   --"Drink"
   
   -- Misc
-  SMARTBUFF_KIRUSSOV        = GetSpellInfo(46302); --"K'iru's Song of Victory"
   SMARTBUFF_FISHING         = GetSpellInfo(7620) or GetSpellInfo(111541); --"Fishing"
   
 
@@ -558,7 +557,9 @@ function SMARTBUFF_InitSpellIDs()
                   GetSpellInfo(203538), -- Greater Blessing of Kings
                   GetSpellInfo(90363),  -- Embrace of the Shale Spider
                   GetSpellInfo(160077),  -- Strength of the Earth
-                  SMARTBUFF_PWF, SMARTBUFF_POFRB1, SMARTBUFF_KIRUSVICTORY,
+                  SMARTBUFF_DSR1, SMARTBUFF_SWPR1,
+                  SMARTBUFF_PSWPR1, SMARTBUFF_POSR1,
+                  SMARTBUFF_PWF, SMARTBUFF_POFRB1,
                 };
 
   S.LinkFlaskClassic = { SMARTBUFF_BLINDINGLIGHTFLASK_BUFF, SMARTBUFF_FORTIFICATIONFLASK_BUFF, SMARTBUFF_RESTORATIONFLASK_BUFF, SMARTBUFF_PUREDEATHFLASK_BUFF,
