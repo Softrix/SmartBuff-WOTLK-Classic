@@ -7,7 +7,7 @@
 -------------------------------------------------------------------------------
 
 SMARTBUFF_DATE			= "110922";
-SMARTBUFF_VERSION       = "r30."..SMARTBUFF_DATE;
+SMARTBUFF_VERSION       = "r31."..SMARTBUFF_DATE;
 SMARTBUFF_VERSIONMIN	= 11403;			-- min version
 SMARTBUFF_VERSIONNR     = 30400;			-- max version
 SMARTBUFF_TITLE         = "SmartBuff";
@@ -1910,10 +1910,9 @@ function SMARTBUFF_Check(mode, force)
       if (units) then
         for _, unit in pairs(units) do
           if (isSetBuffs) then break; end
-          if (UnitInRange(unit) or unit == "player") then  -- unit range checking doesnt work with "player", and only party or raid units.
-              local spellName, actionType, slot, buffType, rankText;
+          if (UnitInRange(unit) or unit == "player") then  -- unit range checking doesnt work with "player", and only party or raid units.            
+			  local spellName, actionType, slot, buffType, rankText;
               i, actionType, spellName, slot, _, buffType, rankText = SMARTBUFF_BuffUnit(unit, subgroup, mode);
-
               if (i <= 1) then
                 if (i == 0 and mode ~= 1) then
                   --tLastCheck = GetTime() - O.AutoTimer + GlobalCd;
@@ -2283,8 +2282,7 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
                 -- check timer object
                 buff, index, buffname, bt, charges = SMARTBUFF_CheckUnitBuffs(unit, buffnS, cBuff.Type, cBuff.Links, cBuff.Chain);
                 if (charges == nil) then charges = -1; end
-                if (charges > 1) then cBuff.CanCharge = true; end
-                  
+                if (charges > 1) then cBuff.CanCharge = true; end                  
                 if (unit ~= "target" and buff == nil and cBuff.DurationS >= 1 and rbTime > 0) then
                   if (SMARTBUFF_IsPlayer(unit)) then
                     if (cBuffTimer[unit] ~= nil and cBuffTimer[unit][buffnS] ~= nil) then
@@ -2296,7 +2294,7 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
                     bufftarget = nil;
                     --SMARTBUFF_AddMsgD(un .. " (P): " .. index .. ". " .. GetPlayerBuffTexture(index) .. "(" .. charges .. ") - " .. buffnS .. string.format(" %.0f sec left", bt));
                   elseif (cBuffTimer[unit] ~= nil and cBuffTimer[unit][buffnS] ~= nil) then
-                    bt = cBuff.DurationS - (time - cBuffTimer[unit][buffnS]);
+					bt = cBuff.DurationS - (time - cBuffTimer[unit][buffnS]);
                     bufftarget = nil;
                     --SMARTBUFF_AddMsgD(un .. " (S): " .. buffnS .. string.format(" %.0f sec left", bt));
                   elseif (cBuff.BuffG ~= nil and cBuffTimer[subgroup] ~= nil and cBuffTimer[subgroup][cBuff.BuffG] ~= nil) then
@@ -2356,9 +2354,8 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
                   end
                 end
               end
-              
+                            
               if (buff) then
-                
                 -- Cast mode ---------------------------------------------------------------------------------------
                 if (mode == 0 or mode == 5) then
                   currentUnit = nil;
