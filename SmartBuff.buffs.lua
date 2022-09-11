@@ -257,7 +257,11 @@ end
 ---
 ----------------------------------------------------------------------------------------------------------------------------------
 function SMARTBUFF_InitSpellIDs()
-  
+ 
+  -- Misc
+  SMARTBUFF_KIRUSSOV        = GetSpellInfo(46302); --"K'iru's Song of Victory"
+  SMARTBUFF_FISHING         = GetSpellInfo(7620) or GetSpellInfo(111541); --"Fishing"
+
   -- Druid  
   SMARTBUFF_DRUID_CAT       = GetSpellInfo(768);   --"Cat Form"
   SMARTBUFF_DRUID_TREE      = GetSpellInfo(33891); --"Tree of Life"
@@ -298,13 +302,10 @@ function SMARTBUFF_InitSpellIDs()
 
   SMARTBUFF_KIRUSVICTORY    = GetSpellInfo(46302); --"K'iru Song of Victory"
 
-
-  
-  S.ChainPriestFortBuffs = { SMARTBUFF_PWF, SMARTBUFF_POFRB1, SMARTBUFF_KIRUSVICTORY};
+  S.ChainPriestFortBuffs = { SMARTBUFF_PWF, SMARTBUFF_POFRB1, SMARTBUFF_KIRUSSOV};
   S.ChainPriestSpiritBuffs = { SMARTBUFF_DS, SMARTBUFF_POSRB1};
   S.ChainPriestShadowBuffs = { SMARTBUFF_SP, SMARTBUFF_POSPRB1};
 
-  
   -- Mage
   SMARTBUFF_AI              = GetSpellInfo(1459);  --"Arcane Intellect"
   SMARTBUFF_ABRB1           = GetSpellInfo(23028); --"Arcane Brilliance"
@@ -327,7 +328,7 @@ function SMARTBUFF_InitSpellIDs()
   
   -- Mage chained
   S.ChainMageArmor = { SMARTBUFF_ICEARMOR, SMARTBUFF_FROSTARMOR, SMARTBUFF_MAGEARMOR, SMARTBUFF_MOLTENARMOR };
-  S.ChainMageBuffs = { SMARTBUFF_AI, SMARTBUFF_ABRB1, SMARTBUFF_KIRUSVICTORY};
+  S.ChainMageBuffs = { SMARTBUFF_AI, SMARTBUFF_ABRB1, SMARTBUFF_KIRUSSOV};
   
   -- Warlock
   SMARTBUFF_FELARMOR        = GetSpellInfo(28176); --"Fel Armor"
@@ -491,11 +492,7 @@ function SMARTBUFF_InitSpellIDs()
   -- Food
   SMARTBUFF_FOOD_AURA       = GetSpellInfo(19705); --"Well Fed"
   SMARTBUFF_FOOD_SPELL      = GetSpellInfo(433);   --"Food"
-  SMARTBUFF_DRINK_SPELL     = GetSpellInfo(430);   --"Drink"
-  
-  -- Misc
-  SMARTBUFF_FISHING         = GetSpellInfo(7620) or GetSpellInfo(111541); --"Fishing"
-  
+  SMARTBUFF_DRINK_SPELL     = GetSpellInfo(430);   --"Drink"  
 
   -- Scroll
   SMARTBUFF_SBAGILITY				= GetSpellInfo(8115);			-- Scroll buff: Agility
@@ -557,8 +554,6 @@ function SMARTBUFF_InitSpellIDs()
                   GetSpellInfo(203538), -- Greater Blessing of Kings
                   GetSpellInfo(90363),  -- Embrace of the Shale Spider
                   GetSpellInfo(160077),  -- Strength of the Earth
-                  SMARTBUFF_DSR1, SMARTBUFF_SWPR1,
-                  SMARTBUFF_PSWPR1, SMARTBUFF_POSR1,
                   SMARTBUFF_PWF, SMARTBUFF_POFRB1,
                 };
 

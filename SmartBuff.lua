@@ -6,7 +6,7 @@
 -- Cast the most important buffs on you, tanks or party/raid members/pets.
 -------------------------------------------------------------------------------
 
-SMARTBUFF_DATE			= "070922 Dev";
+SMARTBUFF_DATE			= "110922";
 SMARTBUFF_VERSION       = "r30."..SMARTBUFF_DATE;
 SMARTBUFF_VERSIONMIN	= 11403;			-- min version
 SMARTBUFF_VERSIONNR     = 30400;			-- max version
@@ -20,16 +20,16 @@ SMARTBUFF_OPTIONS_TITLE = SMARTBUFF_VERS_TITLE;
 local addonName = ...
 local SmartbuffPrefix = "Smartbuff";
 local SmartbuffSession = true;
-local SmartbuffVerCheck = true;		-- for my use when checking guild users/testers versions  :)
+local SmartbuffVerCheck = false;		-- for my use when checking guild users/testers versions  :)
 local wowVersionString, wowBuild, _, wowTOC = GetBuildInfo();
 local isWOTLKC = (_G.WOW_PROJECT_ID == 5 and wowTOC >= 30000);
-local SmartbuffRevision = 29;
+local SmartbuffRevision = 30;
 local SmartbuffVerNotifyList = {}
 
--- changed Smartbuff to use LibRangeCheck-2.0 by Mitchnull
+-- Smartbuff now uses LibRangeCheck-2.0 by Mitchnull, not fully implemented
+-- just yet but I will be moving over to this in the near future.
 -- https://www.wowace.com/projects/librangecheck-2-0
-
-local LRC = LibStub("LibRangeCheck-2.0", true)
+local LRC = LibStub("LibRangeCheck-2.0")
 
 local LCD = LibStub and LibStub("LibClassicDurations", true)
 if LCD then LCD:Register(SMARTBUFF_TITLE) end
@@ -110,9 +110,6 @@ local cBuffTimer = { };
 local cBlacklist = { };
 local cUnits = { };
 local cBuffsCombat = { };
-
-local spellsByName = { };
-local spellsByID = { };
 
 local cScrBtnBO = nil;
 
@@ -309,7 +306,6 @@ local function IsVisibleToPlayer(self)
   return false;
 end
 
-
 local function CS()
   if isWOTLKC then
       currentSpec = GetActiveTalentGroup() or nil;
@@ -460,7 +456,6 @@ local function SendSmartbuffVersion(player, unit)
 	-- not announced, add the player and announce.
 	tinsert(SmartbuffVerNotifyList, {player, unit, GetTime()})
 	C_ChatInfo.SendAddonMessage(SmartbuffPrefix, SmartbuffRevision, "WHISPER", player)
-	SMARTBUFF_AddMsgD(string.format("%s was sent version information.",player))
 end
 
 -- SMARTBUFF_OnLoad
@@ -484,7 +479,7 @@ function SMARTBUFF_OnLoad(self)
   self:RegisterEvent("UNIT_SPELLCAST_FAILED");
   self:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED");
   
-  --One of them allows SmartBuff to be closed with the Escape key
+  -- One of them allows SmartBuff to be closed with the Escape key
   tinsert(UISpecialFrames, "SmartBuffOptionsFrame");
   UIPanelWindows["SmartBuffOptionsFrame"] = nil;
   
@@ -663,7 +658,7 @@ function SMARTBUFF_OnEvent(self, event, ...)
       if (UnitName(currentUnit) ~= sPlayerName and O.BlacklistTimer > 0) then
         cBlacklist[currentUnit] = GetTime();
         if (currentUnit and UnitName(currentUnit)) then
-          SMARTBUFF_AddMsgWarn(UnitName(currentUnit).." ("..currentUnit..") blacklisted ("..O.BlacklistTimer.."sec)");
+          SMARTBUFF_AddMsgD(UnitName(currentUnit).." ("..currentUnit..") blacklisted ("..O.BlacklistTimer.."sec)");
         end
       end
     end
@@ -892,10 +887,7 @@ function SMARTBUFF_SetUnits()
           SMARTBUFF_AddMsgD(name .. ", " .. server);
         end
         sRUnit = "raid"..n;
-        
-		-- Debug ----------------------------------------------------------------------------------------
---        if role then print("Player: ".. name .. ", " .. sRUnit .. ", " .. role); end
-        
+               
         SMARTBUFF_AddUnitToClass("raid", n, role);
         SmartBuff_AddToUnitList(1, sRUnit, subgroup);
         SmartBuff_AddToUnitList(2, sRUnit, subgroup);
@@ -958,11 +950,6 @@ function SMARTBUFF_SetUnits()
       SmartBuff_AddToUnitList(2, "party"..j, 1);
 	  name, _, _, _, _, _, _, online, _, _ = GetRaidRosterInfo(j);
 	  if name and online then SendSmartbuffVersion(name, "party") end
-	  
-	  -- debug
---      if name then print("Player: ".. name .. ", " .. "party"..j .. "."); end
-
-	  
     end
     SMARTBUFF_AddMsgD("Party Unit-Setup finished");
   
@@ -1048,6 +1035,7 @@ end
 -- END SMARTBUFF_SetUnits
 
 
+
 -------------------------------------------------------------------------------------------------------------------------------------
 --	SMARTBUFF_GetSpellID 
 --	Read available spells / abilities from spell book including spellid's
@@ -1072,6 +1060,7 @@ function SMARTBUFF_GetSpellID(spellname)
     i = i + 1;
     spellN = GetSpellBookItemName(i, BOOKTYPE_SPELL);
     skillType, spellId = GetSpellBookItemInfo(i, BOOKTYPE_SPELL);
+    --print(spellN.." "..spellId);
 
     if (skillType == "FLYOUT") then
       for j = 1, GetNumFlyouts() do
@@ -1081,6 +1070,7 @@ function SMARTBUFF_GetSpellID(spellname)
           for s = 1, numSlots do
             local flySpellID, overrideSpellID, isKnown, spellN, slotSpecID = GetFlyoutSlotInfo(fid, s);
             if (isKnown and string.lower(spellN) == spellname) then
+              --print(spellname.." "..spellN.." "..flySpellID);
               return flySpellID;
             end
           end
@@ -1101,8 +1091,6 @@ function SMARTBUFF_GetSpellID(spellname)
     end    
   end
   
---  if i and id then print("Spell Name: "..spellname..", id: "..id..", i: " .. i); end; 
-
   return id, i;
 end
 
@@ -1193,6 +1181,7 @@ function SMARTBUFF_SetBuff(buff, i, ia)
 
   if (SMARTBUFF_IsSpell(cBuffs[i].Type) or cBuffs[i].Type == SMARTBUFF_CONST_TRACK) then
     cBuffs[i].IDS, cBuffs[i].BookID = SMARTBUFF_GetSpellID(cBuffs[i].BuffS);
+--	if cBuffs[i].IDS then print("Id: "..cBuffs[i].IDS.."   BookId:"..cBuffs[i].BookID); end
   end
   
   if (cBuffs[i].IDS == nil and not(SMARTBUFF_IsItem(cBuffs[i].Type))) then
@@ -1232,10 +1221,7 @@ function SMARTBUFF_SetBuff(buff, i, ia)
       cBuffs[i].IconS = texture;
     end
   end
-  
-  -- debug
---  print("Add "..buff[1]);
-  
+    
   cBuffs[i].Links = buff[6];
   cBuffs[i].Chain = buff[7];  
   cBuffs[i].BuffG = buff[8];
@@ -1374,7 +1360,7 @@ function SMARTBUFF_CheckBuffTimers()
       end
       if (cBuffTimer[subgroup]) then
         cBuffTimer[subgroup] = nil;
-        SMARTBUFF_AddMsgD("Group " .. subgroup .. ": group timer reset");
+        SMARTBUFF_AddMsgD("Group " .. subgroup .. ": group timer reseted");
       end
     end
   end
@@ -1746,8 +1732,7 @@ function SMARTBUFF_Check(mode, force)
       else        
         unitsGrp = units;
       end
-      
-
+    
       -- check group buff
       if (buffs and unitsGrp and not isMounted) then
 
@@ -1925,9 +1910,10 @@ function SMARTBUFF_Check(mode, force)
       if (units) then
         for _, unit in pairs(units) do
           if (isSetBuffs) then break; end
-          if (UnitInRange(unit)) then
+          if (UnitInRange(unit) or unit == "player") then  -- unit range checking doesnt work with "player", and only party or raid units.
               local spellName, actionType, slot, buffType, rankText;
               i, actionType, spellName, slot, _, buffType, rankText = SMARTBUFF_BuffUnit(unit, subgroup, mode);
+
               if (i <= 1) then
                 if (i == 0 and mode ~= 1) then
                   --tLastCheck = GetTime() - O.AutoTimer + GlobalCd;
@@ -1938,7 +1924,7 @@ function SMARTBUFF_Check(mode, force)
                 IsChecking = false;
                 return i, actionType, spellName, slot, unit, buffType, rankText;
               end
-          end
+		  end
         end
       end
     
@@ -2682,11 +2668,12 @@ function SMARTBUFF_doCast(unit, id, spellName, levels, type)
   elseif (cd > 0) then 
     return 1;
   end
-  
-  -- switched to using the LibRangeCheck-2.0 library by mitchnull for range checking.
+
+
+ -- switched to using the LibRangeCheck-2.0 library by mitchnull for range checking.
   if ((type == SMARTBUFF_CONST_GROUP or type == SMARTBUFF_CONST_ITEMGROUP)) then
     local minRange, maxRange = LRC:GetRange(unit)
-	if (UnitInRange(unit)) then
+	if (UnitInRange(unit) or unit == "player") then
 	    if (SpellHasRange(spellName)) then    
             if not minRange then
 	            return 3;   -- unit is out of range for spell
@@ -2697,6 +2684,7 @@ function SMARTBUFF_doCast(unit, id, spellName, levels, type)
         return 3;
 	end
   end
+
   
   -- check if target is to low for this spell
   local newId, rank, rankText = SMARTBUFF_CheckUnitLevel(unit, id, levels);
@@ -2709,7 +2697,7 @@ function SMARTBUFF_doCast(unit, id, spellName, levels, type)
   if (notEnoughMana) then
     return 6;
   end
-
+  
   return 0, rank, rankText;
 end
 -- END SMARTBUFF_doCast

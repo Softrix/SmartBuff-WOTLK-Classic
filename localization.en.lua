@@ -162,7 +162,7 @@ SMARTBUFF_OFTT_LINKSELFBUFFCHECK = "Checks if a self buff is active,\nwhose only
 
 -- Buffsetup Frame Text
 SMARTBUFF_BST_SELFONLY       = "Myself only";
-SMARTBUFF_BST_SELFNOT        = "Myself not";
+SMARTBUFF_BST_SELFNOT        = "Not myself";
 SMARTBUFF_BST_COMBATIN       = "In combat";
 SMARTBUFF_BST_COMBATOUT      = "Out of combat";
 SMARTBUFF_BST_MAINHAND       = "Main Hand";
