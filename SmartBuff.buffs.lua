@@ -359,6 +359,7 @@ function SMARTBUFF_InitSpellIDs()
   -- Hunter
   SMARTBUFF_TRUESHOTAURA    = GetSpellInfo(19506); --"Trueshot Aura"
   SMARTBUFF_RAPIDFIRE       = GetSpellInfo(3045);  --"Rapid Fire"
+  SMARTBUFF_CALLPET         = GetSpellInfo(883);   --"Call Pet"
   SMARTBUFF_AOTH            = GetSpellInfo(13165); --"Aspect of the Hawk"
   SMARTBUFF_AOTM            = GetSpellInfo(13163); --"Aspect of the Monkey"
   SMARTBUFF_AOTW            = GetSpellInfo(20043); --"Aspect of the Wild"
@@ -695,14 +696,16 @@ function SMARTBUFF_InitSpellList()
     SMARTBUFF_BUFFLIST = {
       {SMARTBUFF_TRUESHOTAURA, -1, SMARTBUFF_CONST_SELF},
       {SMARTBUFF_RAPIDFIRE, 0.2, SMARTBUFF_CONST_SELF},
-      {SMARTBUFF_AOTDH, -1, SMARTBUFF_CONST_SELF, nil, nil, nil, S.ChainAspects},
+
+	  {SMARTBUFF_AOTDH, -1, SMARTBUFF_CONST_SELF, nil, nil, nil, S.ChainAspects},
       {SMARTBUFF_AOTH, -1, SMARTBUFF_CONST_SELF, nil, nil, nil, S.ChainAspects},
       {SMARTBUFF_AOTM, -1, SMARTBUFF_CONST_SELF, nil, nil, nil, S.ChainAspects},
       {SMARTBUFF_AOTV, -1, SMARTBUFF_CONST_SELF, nil, nil, nil, S.ChainAspects},
       {SMARTBUFF_AOTW, -1, SMARTBUFF_CONST_SELF, nil, nil, nil, S.ChainAspects},
       {SMARTBUFF_AOTB, -1, SMARTBUFF_CONST_SELF, nil, nil, nil, S.ChainAspects},
       {SMARTBUFF_AOTC, -1, SMARTBUFF_CONST_SELF, nil, nil, nil, S.ChainAspects},
-      {SMARTBUFF_AOTP, -1, SMARTBUFF_CONST_SELF, nil, nil, nil, S.ChainAspects}
+      {SMARTBUFF_AOTP, -1, SMARTBUFF_CONST_SELF, nil, nil, nil, S.ChainAspects},
+      {SMARTBUFF_CALLPET, -1, SMARTBUFF_CONST_SELF},
     };
   end
 

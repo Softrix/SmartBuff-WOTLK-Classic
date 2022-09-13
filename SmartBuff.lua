@@ -6,8 +6,8 @@
 -- Cast the most important buffs on you, tanks or party/raid members/pets.
 -------------------------------------------------------------------------------
 
-SMARTBUFF_DATE			= "110922";
-SMARTBUFF_VERSION       = "r31."..SMARTBUFF_DATE;
+SMARTBUFF_DATE			= "130922 Dev";
+SMARTBUFF_VERSION       = "r32."..SMARTBUFF_DATE;
 SMARTBUFF_VERSIONMIN	= 11403;			-- min version
 SMARTBUFF_VERSIONNR     = 30400;			-- max version
 SMARTBUFF_TITLE         = "SmartBuff";
@@ -23,7 +23,7 @@ local SmartbuffSession = true;
 local SmartbuffVerCheck = false;		-- for my use when checking guild users/testers versions  :)
 local wowVersionString, wowBuild, _, wowTOC = GetBuildInfo();
 local isWOTLKC = (_G.WOW_PROJECT_ID == 5 and wowTOC >= 30000);
-local SmartbuffRevision = 30;
+local SmartbuffRevision = 31;
 local SmartbuffVerNotifyList = {}
 
 -- Smartbuff now uses LibRangeCheck-2.0 by Mitchnull, not fully implemented
@@ -1905,12 +1905,12 @@ function SMARTBUFF_Check(mode, force)
           i = i + 1;
         end -- END while buffs
       end
-          
+      
       -- check buffs
       if (units) then
         for _, unit in pairs(units) do
           if (isSetBuffs) then break; end
-          if (UnitInRange(unit) or unit == "player") then  -- unit range checking doesnt work with "player", and only party or raid units.            
+          if ((UnitInRange(unit) or unit == "player")) then  -- unit range checking doesnt work with "player", and only party or raid units.            
 			  local spellName, actionType, slot, buffType, rankText;
               i, actionType, spellName, slot, _, buffType, rankText = SMARTBUFF_BuffUnit(unit, subgroup, mode);
               if (i <= 1) then
@@ -2039,7 +2039,13 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
 			bUsable = false;
 		  end
 	  end
-    
+
+      -- check for hunter pet spawn and ignore call pet if its already active
+      if (bUsable and sPlayerClass == "HUNTER") then
+        if (buffnS == SMARTBUFF_CALLPET and IsPetActive()) then
+		    bUsable = false;
+		end
+      end    
       
       if (bUsable and not (cBuff.Type == SMARTBUFF_CONST_TRACK or SMARTBUFF_IsItem(cBuff.Type))) then
         -- check if you have enough mana/rage/energy to cast
