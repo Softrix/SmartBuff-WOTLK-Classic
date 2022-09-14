@@ -30,6 +30,7 @@ Run the mod when ever you wish, if nothing is buffed, there is no penalty or coo
 - Titan Panel support
 
 
+
 ## Usage:
 
 Minimap button:
@@ -37,6 +38,7 @@ Minimap button:
 - Right click: enables/disables SmartBuff
 - Alt-Left click: SmartDebuff
 - Shift-Left click: move minimap button
+
 
 
 ## Commands:
@@ -52,6 +54,14 @@ Type /sb [command] or /smartbuff [command] in game
 
 Options frame:
 Right click on buff checkbox: opens buff setup frame
+
+
+
+## Macro Usage
+
+If you prefer to use Smartbuff in a macro rather than scrolling your mouse or using the action button then simply use: 
+
+/click SmartBuff_KeyButton
 
 
 ## Contact / Support
