@@ -6,9 +6,9 @@
 SMARTBUFF_WHATSNEW = "\n\n|cffffffff        Whats new:|r\n\n"
   .."          |cffffffffClassic version by Codermik\n"
   .."          Please report any issues on Curse or Discord.|r\n\n\n"
-  .."          Changes in r32:\n\n"
-  .."             * Added Hunter's 'Call Pet' which needed some\n"
-  .."               additional logic as its not a buff.\n"
+  .."          Changes in r33:\n\n"
+  .."             * Added additional checking for the daily island\n"
+  .."               K'iru Song buff that causes buffing issues.\n"
   .."\n\n"
   .."          |c0000FF96Many thanks to Chris S. for his donation and\n"
   .."          supporting my addon development.\n\n"
@@ -199,7 +199,7 @@ SMARTBUFF_MSG_OOR            = "is out of range to buff!";
 SMARTBUFF_MSG_CD             = "Global cooldown!";
 SMARTBUFF_MSG_CHAT           = "not possible in chat mode!";
 SMARTBUFF_MSG_SHAPESHIFT     = "Casting is not allowed in shapeshift form!";
-SMARTBUFF_MSG_NOACTIONSLOT   = "needs a slot in an actionbar to working properly!";
+SMARTBUFF_MSG_NOACTIONSLOT   = "needs a slot in an actionbar to work properly!";
 SMARTBUFF_MSG_GROUP          = "Group";
 SMARTBUFF_MSG_NEEDS          = "needs";
 SMARTBUFF_MSG_OOM            = "Not enough mana/rage/energy!";

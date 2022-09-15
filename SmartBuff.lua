@@ -6,8 +6,8 @@
 -- Cast the most important buffs on you, tanks or party/raid members/pets.
 -------------------------------------------------------------------------------
 
-SMARTBUFF_DATE			= "140922";
-SMARTBUFF_VERSION       = "r32."..SMARTBUFF_DATE;
+SMARTBUFF_DATE			= "150922 Dev";
+SMARTBUFF_VERSION       = "r33."..SMARTBUFF_DATE;
 SMARTBUFF_VERSIONMIN	= 11403;			-- min version
 SMARTBUFF_VERSIONNR     = 30400;			-- max version
 SMARTBUFF_TITLE         = "SmartBuff";
@@ -323,6 +323,17 @@ end
 
 local function CT()
   return currentTemplate;
+end
+
+-- check for K'iru's Song of Victory
+local function CheckKirusSongBuff()
+  for i=1,40 do
+    name, rank, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, shouldConsolidate, spellId = UnitAura("player",i);
+    if name == SMARTBUFF_KIRUSSOV then
+	  return true;
+	end
+  end
+  return false;
 end
 
 local function GetBuffSettings(buff)
@@ -2046,6 +2057,14 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
 		    bUsable = false;
 		end
       end  
+
+      -- check if daily island buff is active
+      if (bUsable and CheckKirusSongBuff() and (sPlayerClass == "PRIEST" or sPlayerClass == "MAGE")) then
+        -- island buff is more powerful than the class buffs which prevents the addon moving past this.
+	    if (buffnS == SMARTBUFF_AI or buffnS == SMARTBUFF_ABRB1 or buffnS == SMARTBUFF_PWF or buffnS == SMARTBUFF_POFRB1) then
+		    bUsable = false;
+		end
+	  end
       
       if (bUsable and not (cBuff.Type == SMARTBUFF_CONST_TRACK or SMARTBUFF_IsItem(cBuff.Type))) then
         -- check if you have enough mana/rage/energy to cast
