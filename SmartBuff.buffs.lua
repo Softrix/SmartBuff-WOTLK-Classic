@@ -512,7 +512,7 @@ function SMARTBUFF_InitSpellIDs()
   SMARTBUFF_EARTHEN_BUFF			= GetSpellInfo(39637);			-- Earthen Elixir
   SMARTBUFF_MASTERY_BUFF			= GetSpellInfo(33741);			-- Elixir of Mastery
   SMARTBUFF_CAMOUFLAGE_BUFF 		= GetSpellInfo(28543);			-- Elixir of Camouflage
-  SMARTBUFF_HEALINGPOWER_BUFF		= GetSpellInfo(28545);			-- Elixir of Healing Power
+  SMARTBUFF_HEALINGPOWER_BUFF		= GetSpellInfo(28491);			-- Elixir of Healing Power
   SMARTBUFF_MAJORFORTITUDE_BUFF		= GetSpellInfo(39636);			-- Elixir of Major Fortitude
   SMARTBUFF_MAJORSTRENGTH_BUFF		= GetSpellInfo(28544);			-- Elixir of Major Strength
   SMARTBUFF_ONSLAUGHTELIXIR_BUFF	= GetSpellInfo(33738);			-- Onslaught Elixir
