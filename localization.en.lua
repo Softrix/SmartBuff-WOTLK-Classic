@@ -6,11 +6,13 @@
 SMARTBUFF_WHATSNEW = "\n\n|cffffffff        Whats new:|r\n\n"
   .."          |cffffffffClassic version by Codermik\n"
   .."          Please report any issues on Curse or Discord.|r\n\n\n"
-  .."          Changes in r33:\n\n"
-  .."             * Added additional checking for the daily island\n"
-  .."               K'iru Song buff that causes buffing issues.\n"
-  .."             * Fixed issue with Elixir of Healing Power reported\n"
-  .."               via Discord by Funder - thanks!\n"
+  .."          Changes in r34:\n\n"
+  .."             * Added the ability to change the missing buff\n"
+  .."               sound from the options screen.\n\n"
+  .."             * Added option to warn for missing buffs while\n"
+  .."               you are mounted.\n\n"
+  .."             * Fixed issue with Moonkin form not prompting \n"
+  .."               with missing buff notifications.\n\n"
   .."\n\n"
   .."          |c0000FF96Many thanks to Chris S. for his donation and\n"
   .."          supporting my addon development.\n\n"
@@ -109,6 +111,7 @@ SMARTBUFF_OFT_BUFFINCITIES   = "Buff in cities";
 SMARTBUFF_OFT_BLDURATION     = "Blacklisted";
 SMARTBUFF_OFT_ANTIDAZE       = "Anti daze";
 SMARTBUFF_OFT_HIDESABUTTON   = "Hide action button";
+SMARTBUFF_OFT_WARNWHILEMOUNTED = "Warn while mounted";
 SMARTBUFF_OFT_INCOMBAT       = "Buff in combat";
 SMARTBUFF_OFT_SMARTDEBUFF    = "SmartDebuff";
 SMARTBUFF_OFT_INSHAPESHIFT   = "Shapeshift";
@@ -154,6 +157,8 @@ SMARTBUFF_OFTT_BLDURATION    = "How many seconds, players will be blacklisted.\n
 SMARTBUFF_OFTT_ANTIDAZE      = "Automatically cancels the\naspect of the cheetah/pack\nif someone gets dazed\n(self or group).";
 SMARTBUFF_OFTT_SPLASHSTYLE   = "Changes the fontstyle of\nthe buff messages.";
 SMARTBUFF_OFTT_HIDESABUTTON  = "Hides the SmartBuff action button.";
+SMARTBUFF_OFTT_WARNWHILEMOUNTED = "Check and warn for missing buffs while you are mounted.";
+SMARTBUFF_OFTT_SOUNDSELECT	 = "Select the required splash sound.";
 SMARTBUFF_OFTT_INCOMBAT      = "At the moment it only works on yourself.\nThe first buff you mark as in combat,\nwill set on the button before combat\nand you can use it in combat.\n!!! Warning !!!\nAll logic is disabled in combat!";
 SMARTBUFF_OFTT_SMARTDEBUFF   = "Shows the SmartDebuff frame.";
 SMARTBUFF_OFTT_SPLASHDURATION= "How many seconds the splash\nmessage will displayed,\nbefore it fades.";
@@ -188,7 +193,7 @@ SMARTBUFF_BSTT_MANALIMIT     = "Mana/Rage/Energy threshold\nIf you are below thi
 SMARTBUFF_PSTT_RESIZE        = "Minimize/maximize\nthe main options frame";
 
 -- Messages
-SMARTBUFF_MSG_LOADED         = "loaded. Classic version by Codermik - please report any errors found.";
+SMARTBUFF_MSG_LOADED         = "loaded! - Classic version by Codermik - please report any errors found.";
 SMARTBUFF_MSG_NEWVER1		 = "|cff00e0ffSmartbuff : |cffffffff There is a new version available, you are using |cffFFFF00";
 SMARTBUFF_MSG_NEWVER2		 = "|cffffffff and revision |cffFFFF00r"
 SMARTBUFF_MSG_NEWVER3		 = "|cffffffff is currently available for download.  Join Discord for all the latest information at https://discord.gg/R6EkZ94TKK.";
@@ -212,6 +217,7 @@ SMARTBUFF_MSG_REBUFF         = "Rebuff";
 SMARTBUFF_MSG_LEFT           = "left";
 SMARTBUFF_MSG_CLASS          = "Class";
 SMARTBUFF_MSG_CHARGES        = "charges";
+SMARTBUFF_MSG_SOUNDS		 = "Splash Sound Selection: "
 SMARTBUFF_MSG_SPECCHANGED    = "Spec changed (%s), loading buff templates...";
 
 -- Support

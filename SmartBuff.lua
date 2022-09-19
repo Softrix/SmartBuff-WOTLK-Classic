@@ -6,8 +6,8 @@
 -- Cast the most important buffs on you, tanks or party/raid members/pets.
 -------------------------------------------------------------------------------
 
-SMARTBUFF_DATE			= "160922";
-SMARTBUFF_VERSION       = "r33."..SMARTBUFF_DATE;
+SMARTBUFF_DATE			= "190922";
+SMARTBUFF_VERSION       = "r34."..SMARTBUFF_DATE;
 SMARTBUFF_VERSIONMIN	= 11403;			-- min version
 SMARTBUFF_VERSIONNR     = 30400;			-- max version
 SMARTBUFF_TITLE         = "SmartBuff";
@@ -20,10 +20,10 @@ SMARTBUFF_OPTIONS_TITLE = SMARTBUFF_VERS_TITLE;
 local addonName = ...
 local SmartbuffPrefix = "Smartbuff";
 local SmartbuffSession = true;
-local SmartbuffVerCheck = false;		-- for my use when checking guild users/testers versions  :)
+local SmartbuffVerCheck = false;	-- for my use when checking guild users/testers versions  :)
 local wowVersionString, wowBuild, _, wowTOC = GetBuildInfo();
-local isWOTLKC = (_G.WOW_PROJECT_ID == 5 and wowTOC >= 30000);
-local SmartbuffRevision = 33;
+local isWOTLKC = (_G.WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC and wowTOC >= 30400);
+local SmartbuffRevision = 34;
 local SmartbuffVerNotifyList = {}
 
 -- Smartbuff now uses LibRangeCheck-2.0 by Mitchnull, not fully implemented
@@ -158,6 +158,9 @@ local Icons = {
   ["NONE"]        = { IconPaths.Roles, 20/64, 39/64, 22/64, 41/64 },
 };
 
+-- available sounds (14)
+local Sounds = { 1141, 3784, 4574, 17318, 15262, 13830, 15273, 10042, 10720, 17316, 3337, 7894, 7914, 10033 }
+
 local DebugChatFrame = DEFAULT_CHAT_FRAME;
 
 -- upvalues
@@ -206,6 +209,11 @@ local ORD = BCC(0.7, 0.5, 0);
 local ORL = BCC(1, 0.6, 0.3);
 local WH  = BCC(1, 1, 1);
 local CY  = BCC(0.5, 1, 1);
+
+-- function to preview selected warning sound in options screen
+function SMARTBUFF_PlaySpashSound()
+  PlaySound(Sounds[O.AutoSoundSelection]);
+end
 
 -- Reorders values in the table
 local function treorder(t, i, n)
@@ -256,12 +264,21 @@ local function ChkS(text)
   return text;
 end
 
+-- check for moonkin buff
+local function CheckMoonkinBuff()
+  for i=1,40 do
+    name, rank, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, shouldConsolidate, spellId = UnitAura("player",i);
+    if name == SMARTBUFF_DRUID_MOONKIN then
+	  return true;
+	end
+  end
+  return false;
+end
+
 local function IsFlying()
+  if (O.WarnWhileMounted) then return false; end
   local result = GetShapeshiftForm(false)
-  -- bugfix 6/7/2022, frost/shadow/sanct aura on paladin was causing the 
-  -- GetShapeshiftForm to return 5 faking the addon into thinking the 
-  -- player was actually flying on a druid.  CM
-  if (result == 5 or result == 6) and sPlayerClass == "DRUID" then 
+  if ((result == 5 and not CheckMoonkinBuff()) or result == 6) and sPlayerClass == "DRUID" then 
 	return true 
   end
   return false
@@ -294,12 +311,9 @@ local function UnitGroupRolesAssigned(unit)
 end
 
 local function IsVisibleToPlayer(self)
-  if (not self) then return false; end
-  
+  if (not self) then return false; end  
   local w, h = UIParent:GetWidth(), UIParent:GetHeight();
-  local x, y = self:GetLeft(), UIParent:GetHeight() - self:GetTop();
-  
-  --print(format("w = %.0f, h = %.0f, x = %.0f, y = %.0f", w, h, x, y));  
+  local x, y = self:GetLeft(), UIParent:GetHeight() - self:GetTop();  
   if (x >= 0 and x < (w - self:GetWidth()) and y >= 0 and y < (h - self:GetHeight())) then
     return true;
   end
@@ -310,7 +324,6 @@ local function CS()
   if isWOTLKC then
       currentSpec = GetActiveTalentGroup() or nil;
   else
-      -- still need to check currentSpec here.
       if (currentSpec == nil) then
         currentSpec = GetSpecialization() or nil;
 	  end
@@ -443,11 +456,9 @@ local function IsPowerLimitOk(bs)
     -- if bs.ManaLimit <= 100 and powertype is mana then the ManaLimit is %
     if (bs.ManaLimit <= 100 and powerType == 0) then
       if (((UnitPower("player", powerType) / UnitPowerMax("player", powerType))) * 100 < bs.ManaLimit) then
-        --print(powerToken.." is below % threshold!");
         return false;
       end
     elseif (UnitPower("player", powerType) < bs.ManaLimit) then
-      --print(powerToken.." is below threshold!");
       return false;
     end
   end
@@ -505,8 +516,8 @@ function SMARTBUFF_OnLoad(self)
   SLASH_SmartReloadUI1 = "/rui";
   
   SMARTBUFF_InitSpellIDs();
-  --DEFAULT_CHAT_FRAME:AddMessage("SB OnLoad");
 end
+
 -- END SMARTBUFF_OnLoad
 
 
@@ -689,7 +700,6 @@ function SMARTBUFF_OnEvent(self, event, ...)
         if (string.find(arg1, "party") or string.find(arg1, "raid")) then
           spell = arg2;
         end        
-        --SMARTBUFF_SetButtonTexture(SmartBuff_KeyButton, imgSB);
       end      
       if (currentUnit and currentSpell and currentUnit ~= "target") then
         unit = currentUnit;
@@ -700,9 +710,7 @@ function SMARTBUFF_OnEvent(self, event, ...)
         if (cBuffTimer[unit] == nil) then
           cBuffTimer[unit] = { };
         end
-        --if (not SMARTBUFF_IsPlayer(unit)) then
           cBuffTimer[unit][spell] = GetTime();
-        --end
         if (name ~= nil) then
           SMARTBUFF_AddMsg(name .. ": " .. spell .. " " .. SMARTBUFF_MSG_BUFFED);
           currentUnit = nil;
@@ -768,7 +776,6 @@ function SMARTBUFF_Ticker(force)
         
     if (isAuraChanged) then
       isAuraChanged = false;
-      --SMARTBUFF_AddMsgD("Force check");
       SMARTBUFF_Check(1, true);
     end
     
@@ -870,7 +877,6 @@ function SMARTBUFF_SetUnits()
       SMARTBUFF_SetBuffs();
     end
     SMARTBUFF_MiniGroup_Show();
-    --SMARTBUFF_AddMsgD("Group type changed");
   end 
   
   wipe(cUnits);
@@ -926,7 +932,6 @@ function SMARTBUFF_SetUnits()
     if (not b or B[CS()][currentTemplate].SelfFirst) then
       SMARTBUFF_AddSoloSetup();
       iLastSubgroup = psg;
-      --SMARTBUFF_AddMsgD("Player not in selected groups or buff self first");
     end
   
     if (iLastSubgroup ~= psg) then
@@ -1043,8 +1048,8 @@ function SMARTBUFF_AddSoloSetup()
     cClassGroups[0][0] = "player";
   end
 end
--- END SMARTBUFF_SetUnits
 
+-- END SMARTBUFF_SetUnits
 
 
 -------------------------------------------------------------------------------------------------------------------------------------
@@ -1071,7 +1076,6 @@ function SMARTBUFF_GetSpellID(spellname)
     i = i + 1;
     spellN = GetSpellBookItemName(i, BOOKTYPE_SPELL);
     skillType, spellId = GetSpellBookItemInfo(i, BOOKTYPE_SPELL);
-    --print(spellN.." "..spellId);
 
     if (skillType == "FLYOUT") then
       for j = 1, GetNumFlyouts() do
@@ -1081,7 +1085,6 @@ function SMARTBUFF_GetSpellID(spellname)
           for s = 1, numSlots do
             local flySpellID, overrideSpellID, isKnown, spellN, slotSpecID = GetFlyoutSlotInfo(fid, s);
             if (isKnown and string.lower(spellN) == spellname) then
-              --print(spellname.." "..spellN.." "..flySpellID);
               return flySpellID;
             end
           end
@@ -1192,7 +1195,6 @@ function SMARTBUFF_SetBuff(buff, i, ia)
 
   if (SMARTBUFF_IsSpell(cBuffs[i].Type) or cBuffs[i].Type == SMARTBUFF_CONST_TRACK) then
     cBuffs[i].IDS, cBuffs[i].BookID = SMARTBUFF_GetSpellID(cBuffs[i].BuffS);
---	if cBuffs[i].IDS then print("Id: "..cBuffs[i].IDS.."   BookId:"..cBuffs[i].BookID); end
   end
   
   if (cBuffs[i].IDS == nil and not(SMARTBUFF_IsItem(cBuffs[i].Type))) then
@@ -1264,7 +1266,6 @@ function SMARTBUFF_SetInCombatBuffs()
     return;
   end
   for name, data in pairs(B[CS()][ct]) do
-    --SMARTBUFF_AddMsgD(name .. ", type = " .. type(data));
     if (type(data) == "table" and cBuffIndex[name] and (B[CS()][ct][name].EnableS or B[CS()][ct][name].EnableG) and B[CS()][ct][name].CIn) then
       if (cBuffsCombat[name]) then
         wipe(cBuffsCombat[name]);
@@ -1281,11 +1282,9 @@ function SMARTBUFF_SetInCombatBuffs()
 end
 -- END SMARTBUFF_SetBuffs
 
-
 function SMARTBUFF_IsTalentFrameVisible()
   return PlayerTalentFrame and PlayerTalentFrame:IsVisible();
 end
-
 
 -- Main Check functions
 function SMARTBUFF_PreCheck(mode, force)
@@ -1316,15 +1315,14 @@ function SMARTBUFF_PreCheck(mode, force)
   if (SmartBuffOptionsFrame:IsVisible()) then return false; end  
   
   -- check for mount-spells
-  if (sPlayerClass == "PALADIN" and (IsMounted() or IsFlying()) and not SMARTBUFF_CheckBuff("player", SMARTBUFF_CRUSADERAURA)) then
+  if (sPlayerClass == "PALADIN" and (IsMounted() or IsFlying()) and not O.WarnWhileMounted and not SMARTBUFF_CheckBuff("player", SMARTBUFF_CRUSADERAURA)) then
     return true;
   end
 
-  if ((mode == 1 and not O.ToggleAuto) or IsMounted() or IsFlying() or LootFrame:IsVisible()
+  if ((mode == 1 and not O.ToggleAuto) or not O.WarnWhileMounted and (IsMounted() or IsFlying() or LootFrame:IsVisible())
     or UnitOnTaxi("player") or UnitIsDeadOrGhost("player") or UnitIsCorpse("player")
     or (mode ~= 1 and (SMARTBUFF_IsPicnic("player") or SMARTBUFF_IsFishing("player")))
     or (UnitInVehicle("player") or UnitHasVehicleUI("player"))
-    --or (mode == 1 and (O.ToggleAutoRest and IsResting()) and not UnitIsPVP("player"))
     or (not O.BuffInCities and IsResting() and not UnitIsPVP("player"))) then
     
     if (UnitIsDeadOrGhost("player")) then
@@ -1336,10 +1334,8 @@ function SMARTBUFF_PreCheck(mode, force)
     
   if (UnitAffectingCombat("player")) then
     isCombat = true;
-    --SMARTBUFF_AddMsgD("In combat");
   else
     isCombat = false;
-    --SMARTBUFF_AddMsgD("Out of combat");
   end
   
   if (not isCombat and isSetBuffs) then
@@ -1352,7 +1348,6 @@ function SMARTBUFF_PreCheck(mode, force)
   
   return true;
 end
-
 
 -- Bufftimer check functions
 function SMARTBUFF_CheckBuffTimers()
@@ -1399,8 +1394,8 @@ function SMARTBUFF_CheckUnitBuffTimers(unit)
     end
   end
 end
--- END SMARTBUFF_CheckUnitBuffTimers
 
+-- END SMARTBUFF_CheckUnitBuffTimers
 
 -- Reset the buff timers and set them to running out soon
 function SMARTBUFF_ResetBuffTimers()
@@ -1544,7 +1539,6 @@ function SMARTBUFF_ShowBuffTimers()
 end
 -- END SMARTBUFF_ResetBuffTimers
 
-
 -- Synchronize the internal buff timers with the UI timers
 function SMARTBUFF_SyncBuffTimers()
   if (not isInit or isSync or isSetBuffs or SMARTBUFF_IsTalentFrameVisible()) then return; end
@@ -1587,8 +1581,6 @@ function SMARTBUFF_SyncBuffTimers()
             
             if (buffS and B[CS()][ct][buffS].EnableS and cBuffs[i].IDS ~= nil and cBuffs[i].DurationS > 0) then
               if (cBuffs[i].Type ~= SMARTBUFF_CONST_SELF or (cBuffs[i].Type == SMARTBUFF_CONST_SELF and SMARTBUFF_IsPlayer(unit))) then
-                --and uc and B[CS()][ct][buffS][uc]) then
-                --SMARTBUFF_AddMsgD("Buff timer sync check: " .. buffS);
                 SMARTBUFF_SyncBuffTimer(unit, unit, cBuffs[i], false);
               end
             end
@@ -1698,7 +1690,6 @@ function SMARTBUFF_Check(mode, force)
     for spell in pairs(cBuffsCombat) do
       if (spell) then
         local ret, actionType, spellName, slot, unit, buffType = SMARTBUFF_BuffUnit("player", 0, mode, spell)
-        --SMARTBUFF_AddMsgD("Check combat spell: " .. spell .. ", ret = " .. ret);
         if (ret and ret == 0) then
           IsChecking = false;
           return;
@@ -1726,10 +1717,9 @@ function SMARTBUFF_Check(mode, force)
   cGrp = cGroups;
   cOrd = cOrderGrp;
   
-  isMounted = IsMounted() or IsFlying();
+  isMounted = (IsMounted() or IsFlying()) and not O.WarnWhileMounted;
 
   for _, subgroup in pairs(cOrd) do
-    --SMARTBUFF_AddMsgD("Checking subgroup " .. subgroup .. ", " .. GetTime());
     if (cGrp[subgroup] ~= nil or (type(subgroup) == "number" and subgroup == 1)) then
       
       if (cGrp[subgroup] ~= nil) then
@@ -1796,7 +1786,6 @@ function SMARTBUFF_Check(mode, force)
                     -- clean up buff timer, if expired
                     if (btl < 0) then
                       cBuffTimer[subgroup][buffnG] = nil;
-                      --SMARTBUFF_AddMsgD("Group " .. subgroup .. ": " .. buffnS .. " timer reset");
                       tLastCheck = GetTime() - SMARTBUFF_Options.AutoTimer + 0.5;
                       return;
                     end
@@ -1815,17 +1804,11 @@ function SMARTBUFF_Check(mode, force)
               unitB = nil;
               for _, unit in pairs(unitsGrp) do
                 j = j + 1;
-                SMARTBUFF_AddMsgD("Checking1 " .. buffnG .. " " .. unit); 
-                
-                --if (unit and (UnitIsPlayer(unit) or (sPlayerClass == "PALADIN" and (UnitPlayerOrPetInParty(unit) or UnitPlayerOrPetInRaid(unit)))) and not SMARTBUFF_IsInList(unit, UnitName(unit), SMARTBUFF_Buffs[CS()][ct][buffnS].IgnoreList)) then
+                SMARTBUFF_AddMsgD("Checking1 " .. buffnG .. " " .. unit);              
                 if (unit and UnitIsPlayer(unit) and not SMARTBUFF_IsInList(unit, UnitName(unit), bs.IgnoreList)) then
-
                   SMARTBUFF_AddMsgD("Checking2 " .. buffnG .. " " .. unit);
                   n = n + 1;
-                  --if (UnitExists(unit) and not UnitIsDeadOrGhost(unit) and not UnitIsCorpse(unit) and UnitIsConnected(unit) and UnitIsVisible(unit) and not UnitOnTaxi(unit) and (SMARTBUFF_IsPlayer(unit) or not SMARTBUFF_Options.AdvGrpBuffRange or not SpellHasRange(cBuff.BuffG) or (IsSpellInRange(cBuff.BuffG, unit) == 1))) then
-                  
 				  if (UnitExists(unit) and not UnitIsDeadOrGhost(unit) and not UnitIsCorpse(unit) and UnitIsConnected(unit) and UnitIsVisible(unit) and not UnitOnTaxi(unit) and UnitInRange(unit) == 1) then
-                    --if (sPlayerClass ~= "PALADIN")
                     tmpUnits[n] = unit;
                     uLevel = UnitLevel(unit);
                     if (uLevel < uLevelL) then
@@ -2045,7 +2028,7 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
       -- Check for mount auras
         isMounted = false;
 	  if (bUsable and sPlayerClass == "PALADIN") then
-		  isMounted = IsMounted() or IsFlying();
+		  isMounted = (IsMounted() or IsFlying()) and not O.WarnWhileMounted;
 		  if ((buffnS ~= SMARTBUFF_CRUSADERAURA and isMounted) or (buffnS == SMARTBUFF_CRUSADERAURA and not isMounted)) then
 			bUsable = false;
 		  end
@@ -2190,7 +2173,6 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
                     else
                       buff, index, buffname, bt, charges = SMARTBUFF_CheckUnitBuffs(unit, cBuff.Params, cBuff.Type, cBuff.Links, cBuff.Chain);
 			        end
-                    --SMARTBUFF_AddMsgD("Buff time ("..cBuff.Params..") = "..tostring(bt));
                   else
                     buff = nil;
                   end
@@ -2215,14 +2197,11 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
                       if (cBuff.Type == SMARTBUFF_CONST_ITEMGROUP or cBuff.Type == SMARTBUFF_CONST_SCROLL) then
                         cds, cd = GetItemCooldown(iid);
                         cd = (cds + cd) - time;
-                        --SMARTBUFF_AddMsgD(cr.." "..buffnS.." found, cd = "..cd);
                         if (cd > 0) then
                           buff = nil;
                         end
                       end
-                      --SMARTBUFF_AddMsgD(cr .. " " .. buffnS .. " found");
                     else
-                      --SMARTBUFF_AddMsgD("No " .. buffnS .. " found");
                       buff = nil;
                       bExpire = false;
                     end
@@ -2232,9 +2211,7 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
               -- Weapon buff ------------------------------------------------------------------------
 
               elseif (cBuff.Type == SMARTBUFF_CONST_WEAPON or cBuff.Type == SMARTBUFF_CONST_INV) then                                
-                --SMARTBUFF_AddMsgD("Check weapon Buff");
                 local bMh, tMh, cMh, idMh, bOh, tOh, cOh, idOh = GetWeaponEnchantInfo();
-                
                 if (bs.MH) then
                   iSlot = 16;
                   iId = GetInventoryItemID("player", iSlot);
@@ -2258,7 +2235,7 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
                       buff = buffnS;
                     end
                   else
-                    --SMARTBUFF_AddMsgD("Weapon Buff cannot be cast, no mainhand weapon equipped or wrong weapon/stone type");
+                    SMARTBUFF_AddMsgD("Weapon Buff cannot be cast, no mainhand weapon equipped or wrong weapon/stone type");
                   end
                 end
                 
@@ -2285,7 +2262,7 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
                       buff = buffnS;
                     end
                   else
-                    --SMARTBUFF_AddMsgD("Weapon Buff cannot be cast, no offhand weapon equipped or wrong weapon/stone type");
+                    SMARTBUFF_AddMsgD("Weapon Buff cannot be cast, no offhand weapon equipped or wrong weapon/stone type");
                   end
                 end
 
@@ -2302,8 +2279,7 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
               -- Normal buff ------------------------------------------------------------------------
 
               else
-                local index = nil;
-                
+                local index = nil;                
                 -- check timer object
                 buff, index, buffname, bt, charges = SMARTBUFF_CheckUnitBuffs(unit, buffnS, cBuff.Type, cBuff.Links, cBuff.Chain);
                 if (charges == nil) then charges = -1; end
@@ -2620,7 +2596,7 @@ function SMARTBUFF_SetMissingBuffMessage(target, buff, icon, bCanCharge, nCharge
   
   -- play sound
   if (O.ToggleAutoSound) then
-    PlaySound(1141);
+    PlaySound(Sounds[O.AutoSoundSelection]);
   end
 end
 
@@ -3304,8 +3280,7 @@ function SMARTBUFF_Options_Init(self)
   --AutoSelfCast = GetCVar("autoSelfCast");
   
   SMARTBUFF_PLAYERCLASS = sPlayerClass;
-  
-  
+    
   if (not SMARTBUFF_Buffs) then SMARTBUFF_Buffs = { }; end
   B = SMARTBUFF_Buffs;
   if (not SMARTBUFF_Options) then SMARTBUFF_Options = { }; end
@@ -3321,6 +3296,7 @@ function SMARTBUFF_Options_Init(self)
   if (O.ToggleAutoChat == nil) then O.ToggleAutoChat = false; end
   if (O.ToggleAutoSplash == nil) then O.ToggleAutoSplash = true; end
   if (O.ToggleAutoSound == nil) then O.ToggleAutoSound = true; end
+  if (O.AutoSoundSelection == nil) then O.AutoSoundSelection = 1; end;
   if (O.CheckCharges == nil) then O.CheckCharges = true; end
   --if (O.ToggleAutoRest == nil) then  O.ToggleAutoRest = true; end
   if (O.RebuffTimer == nil) then O.RebuffTimer = 20; end
@@ -3343,8 +3319,9 @@ function SMARTBUFF_Options_Init(self)
   if (O.AutoSwitchTemplate == nil) then O.AutoSwitchTemplate = true; end
   if (O.AutoSwitchTemplateInst == nil) then O.AutoSwitchTemplateInst = true; end
   if (O.InShapeshift == nil) then O.InShapeshift = true; end
+  if (O.WarnWhileMounted == nil) then O.WarnWhileMounted = false; end
 
-  if (O.ToggleGrp == nil) then O.ToggleGrp = {true, false, false, false, false, false, false, false}; end
+  if (O.ToggleGrp == nil) then O.ToggleGrp = {true, true, true, true, true, true, true, true}; end
   if (O.ToggleSubGrpChanged == nil) then  O.ToggleSubGrpChanged = false; end  
   
   if (O.ToggleMsgNormal == nil) then O.ToggleMsgNormal = false; end
@@ -3429,8 +3406,7 @@ function SMARTBUFF_Options_Init(self)
     
   SMARTBUFF_FindItem("ScanBagsForSBInit");  
     
-  SMARTBUFF_AddMsg(SMARTBUFF_VERS_TITLE .. " " .. SMARTBUFF_MSG_LOADED, true);
-  SMARTBUFF_AddMsg("/sbm - " .. SMARTBUFF_OFT_MENU, true);
+  DEFAULT_CHAT_FRAME:AddMessage("|cff00e0ff"..SMARTBUFF_VERS_TITLE .. "|cffffffff " .. SMARTBUFF_MSG_LOADED.."|cffFFFF00  /sbm - |cffffffff"..SMARTBUFF_OFT_MENU);
   isInit = true;
   
   SMARTBUFF_CheckMiniMapButton();
@@ -3814,6 +3790,9 @@ function SMARTBUFF_OHideSAButton()
   O.HideSAButton = not O.HideSAButton;
   SMARTBUFF_ShowSAButton();
 end
+function SMARTBUFF_OWarnWhenMountedButton()
+  O.WarnWhileMounted = not O.WarnWhileMounted;
+end
 
 function SMARTBUFF_OToggleBuff(s, i)
   local bs = GetBuffSettings(cBuffs[i].BuffS);
@@ -4127,6 +4106,7 @@ function SMARTBUFF_Options_OnShow()
   SmartBuffOptionsFrame_cbBuffTarget:SetChecked(O.BuffTarget);
   SmartBuffOptionsFrame_cbBuffInCities:SetChecked(O.BuffInCities);
   SmartBuffOptionsFrame_cbInShapeshift:SetChecked(O.InShapeshift);  
+  SmartBuffOptionsFrame_cbWarnWhenMounted:SetChecked(O.WarnWhileMounted);
   
   SmartBuffOptionsFrame_cbAntiDaze:SetChecked(O.AntiDaze);
   SmartBuffOptionsFrame_cbLinkGrpBuffCheck:SetChecked(O.LinkGrpBuffCheck);
@@ -4627,9 +4607,7 @@ function SMARTBUFF_OnPreClick(self, button, down)
     td = GlobalCd;
   end
   --SMARTBUFF_AddMsgD("Last buff type: " .. lastBuffType .. ", set cd: " .. td);
-  
-  
-  -- *** TODO: Check for classic **********************************************************************************
+    
   local casting = UnitCastingInfo("player") or UnitChannelInfo("player");
   --print(casting);
   if (casting ~= nil) then
@@ -5040,19 +5018,3 @@ local HelpPlateList = {
 
 function SMARTBUFF_ToggleTutorial(close)
 end
---[[function SMARTBUFF_ToggleTutorial(close)
-  local helpPlate = HelpPlateList;
-  if (not helpPlate) then return end;
-  
-  local b = HelpPlate_IsShowing(helpPlate);
-  if (close) then
-    HelpPlate_Hide(false);
-    return;
-  end
-  
-  if (not b) then
-    HelpPlate_Show(helpPlate, SmartBuffOptionsFrame, SmartBuffOptionsFrame_TutorialButton, true);
-  else
-    HelpPlate_Hide(true);
-  end
-end--]]

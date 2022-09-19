@@ -89,6 +89,8 @@ SMARTBUFF_OFT_COMPMODE       = "Комп.режим";
 SMARTBUFF_OFT_MINIGRP        = "Мини-группа";
 SMARTBUFF_OFT_ANTIDAZE       = "Анти-стоп";
 SMARTBUFF_OFT_HIDESABUTTON   = "Спрятать кнопку действия";
+SMARTBUFF_OFT_WARNWHILEMOUNTED = "Предупреждать, находясь на маунте";
+SMARTBUFF_OFTT_SOUNDSELECT	 = "Выберите звук всплеска.";
 SMARTBUFF_OFT_INCOMBAT       = "в бою";
 SMARTBUFF_OFT_SMARTDEBUFF    = "SmartDebuff";
 SMARTBUFF_OFT_INSHAPESHIFT   = "Shapeshift";
@@ -133,6 +135,7 @@ SMARTBUFF_OFTT_MINIGRP       = "Показывать выбор подгрупп
 SMARTBUFF_OFTT_ANTIDAZE      = "Автоматически прерывать\nДух Гепарда/Стаи\nесли на ком-то из группы\nповисло замедление.";
 SMARTBUFF_OFTT_SPLASHSTYLE   = "Изменить шрифт сообщений о баффах.";
 SMARTBUFF_OFTT_HIDESABUTTON  = "Спрятать кнопку действия SmartBuff.";
+SMARTBUFF_OFTT_WARNWHILEMOUNTED = "Проверьте и предупредите об отсутствии баффов, пока вы находитесь на ездовом животном.";
 SMARTBUFF_OFTT_INCOMBAT      = "At the moment it only works on yourself.\nThe first buff you mark as in combat,\nwill set on the button before combat\nand you can use it in combat.\nWarning! All logic is disabled in combat!";
 SMARTBUFF_OFTT_SMARTDEBUFF   = "Shows the SmartDebuff frame.";
 SMARTBUFF_OFTT_SPLASHDURATION= "Сколько секунд будут отображаться\nвсплывающие сообщения.";
@@ -190,6 +193,7 @@ SMARTBUFF_MSG_REBUFF         = "Реббафф";
 SMARTBUFF_MSG_LEFT           = "осталось";
 SMARTBUFF_MSG_CLASS          = "Класс";
 SMARTBUFF_MSG_CHARGES        = "зарядов";
+SMARTBUFF_MSG_SOUNDS		 = "Выбранный звук всплеска: "
 SMARTBUFF_MSG_SPECCHANGED    = "Spec changed (%s), loading buff templates...";
 
 -- Support

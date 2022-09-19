@@ -91,6 +91,8 @@ SMARTBUFF_OFT_COMPMODE       = "Comp. mode";
 SMARTBUFF_OFT_MINIGRP        = "Mini groupe";
 SMARTBUFF_OFT_ANTIDAZE       = "Anti daze"; -- NOT TRANSLATED
 SMARTBUFF_OFT_HIDESABUTTON   = "Cacher: Bouton action";
+SMARTBUFF_OFT_WARNWHILEMOUNTED = "Avertir sur une monture";
+SMARTBUFF_OFTT_SOUNDSELECT	 = "Sélectionnez le son d'éclaboussure requis.";
 SMARTBUFF_OFT_INCOMBAT       = "en combat";
 SMARTBUFF_OFT_SMARTDEBUFF    = "SmartDebuff";
 SMARTBUFF_OFT_INSHAPESHIFT   = "Shapeshift";
@@ -135,6 +137,7 @@ SMARTBUFF_OFTT_MINIGRP       = "Show raid subgoup settings in an\nown movable mi
 SMARTBUFF_OFTT_ANTIDAZE      = "Automatically cancels the\naspect of the cheetah/pack\nif someone gets dazed\n(self or group)."; -- NOT TRANSLATED
 SMARTBUFF_OFTT_SPLASHSTYLE   = "Changes the fontstyle of\nthe buff messages."; -- NOT TRANSLATED
 SMARTBUFF_OFTT_HIDESABUTTON  = "Cache le bouton SmartBuff de action."; -- NOT TRANSLATED
+SMARTBUFF_OFTT_WARNWHILEMOUNTED = "Vérifiez et avertissez les buffs manquants pendant que vous êtes sur une monture.";
 SMARTBUFF_OFTT_INCOMBAT      = "At the moment it only works on yourself.\nThe first buff you mark as in combat,\nwill set on the button before combat\nand you can use it in combat.\nWarning! All logic is disabled in combat!";
 SMARTBUFF_OFTT_SMARTDEBUFF   = "Shows the SmartDebuff frame.";
 SMARTBUFF_OFTT_SPLASHDURATION= "How many seconds the splash\nmessage will displayed,\nbefore it fades.";
@@ -193,6 +196,7 @@ SMARTBUFF_MSG_REBUFF         = "Rebuff";
 SMARTBUFF_MSG_LEFT           = "temps restant";
 SMARTBUFF_MSG_CLASS          = "Classe";
 SMARTBUFF_MSG_CHARGES        = "charges";
+SMARTBUFF_MSG_SOUNDS		 = "Son Splash sélectionné: "
 SMARTBUFF_MSG_SPECCHANGED    = "Spec changed (%s), loading buff templates...";
 
 -- Support

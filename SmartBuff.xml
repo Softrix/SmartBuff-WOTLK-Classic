@@ -868,9 +868,7 @@
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrameRebuffTimer" relativePoint="TOPLEFT">
-						<Offset>
-							<AbsDimension x="-20" y="-28" />
-						</Offset>
+						<Offset x="-20" y="-67" />
 					</Anchor>
 				</Anchors>
 				<HitRectInsets>
@@ -1240,7 +1238,7 @@
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbInCombat" relativePoint="TOPLEFT">
-						<Offset x="160" y="-8" />
+						<Offset x="160" y="-20" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -1271,7 +1269,7 @@
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbInCombat" relativePoint="BOTTOMLEFT">
-						<Offset y="-31" />
+						<Offset y="-57" />
 					</Anchor>
 				</Anchors>
 				<HitRectInsets>
@@ -1523,6 +1521,83 @@
 				</Anchors>
 				<FontString inherits="GameFontNormalSmall" justifyH="LEFT" />
 			</EditBox>
+			<Slider name="SmartBuffOptionsFrame_sldSounds" inherits="OptionsSliderTemplate" minValue="1" maxValue="25" defaultValue="1">
+				<Size>
+					<AbsDimension x="172" y="16" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbAutoChat" relativePoint="TOPLEFT">
+						<Offset x="10" y="-103" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						SmartBuffOptionsFrameSlider_OnLoad(self, 1, 14, 1);
+						BackdropTemplateMixin.OnBackdropLoaded(self);
+					</OnLoad>
+					<OnLeave>
+						GameTooltip:Hide();
+					</OnLeave>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						GameTooltip:SetText(SMARTBUFF_OFTT_SOUNDSELECT, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnValueChanged>
+						local o = SMARTBUFF_Options;
+						local n = self:GetValue();
+						if (o and o.AutoSoundSelection ~= n) then
+							SmartBuff_SetSliderText(self, SMARTBUFF_MSG_SOUNDS, n, "%d");
+							o.AutoSoundSelection = n;
+						end
+					</OnValueChanged>
+					<OnShow>
+						local o = SMARTBUFF_Options;
+						if (o and o.AutoSoundSelection) then
+							SmartBuff_SetSliderText(self, SMARTBUFF_MSG_SOUNDS, o.AutoSoundSelection, "%d", true);
+						end
+					</OnShow>
+				</Scripts>
+			</Slider>
+			<Button name="SmartBuffOptionsFrame_btnPlaySound" inherits="UIPanelButtonTemplate" text="&gt;">
+				<Size x="27" y="16" />
+				<Anchors>
+					<Anchor point="TOPLEFT" x="227" y="-225" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						SMARTBUFF_PlaySpashSound();
+					</OnClick>
+				</Scripts>
+			</Button>
+			<CheckButton name="SmartBuffOptionsFrame_cbWarnWhenMounted" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="24" y="24" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbHideMmButton" relativePoint="TOPLEFT">
+						<Offset y="71" />
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						GameTooltip:SetText(SMARTBUFF_OFTT_WARNWHILEMOUNTED, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnClick>
+						SMARTBUFF_OWarnWhenMountedButton();
+					</OnClick>
+					<OnLoad>
+						getglobal(self:GetName().."Text"):SetText(SMARTBUFF_OFT_WARNWHILEMOUNTED);
+						getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnLeave>
+						GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
 		</Frames>
 		<Scripts>
 			<OnLoad>

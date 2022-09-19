@@ -92,6 +92,7 @@ SMARTBUFF_OFT_COMPMODE       = "Komp. Modus";
 SMARTBUFF_OFT_MINIGRP        = "Mini Gruppe";
 SMARTBUFF_OFT_ANTIDAZE       = "Anti-Daze";
 SMARTBUFF_OFT_HIDESABUTTON   = "Verberge Action-Knopf";
+SMARTBUFF_OFT_WARNWHILEMOUNTED = "Warnen, während montiert";
 SMARTBUFF_OFT_INCOMBAT       = "Bufft im Kampf";
 SMARTBUFF_OFT_SMARTDEBUFF    = "SmartDebuff";
 SMARTBUFF_OFT_INSHAPESHIFT   = "Verwandelt";
@@ -138,6 +139,8 @@ SMARTBUFF_OFTT_MINIGRP       = "Zeigt die Raid-Subgruppen Einstellungen in einem
 SMARTBUFF_OFTT_ANTIDAZE      = "Bricht automatisch den\nAspekt des Geparden/Rudels ab,\nwenn jemand betäubt wird\n(Selbst oder Gruppe).";
 SMARTBUFF_OFTT_SPLASHSTYLE   = "Wechselt die Schriftart\nder Buff-Meldungen.";
 SMARTBUFF_OFTT_HIDESABUTTON  = "Verbirgt den SmartBuff Action-Knopf.";
+SMARTBUFF_OFTT_WARNWHILEMOUNTED = "Überprüfen und warnen Sie vor fehlenden Buffs, während Sie auf einem Reittier sind.";
+SMARTBUFF_OFTT_SOUNDSELECT	 = "Wählen Sie den gewünschten Splash.";
 SMARTBUFF_OFTT_INCOMBAT      = "Funktioniert nur auf dich selbst.\nDer erste Buff, welcher als 'im Kampf'\ngesetzt ist, wird verwendet\nund kann im Kampf benutzt werden.\n!!! Achtung !!!\nSämtliche Buff-Logik ist inaktiv im Kampf!";
 SMARTBUFF_OFTT_SMARTDEBUFF   = "Zeigt das SmartDebuff Fenster.";
 SMARTBUFF_OFTT_SPLASHDURATION= "Wieviele Sekunden die Splash Meldung angezeigt wird,\nbevor sie ausgeblendet wird.";
@@ -196,6 +199,7 @@ SMARTBUFF_MSG_REBUFF         = "ReBuff";
 SMARTBUFF_MSG_LEFT           = "übrig";
 SMARTBUFF_MSG_CLASS          = "Klasse";
 SMARTBUFF_MSG_CHARGES        = "Aufladungen";
+SMARTBUFF_MSG_SOUNDS		 = "Splash-Sound-Auswahl: "
 SMARTBUFF_MSG_SPECCHANGED    = "Spec gewechselt (%s), lade Buff-Vorlagen...";
 
 -- Support

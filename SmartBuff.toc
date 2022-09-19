@@ -1,8 +1,8 @@
-## Interface: 20504
-## Title: |TInterface\Addons\Smartbuff\Icons\IconEnabled:0|t SmartBuff |cffffffff(Classic Version)|r
-## Version: 33.20504
+## Interface: 30400
+## Title: |TInterface\Addons\Smartbuff\Icons\IconEnabled:0|t SmartBuff |cffffffff(WOTLK Classic)|r
+## Version: 34.30400
 ## Author: |cff20d2ffCodermik (Mik / Castanova on EU-Mirage Raceway) & Aeldra|r (EU-Proudmoore)
-## Notes: Cast the most important buffs on you or party, raid, pets and assigned tanks. Use  /sbm  for options menu.
+## Notes: Cast the most important buffs on you or party, raid, pets and assigned tanks. Use /sbm for options menu.
 ## DefaultState: Enabled
 ## LoadOnDemand: 0
 ## SavedVariables: SMARTBUFF_OptionsGlobal

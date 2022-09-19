@@ -90,6 +90,8 @@ SMARTBUFF_OFT_COMPMODE       = "Modo Comp.";
 SMARTBUFF_OFT_MINIGRP        = "Mini grupo";
 SMARTBUFF_OFT_ANTIDAZE       = "Anti aturdimiento";
 SMARTBUFF_OFT_HIDESABUTTON   = "Ocultar bot\195\179n de acci\195\179n";
+SMARTBUFF_OFT_WARNWHILEMOUNTED = "Advertencia mientras está montado";
+SMARTBUFF_OFTT_SOUNDSELECT	 = "Select the required splash sound.";
 SMARTBUFF_OFT_INCOMBAT       = "en combate";
 SMARTBUFF_OFT_SMARTDEBUFF    = "SmartDebuff";
 SMARTBUFF_OFT_INSHAPESHIFT   = "Shapeshift";
@@ -134,6 +136,8 @@ SMARTBUFF_OFTT_MINIGRP       = "Mostrar los ajustes del subgrupo de banda en un\
 SMARTBUFF_OFTT_ANTIDAZE      = "Autom\195\161ticamente cancela el\naspecto del mono/manada\nsi alguien est\195\161 aturdido\n(\195\169l mismo o el grupo).";
 SMARTBUFF_OFTT_SPLASHSTYLE   = "Cambia la fuente de\nlos mensajes de buff.";
 SMARTBUFF_OFTT_HIDESABUTTON  = "Oculta el bot\195\179n de acci\195\179n de SmartBuff.";
+SMARTBUFF_OFTT_WARNWHILEMOUNTED = "Comprueba y avisa mientras estás montado.";
+SMARTBUFF_OFTT_SOUNDSELECT	 = "Seleccione el sonido de advertencia.";
 SMARTBUFF_OFTT_INCOMBAT      = "De momento s\195\179lo funciona sobre t\195\173 mismo.\nEl primer buff que marcas para combate,\nse establecer\195\161 en el bot\195\179n antes del combate\ny puede ser usado en combate.\nAviso! Toda l\195\179gica se inutiliza en combate";
 SMARTBUFF_OFTT_SMARTDEBUFF   = "Muestra la pesta\195\177a de SmartDeBuff";
 SMARTBUFF_OFTT_SPLASHDURATION= "Cu\195\161ntos segundos estar\195\161 en pantalla el\nmensaje,\nantes de atenuarse.";
@@ -192,6 +196,7 @@ SMARTBUFF_MSG_REBUFF         = "Rebuff";
 SMARTBUFF_MSG_LEFT           = "tiempo restante";
 SMARTBUFF_MSG_CLASS          = "Clase";
 SMARTBUFF_MSG_CHARGES        = "cargas";
+SMARTBUFF_MSG_SOUNDS		 = "Selección de sonido: "
 SMARTBUFF_MSG_SPECCHANGED    = "Spec changed (%s), loading buff templates...";
 
 -- Support

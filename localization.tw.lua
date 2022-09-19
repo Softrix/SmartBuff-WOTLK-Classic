@@ -93,6 +93,8 @@ SMARTBUFF_OFT_COMPMODE       = "相容模式";
 SMARTBUFF_OFT_MINIGRP        = "小團隊";
 SMARTBUFF_OFT_ANTIDAZE       = "防眩暈";
 SMARTBUFF_OFT_HIDESABUTTON   = "隱藏動作按鈕";
+SMARTBUFF_OFT_WARNWHILEMOUNTED = "掛載時發出警告";
+SMARTBUFF_OFTT_SOUNDSELECT	 = "選擇所需的飛濺聲。";
 SMARTBUFF_OFT_INCOMBAT       = "戰鬥中";
 SMARTBUFF_OFT_SMARTDEBUFF    = "SmartDebuff";
 SMARTBUFF_OFT_INSHAPESHIFT   = "變身型態下";
@@ -140,6 +142,7 @@ SMARTBUFF_OFTT_MINIGRP       = "以獨立可移動小視窗顯示Raid各小隊�
 SMARTBUFF_OFTT_ANTIDAZE      = "若小隊中有人眩暈,\n自動取消獵豹/豹群守護";
 SMARTBUFF_OFTT_SPLASHSTYLE   = "更換 buff 訊息字型.";
 SMARTBUFF_OFTT_HIDESABUTTON  = "隱藏SmartBuff動作按鈕.";
+SMARTBUFF_OFTT_WARNWHILEMOUNTED = "在坐騎時檢查並警告丟失的增益.";
 SMARTBUFF_OFTT_INCOMBAT      = "只對自己作用.\n被勾選為'戰鬥中'的第一個buff會在戰鬥前被設定在按鈕上,\n並能在戰鬥中使用.\n注意: 戰鬥中禁用邏輯判斷.";
 SMARTBUFF_OFTT_SMARTDEBUFF   = "顯示SmartDebuff視窗.";
 SMARTBUFF_OFTT_SPLASHDURATION= "閃爍訊息持續秒數.";
@@ -198,6 +201,7 @@ SMARTBUFF_MSG_REBUFF         = "Rebuff:";
 SMARTBUFF_MSG_LEFT           = "剩餘";
 SMARTBUFF_MSG_CLASS          = "職業";
 SMARTBUFF_MSG_CHARGES        = "次";
+SMARTBUFF_MSG_SOUNDS		 = "飛濺聲音選擇: "
 SMARTBUFF_MSG_SPECCHANGED    = "天賦已更改(%s), 重設buff模組...";
 
 -- Support
