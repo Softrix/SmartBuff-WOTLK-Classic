@@ -6,8 +6,8 @@
 -- Cast the most important buffs on you, tanks or party/raid members/pets.
 -------------------------------------------------------------------------------
 
-SMARTBUFF_DATE			= "190922";
-SMARTBUFF_VERSION       = "r34."..SMARTBUFF_DATE;
+SMARTBUFF_DATE			= "210922 Dev";
+SMARTBUFF_VERSION       = "r35."..SMARTBUFF_DATE;
 SMARTBUFF_VERSIONMIN	= 11403;			-- min version
 SMARTBUFF_VERSIONNR     = 30400;			-- max version
 SMARTBUFF_TITLE         = "SmartBuff";
@@ -264,11 +264,11 @@ local function ChkS(text)
   return text;
 end
 
--- check for moonkin buff
-local function CheckMoonkinBuff()
+-- check for a given buff.
+local function CheckForBuff(buff)
   for i=1,40 do
     name, rank, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, shouldConsolidate, spellId = UnitAura("player",i);
-    if name == SMARTBUFF_DRUID_MOONKIN then
+    if name == buff then
 	  return true;
 	end
   end
@@ -278,7 +278,7 @@ end
 local function IsFlying()
   if (O.WarnWhileMounted) then return false; end
   local result = GetShapeshiftForm(false)
-  if ((result == 5 and not CheckMoonkinBuff()) or result == 6) and sPlayerClass == "DRUID" then 
+  if ((result == 5 and not CheckForBuff(SMARTBUFF_DRUID_MOONKIN)) or result == 6) and sPlayerClass == "DRUID" then 
 	return true 
   end
   return false
@@ -336,17 +336,6 @@ end
 
 local function CT()
   return currentTemplate;
-end
-
--- check for K'iru's Song of Victory
-local function CheckKirusSongBuff()
-  for i=1,40 do
-    name, rank, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, shouldConsolidate, spellId = UnitAura("player",i);
-    if name == SMARTBUFF_KIRUSSOV then
-	  return true;
-	end
-  end
-  return false;
 end
 
 local function GetBuffSettings(buff)
@@ -2042,7 +2031,7 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
       end  
 
       -- check if daily island buff is active
-      if (bUsable and CheckKirusSongBuff() and (sPlayerClass == "PRIEST" or sPlayerClass == "MAGE")) then
+      if (bUsable and CheckForBuff(SMARTBUFF_KIRUSSOV) and (sPlayerClass == "PRIEST" or sPlayerClass == "MAGE")) then
         -- island buff is more powerful than the class buffs which prevents the addon moving past this.
 	    if (buffnS == SMARTBUFF_AI or buffnS == SMARTBUFF_ABRB1 or buffnS == SMARTBUFF_PWF or buffnS == SMARTBUFF_POFRB1) then
 		    bUsable = false;
