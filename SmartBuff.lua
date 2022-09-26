@@ -6,7 +6,7 @@
 -- Cast the most important buffs on you, tanks or party/raid members/pets.
 -------------------------------------------------------------------------------
 
-SMARTBUFF_DATE			= "210922 Dev";
+SMARTBUFF_DATE			= "260922";
 SMARTBUFF_VERSION       = "r35."..SMARTBUFF_DATE;
 SMARTBUFF_VERSIONMIN	= 11403;			-- min version
 SMARTBUFF_VERSIONNR     = 30400;			-- max version
@@ -23,7 +23,7 @@ local SmartbuffSession = true;
 local SmartbuffVerCheck = false;	-- for my use when checking guild users/testers versions  :)
 local wowVersionString, wowBuild, _, wowTOC = GetBuildInfo();
 local isWOTLKC = (_G.WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC and wowTOC >= 30400);
-local SmartbuffRevision = 34;
+local SmartbuffRevision = 35;
 local SmartbuffVerNotifyList = {}
 
 -- Smartbuff now uses LibRangeCheck-2.0 by Mitchnull, not fully implemented
@@ -1029,7 +1029,7 @@ function SMARTBUFF_AddSoloSetup()
   cUnits[0] = { };
   cUnits[0][0] = "player";
   if (sPlayerClass == "HUNTER" or sPlayerClass == "WARLOCK" or sPlayerClass == "MAGE") then cGroups[0][1] = "pet"; end  
-  if (B[CS()][currentTemplate]) then
+  if (B[CS()][currentTemplate] and B[CS()][currentTemplate].SelfFirst) then
     if (not cClassGroups) then
       cClassGroups = { };
     end  
@@ -2009,7 +2009,7 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
       if (bUsable) then
         bUsable = IsPowerLimitOk(bs);
       end
-      
+     
       -- Check for buffs which depends on a pet
       if (bUsable and cBuff.Params == SG.CheckPet and UnitExists("pet")) then bUsable = false end
       if (bUsable and cBuff.Params == SG.CheckPetNeeded and not UnitExists("pet")) then bUsable = false end
@@ -2037,7 +2037,14 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
 		    bUsable = false;
 		end
 	  end
-      
+
+      -- check for Fel Intelligence
+      if (bUsable and CheckForBuff(SMARTBUFF_FELINTELLIGENCE) and (sPlayerClass == "PRIEST" or sPlayerClass == "MAGE")) then
+		if (buffnS == SMARTBUFF_AI or buffnS == SMARTBUFF_ABRB1 or buffnS == SMARTBUFF_DS or buffnS == SMARTBUFF_POSRB1) then
+		  bUsable = false;
+		end
+      end
+
       if (bUsable and not (cBuff.Type == SMARTBUFF_CONST_TRACK or SMARTBUFF_IsItem(cBuff.Type))) then
         -- check if you have enough mana/rage/energy to cast
         local isUsable, notEnoughMana = IsUsableSpell(buffnS);
@@ -3779,6 +3786,9 @@ function SMARTBUFF_OHideSAButton()
   O.HideSAButton = not O.HideSAButton;
   SMARTBUFF_ShowSAButton();
 end
+function SMARTBUFF_OSelfFirst()
+  B[CS()][currentTemplate].SelfFirst = not B[CS()][currentTemplate].SelfFirst;
+end
 function SMARTBUFF_OWarnWhenMountedButton()
   O.WarnWhileMounted = not O.WarnWhileMounted;
 end
@@ -4117,6 +4127,8 @@ function SMARTBUFF_Options_OnShow()
 
   SMARTBUFF_ShowSubGroupsOptions();
   SMARTBUFF_SetCheckButtonBuffs(0);
+
+  SmartBuffOptionsFrame_cbSelfFirst:SetChecked(B[CS()][currentTemplate].SelfFirst);
     
   SMARTBUFF_Splash_Show();
   

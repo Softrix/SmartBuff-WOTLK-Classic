@@ -1457,6 +1457,37 @@
 					</OnShow>
 				</Scripts>
 			</ScrollFrame>
+			<CheckButton name="SmartBuffOptionsFrame_cbSelfFirst" inherits="OptionsCheckButtonTemplate">
+				<Size>
+					<AbsDimension x="20" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="BOTTOMLEFT" relativeTo="SmartBuffOptionsFrame_ScrollFrameBuffs" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="110" y="-4" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnLoad>
+						getglobal(self:GetName().."Text"):SetText(SMARTBUFF_OFT_SELFFIRST);
+						getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						SMARTBUFF_OSelfFirst();
+					</OnClick>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						GameTooltip:SetText(SMARTBUFF_OFTT_SELFFIRST, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
 			<Button name="SmartBuffOptionsFrameRBT" inherits="OptionsButtonTemplate" text="SMARTBUFF_OFT_RBT">
 				<Anchors>
 					<Anchor point="BOTTOMLEFT" relativeTo="$parent" relativePoint="BOTTOMLEFT">
