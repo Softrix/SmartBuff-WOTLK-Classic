@@ -6,8 +6,8 @@
 -- Cast the most important buffs on you, tanks or party/raid members/pets.
 -------------------------------------------------------------------------------
 
-SMARTBUFF_DATE			= "260922";
-SMARTBUFF_VERSION       = "r35."..SMARTBUFF_DATE;
+SMARTBUFF_DATE			= "081022 Dev";
+SMARTBUFF_VERSION       = "r36."..SMARTBUFF_DATE;
 SMARTBUFF_VERSIONMIN	= 11403;			-- min version
 SMARTBUFF_VERSIONNR     = 30400;			-- max version
 SMARTBUFF_TITLE         = "SmartBuff";
