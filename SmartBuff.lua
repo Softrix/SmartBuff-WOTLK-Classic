@@ -6,7 +6,7 @@
 -- Cast the most important buffs on you, tanks or party/raid members/pets.
 -------------------------------------------------------------------------------
 
-SMARTBUFF_DATE			= "081022 Dev";
+SMARTBUFF_DATE			= "091022";
 SMARTBUFF_VERSION       = "r36."..SMARTBUFF_DATE;
 SMARTBUFF_VERSIONMIN	= 11403;			-- min version
 SMARTBUFF_VERSIONNR     = 30400;			-- max version
@@ -23,7 +23,7 @@ local SmartbuffSession = true;
 local SmartbuffVerCheck = false;	-- for my use when checking guild users/testers versions  :)
 local wowVersionString, wowBuild, _, wowTOC = GetBuildInfo();
 local isWOTLKC = (_G.WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC and wowTOC >= 30400);
-local SmartbuffRevision = 35;
+local SmartbuffRevision = 36;
 local SmartbuffVerNotifyList = {}
 
 -- Smartbuff now uses LibRangeCheck-2.0 by Mitchnull, not fully implemented
@@ -681,6 +681,16 @@ function SMARTBUFF_OnEvent(self, event, ...)
       local unit = nil;
       local spell = nil;
       local target = nil;
+
+      -- temporary dirty hack to force a spell list refresh and check when a warlock stone is created.
+      -- yes yes, i know its horrible but its temporary as a quick fix - i will tidy this up later.
+      if (sPlayerClass == "WARLOCK") then
+	    -- only really interested if im a warlock, otherwise just skip over.
+        if arg3 == 2362 or arg3 == 17727 or arg3 == 17728 or arg3 == 28172 or arg3 == 47886 or arg3 == 47888 or
+            arg3 == 6366 or arg3 == 17951 or arg3 == 17952 or arg3 == 17954 or arg3 == 27250 or arg3 == 60219 then
+		    isSetBuffs = true;
+		end
+	  end
       
       if (arg1 and arg2) then
         if (not arg3) then arg3 = ""; end
@@ -1973,8 +1983,9 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
     uct = UnitCreatureType(unit);
     ucf = UnitCreatureFamily(unit);
     if (uct == nil) then uct = ""; end
-    if (ucf == nil) then ucf = ""; end
-          
+    if (ucf == nil) then ucf = ""; end    
+
+    -- debug    
 --    if (un) then SMARTBUFF_AddMsgD("Grp "..subgroup.." checking "..un.." ("..unit.."/"..uc.."/"..ur.."/"..uct.."/"..ucf..")", 0, 1, 0.5); end
 
     isShapeshifted, sShapename = SMARTBUFF_IsShapeshifted();
@@ -1997,9 +2008,8 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
       
       if (bUsable and spell and spell ~= buffnS) then
         bUsable = false;
-        --SMARTBUFF_AddMsgD("Exclusive check on " .. spell .. ", current spell = " .. buffnS);
       end
-      
+
       if (bUsable and cBuff.Type == SMARTBUFF_CONST_SELF and not SMARTBUFF_IsPlayer(unit)) then bUsable = false end
       if (bUsable and not cBuff.Type == SMARTBUFF_CONST_TRACK and not SMARTBUFF_IsItem(cBuff.Type) and not IsUsableSpell(buffnS)) then bUsable = false end
       if (bUsable and bs.SelfNot and SMARTBUFF_IsPlayer(unit)) then bUsable = false end
@@ -2099,7 +2109,7 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
               or (cBuff.Type ~= SMARTBUFF_CONST_GROUP and SMARTBUFF_IsPlayer(unit))
               or SMARTBUFF_IsInList(unit, un, bs.AddList))) then
               buff = nil;
-                            
+                        
               --Tracking ability ------------------------------------------------------------------------
 
 			  if (cBuff.Type == SMARTBUFF_CONST_TRACK) then   			        
@@ -2144,7 +2154,6 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
                   buff = nil;
                   if (cBuff.Params ~= SG.NIL) then
                     local cr = SMARTBUFF_CountReagent(cBuff.Params, cBuff.Chain);
-                    --SMARTBUFF_AddMsgD(cr.." "..cBuff.Params.." found");
                     if (cr == 0) then
                       buff = cBuff.Params;
                     end
@@ -2352,12 +2361,11 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
                 end
               end
                             
-              if (buff) then
+              if (buff) then              
                 -- Cast mode ---------------------------------------------------------------------------------------
                 if (mode == 0 or mode == 5) then
                   currentUnit = nil;
                   currentSpell = nil;
-                  
                   --try to apply weapon buffs on main/off hand
                   if (cBuff.Type == SMARTBUFF_CONST_INV) then                    
                     if (iSlot and (handtype ~= "" or bExpire)) then
@@ -2374,8 +2382,7 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
                       return 0, SMARTBUFF_ACTION_SPELL, buffnS, iSlot, "player", cBuff.Type;
                       --return 0, SMARTBUFF_ACTION_SPELL, buffnS, iId, "player", cBuff.Type;
                     end                    
-                    r = 50;
-                    
+                    r = 50;                    
                   -- eat food or use scroll or potion
                   elseif (cBuff.Type == SMARTBUFF_CONST_FOOD or cBuff.Type == SMARTBUFF_CONST_SCROLL or cBuff.Type == SMARTBUFF_CONST_POTION) then
                     local bag, slot, count = SMARTBUFF_FindItem(buffnS, cBuff.Chain);
@@ -2383,8 +2390,7 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
                       sMsgWarning = "";
                       return 0, SMARTBUFF_ACTION_ITEM, buffnS, 0, "player", cBuff.Type;
                     end
-                    r = 20;
-                    
+                    r = 20;                    
                   -- use item on a unit
                   elseif (cBuff.Type == SMARTBUFF_CONST_ITEMGROUP) then
                     local bag, slot, count = SMARTBUFF_FindItem(buffnS, cBuff.Chain);
@@ -2392,8 +2398,7 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
                       sMsgWarning = "";
                       return 0, SMARTBUFF_ACTION_ITEM, buffnS, 0, unit, cBuff.Type;
                     end
-                    r = 20;
-                  
+                    r = 20;                  
                   -- create item
                   elseif (cBuff.Type == SMARTBUFF_CONST_ITEM) then
                     r = 20;
@@ -2404,12 +2409,11 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
                         currentUnit = unit;
                         currentSpell = buffnS;
                       end
-                    end
-                  
+                    end                  
                   -- cast spell
                   else
                     r, _, rankText = SMARTBUFF_doCast(unit, cBuff.IDS, buffnS, cBuff.LevelsS, cBuff.Type);
-                    if (r == 0) then
+					if (r == 0) then
                       currentUnit = unit;
                       currentSpell = buffnS;
                     end
@@ -2644,7 +2648,6 @@ end
 -- Casts a spell
 function SMARTBUFF_doCast(unit, id, spellName, levels, type)
   if (id == nil) then return 9; end
-  
   if (type == SMARTBUFF_CONST_TRACK) then  
     local iconTrack = GetTrackingTexture();
     if (iconTrack ~= nil and iconTrack ~= "Interface\\Minimap\\Tracking\\None") then
@@ -2663,11 +2666,10 @@ function SMARTBUFF_doCast(unit, id, spellName, levels, type)
     return 1;
   end
 
-
  -- switched to using the LibRangeCheck-2.0 library by mitchnull for range checking.
   if ((type == SMARTBUFF_CONST_GROUP or type == SMARTBUFF_CONST_ITEMGROUP)) then
     local minRange, maxRange = LRC:GetRange(unit)
-	if (UnitInRange(unit) or unit == "player") then
+	if (UnitInRange(unit) or unit == "player" or (unit == "target" and O.BuffTarget)) then
 	    if (SpellHasRange(spellName)) then    
             if not minRange then
 	            return 3;   -- unit is out of range for spell
@@ -2678,7 +2680,6 @@ function SMARTBUFF_doCast(unit, id, spellName, levels, type)
         return 3;
 	end
   end
-
   
   -- check if target is to low for this spell
   local newId, rank, rankText = SMARTBUFF_CheckUnitLevel(unit, id, levels);
