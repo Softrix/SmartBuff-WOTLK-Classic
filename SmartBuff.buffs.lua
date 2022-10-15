@@ -562,7 +562,7 @@ function SMARTBUFF_InitSpellIDs()
   SMARTBUFF_CAMOUFLAGE_BUFF 		= GetSpellInfo(28543);			-- Elixir of Camouflage
   SMARTBUFF_HEALINGPOWER_BUFF		= GetSpellInfo(28491);			-- Elixir of Healing Power
   SMARTBUFF_MAJORFORTITUDE_BUFF		= GetSpellInfo(39636);			-- Elixir of Major Fortitude
-  SMARTBUFF_MAJORSTRENGTH_BUFF		= GetSpellInfo(28544);			-- Elixir of Major Strength
+  SMARTBUFF_MAJORSTRENGTH_BUFF		= GetSpellInfo(28490);			-- Elixir of Major Strength
   SMARTBUFF_ONSLAUGHTELIXIR_BUFF	= GetSpellInfo(33738);			-- Onslaught Elixir
   SMARTBUFF_GREATERARCANE_BUFF		= GetSpellInfo(17573);			-- Greater Arcane
   SMARTBUFF_MONGOOSEELIXIR_BUFF		= GetSpellInfo(17571);			-- Elixir of Mongoose
