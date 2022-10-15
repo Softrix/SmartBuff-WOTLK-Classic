@@ -6,8 +6,8 @@
 -- Cast the most important buffs on you, tanks or party/raid members/pets.
 -------------------------------------------------------------------------------
 
-SMARTBUFF_DATE			= "091022";
-SMARTBUFF_VERSION       = "r36."..SMARTBUFF_DATE;
+SMARTBUFF_DATE			= "151022 Dev";
+SMARTBUFF_VERSION       = "r37."..SMARTBUFF_DATE;
 SMARTBUFF_VERSIONMIN	= 11403;			-- min version
 SMARTBUFF_VERSIONNR     = 30400;			-- max version
 SMARTBUFF_TITLE         = "SmartBuff";
@@ -459,14 +459,15 @@ local function IsPlayerInGuild()
 end
 
 local function SendSmartbuffVersion(player, unit)
-	-- if ive announced to this player / the player is me then just return.
 	if player == UnitName("player") then return end
 	for count,value in ipairs(SmartbuffVerNotifyList) do
 		if value[1] == player then return end
 	end
-	-- not announced, add the player and announce.
-	tinsert(SmartbuffVerNotifyList, {player, unit, GetTime()})
-	C_ChatInfo.SendAddonMessage(SmartbuffPrefix, SmartbuffRevision, "WHISPER", player)
+    local isInBattleground = UnitInBattleground("player")
+    if not isInBattleground then
+	    tinsert(SmartbuffVerNotifyList, {player, unit, GetTime()})
+	    C_ChatInfo.SendAddonMessage(SmartbuffPrefix, SmartbuffRevision, "WHISPER", player)
+	end
 end
 
 -- SMARTBUFF_OnLoad
@@ -924,7 +925,7 @@ function SMARTBUFF_SetUnits()
           end
         end
 		-- attempt to announce the addon version (if they have it)
-		if online then SendSmartbuffVersion(name, sRUnit) end
+        if online then SendSmartbuffVersion(name, sRUnit) end
       end
     end --end for
     
