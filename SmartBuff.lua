@@ -6,7 +6,7 @@
 -- Cast the most important buffs on you, tanks or party/raid members/pets.
 -------------------------------------------------------------------------------
 
-SMARTBUFF_DATE			= "151022 Dev";
+SMARTBUFF_DATE			= "171022";
 SMARTBUFF_VERSION       = "r37."..SMARTBUFF_DATE;
 SMARTBUFF_VERSIONMIN	= 11403;			-- min version
 SMARTBUFF_VERSIONNR     = 30400;			-- max version
@@ -23,7 +23,7 @@ local SmartbuffSession = true;
 local SmartbuffVerCheck = false;	-- for my use when checking guild users/testers versions  :)
 local wowVersionString, wowBuild, _, wowTOC = GetBuildInfo();
 local isWOTLKC = (_G.WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC and wowTOC >= 30400);
-local SmartbuffRevision = 36;
+local SmartbuffRevision = 37;
 local SmartbuffVerNotifyList = {}
 
 -- Smartbuff now uses LibRangeCheck-2.0 by Mitchnull, not fully implemented
