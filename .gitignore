@@ -2,3 +2,5 @@
 *.wowproj
 *.wowsln
 .vs/SmartBuff/v17/.wowsuo
+work-in-progress.txt
+*.log

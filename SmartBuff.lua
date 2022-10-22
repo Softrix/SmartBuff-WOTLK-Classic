@@ -6,8 +6,8 @@
 -- Cast the most important buffs on you, tanks or party/raid members/pets.
 -------------------------------------------------------------------------------
 
-SMARTBUFF_DATE			= "171022";
-SMARTBUFF_VERSION       = "r37."..SMARTBUFF_DATE;
+SMARTBUFF_DATE			= "221022 Dev";
+SMARTBUFF_VERSION       = "r38."..SMARTBUFF_DATE;
 SMARTBUFF_VERSIONMIN	= 11403;			-- min version
 SMARTBUFF_VERSIONNR     = 30400;			-- max version
 SMARTBUFF_TITLE         = "SmartBuff";
@@ -1220,16 +1220,18 @@ function SMARTBUFF_SetBuff(buff, i, ia)
       cBuffs[i].IconS = texture;
       
     else
-      local _, _, _, _, minLevel = GetItemInfo(cBuffs[i].BuffS);
+	  local itemsName, _, _, _, minLevel = GetItemInfo(cBuffs[i].BuffS);
       if (not IsMinLevel(minLevel)) then
         cBuffs[i] = nil;
         return i;      
       end
       
       local _, _, count, texture = SMARTBUFF_FindItem(cBuffs[i].BuffS, cBuffs[i].Chain);
-      if (count <= 0) then
+      if (count <= 0) then        
         cBuffs[i] = nil;
         return i;
+      else
+--          print("Found: "..cBuffs[i].BuffS..", count: "..count)
       end    
       cBuffs[i].IconS = texture;
     end
@@ -3132,13 +3134,12 @@ function SMARTBUFF_FindItem(reagent, chain)
         --itemName = string.match(itemLink, "item[%-?%d:]+");
         --itemName = string.match(itemLink, "|h%[.*%]|h");
         itemName = string.match(itemLink, "%[.-%]");
-        --print(bag, slot, itemName);
+--        print(bag, slot, itemName);
         --SMARTBUFF_AddMsgD("Reagent found: " .. itemLink);
         for i = 1, #chain, 1 do
-          --print(chain[i]);
-          if (chain[i] and string.find(itemName, chain[i], 1, true)) then
-          --if (chain[i] and string.find(itemLink, "["..chain[i].."]", 1, true)) then
-            --print("Item found: "..chain[i]);
+          --if (chain[i] and string.find(itemName, chain[i], 1, true)) then
+          if (chain[i] and string.find(itemLink, "["..chain[i].."]", 1, true)) then
+--            print("Item found: "..chain[i]);
             texture, count = GetContainerItemInfo(bag, slot);
             return bag, slot, count, texture;
           end

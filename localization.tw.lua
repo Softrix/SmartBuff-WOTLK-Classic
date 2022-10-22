@@ -15,6 +15,9 @@ SMARTBUFF_CREDITS = "|cffffffff"
   .."|cffffffffPayPal.Me: |cff00e0ffhttps://paypal.me/codermik\n\n"
 ;
 
+-- Alchemy
+SMARTBUFF_ALCHEMY_TITLE = "鍊金術";
+
 -- Weapon types
 SMARTBUFF_WEAPON_STANDARD = {"匕首", "斧", "劍", "錘", "法杖", "拳套", "長柄武器", "投擲武器"};
 SMARTBUFF_WEAPON_BLUNT = {"錘", "法杖", "拳套"};

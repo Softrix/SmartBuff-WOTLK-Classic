@@ -1,9 +1,0 @@
-
-
-WOTLK Beta Issues:
-
-As of 19/07/2022, Theres a known issue on API call IsSpellInRange where it is always returning nil as if the wrong 
-parameters have been provided - it should be returning 1 if a player is in range and 0 if he/she is out of range.
-
-Try:   IsSpellInRange("Arcane Brilliance", "player") on a mage.
-

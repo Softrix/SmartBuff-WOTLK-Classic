@@ -6,13 +6,11 @@
 SMARTBUFF_WHATSNEW = "\n\n|cffffffff        Whats new:|r\n\n"
   .."          |cffffffffClassic version by Codermik\n"
   .."          Please report any issues on Curse or Discord.|r\n\n\n"
-  .."          Changes in r37:\n\n"
-  .."             * Fixed a battleground cross-realm issue thats \n"
-  .."               causing some system messages when the addon\n"
-  .."               tries to send version information.\n\n"
-  .."             * Added Flask of the North for Alchemists. \n\n"
-  .."             * Added missing scrolls (thanks Emmalee via \n"
-  .."               my Discord). \n\n"
+  .."          Changes in r38:\n\n"
+  .."             * Addon now checks for Alchemy and adjusts the \n"
+  .."               duration of pots, elixir's etc.\n\n"
+  .."             * Added Dalaran Mage buffs. \n\n"
+  .."             * Various other bug fixes. \n\n"
   .."\n\n"
   .."          |c0000FF96Many thanks to Chris S. for his donation and\n"
   .."          supporting my addon development.\n\n"
@@ -38,6 +36,9 @@ SMARTBUFF_CREDITS = "|cffffffff"
   .."|cffffffffTwitch: |cff00e0ffhttps://www.twitch.tv/codermik\n"
   .."|cffffffffPayPal.Me: |cff00e0ffhttps://paypal.me/codermik\n\n"
 ;
+
+-- Alchemy
+SMARTBUFF_ALCHEMY_TITLE = "Alchemy";
 
 -- Weapon types
 SMARTBUFF_WEAPON_STANDARD = {"Daggers", "Axes", "Swords", "Maces", "Staves", "Fist Weapons", "Polearms", "Thrown"};

@@ -15,6 +15,9 @@ SMARTBUFF_CREDITS = "|cffffffff"
   .."|cffffffffPayPal.Me: |cff00e0ffhttps://paypal.me/codermik\n\n"
 ;
 
+-- Alchemy
+SMARTBUFF_ALCHEMY_TITLE = "炼金术";
+
 -- 德鲁伊
 SMARTBUFF_DRUID_CAT = "猎豹形态";
 SMARTBUFF_DRUID_MOONKIN = "枭兽形态";

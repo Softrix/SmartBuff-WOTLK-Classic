@@ -14,6 +14,9 @@ SMARTBUFF_CREDITS = "|cffffffff"
   .."|cffffffffPayPal.Me: |cff00e0ffhttps://paypal.me/codermik\n\n"
 ;
 
+-- Alchemy
+SMARTBUFF_ALCHEMY_TITLE = "Алхимия";
+
 -- Weapon types
 SMARTBUFF_WEAPON_STANDARD = {"Кинжалы", "топоры", "мечи", "дробящее", "Посохи", "Кистевое", "Древковое", "Метательное"};
 SMARTBUFF_WEAPON_BLUNT = {"дробящее", "Посохи", "Кистевое"};
