@@ -6,10 +6,10 @@
 -- Cast the most important buffs on you, tanks or party/raid members/pets.
 -------------------------------------------------------------------------------
 
-SMARTBUFF_DATE			= "221022 Dev";
-SMARTBUFF_VERSION       = "r38."..SMARTBUFF_DATE;
+SMARTBUFF_DATE			= "180122";
+SMARTBUFF_VERSION       = "r39."..SMARTBUFF_DATE;
 SMARTBUFF_VERSIONMIN	= 11403;			-- min version
-SMARTBUFF_VERSIONNR     = 30400;			-- max version
+SMARTBUFF_VERSIONNR     = 30401;			-- max version
 SMARTBUFF_TITLE         = "SmartBuff";
 SMARTBUFF_SUBTITLE      = "Supports casting buffs on tanks, selected classes in party or raids.";
 SMARTBUFF_DESC          = "Cast the most important buffs on you, tanks, party or raid members/pets";
@@ -23,7 +23,7 @@ local SmartbuffSession = true;
 local SmartbuffVerCheck = false;	-- for my use when checking guild users/testers versions  :)
 local wowVersionString, wowBuild, _, wowTOC = GetBuildInfo();
 local isWOTLKC = (_G.WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC and wowTOC >= 30400);
-local SmartbuffRevision = 37;
+local SmartbuffRevision = 39;
 local SmartbuffVerNotifyList = {}
 
 -- Smartbuff now uses LibRangeCheck-2.0 by Mitchnull, not fully implemented
@@ -3091,8 +3091,8 @@ function SMARTBUFF_CountReagent(reagent, chain)
   local itemLink, itemName, count;
   if (chain == nil) then chain = { reagent }; end
   for bag = 0, NUM_BAG_FRAMES do
-    for slot = 1, GetContainerNumSlots(bag) do
-      itemLink = GetContainerItemLink(bag, slot); 
+    for slot = 1, C_Container.GetContainerNumSlots(bag) do
+      itemLink = C_Container.GetContainerItemLink(bag, slot); 
       if (itemLink ~= nil) then
         itemName = string.match(itemLink, "%[.-%]");
         --print(bag, slot, itemName);
@@ -3101,8 +3101,8 @@ function SMARTBUFF_CountReagent(reagent, chain)
           if (chain[i] and string.find(itemName, chain[i], 1, true)) then
           --if (chain[i] and string.find(itemLink, "["..chain[i].."]", 1, true)) then
             --print("Item found: "..chain[i]);
-            _, count = GetContainerItemInfo(bag, slot);
-            id = GetContainerItemID(bag, slot);
+            _, count = C_Container.GetContainerItemInfo(bag, slot);
+            id = C_Container.GetContainerItemID(bag, slot);
             n = n + count;
           end
         end
@@ -3116,32 +3116,28 @@ function SMARTBUFF_FindItem(reagent, chain)
   if (reagent == nil) then
     return nil, nil, -1, nil;
   end
-  
-  --local toy = SG.Toybox[reagent];
-  --if (toy) then
-  --  return 999, toy[1], 1, toy[2];
-  --end
-  
+    
   local n = 0;
   local bag = 0;
   local slot = 0;
+  local itemsInfo;
   local itemLink, itemName, texture, count;
   if (chain == nil) then chain = { reagent }; end
+
   for bag = 0, NUM_BAG_FRAMES do
-    for slot = 1, GetContainerNumSlots(bag) do
-      itemLink = GetContainerItemLink(bag, slot);
+    for slot = 1, C_Container.GetContainerNumSlots(bag) do
+      itemLink = C_Container.GetContainerItemLink(bag, slot);
       if (itemLink ~= nil) then
-        --itemName = string.match(itemLink, "item[%-?%d:]+");
-        --itemName = string.match(itemLink, "|h%[.*%]|h");
         itemName = string.match(itemLink, "%[.-%]");
---        print(bag, slot, itemName);
-        --SMARTBUFF_AddMsgD("Reagent found: " .. itemLink);
         for i = 1, #chain, 1 do
-          --if (chain[i] and string.find(itemName, chain[i], 1, true)) then
           if (chain[i] and string.find(itemLink, "["..chain[i].."]", 1, true)) then
---            print("Item found: "..chain[i]);
-            texture, count = GetContainerItemInfo(bag, slot);
-            return bag, slot, count, texture;
+            -- itemInfo now returns a table, thanks bliz  :)
+            itemsInfo = C_Container.GetContainerItemInfo(bag, slot);
+            if itemsInfo then
+                return bag, slot, itemsInfo.stackCount, texture;
+			else
+			    return nil, nil, 0, nil;
+			end
           end
         end
       end
@@ -3266,7 +3262,7 @@ end
 -- Init the SmartBuff variables ---------------------------------------------------------------------------------------
 function SMARTBUFF_Options_Init(self)
   if (isInit) then return; end
-  
+
   self:UnregisterEvent("CHAT_MSG_CHANNEL");
   self:UnregisterEvent("UPDATE_MOUSEOVER_UNIT");
   
