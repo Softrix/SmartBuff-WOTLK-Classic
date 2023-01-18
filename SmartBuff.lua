@@ -6,8 +6,8 @@
 -- Cast the most important buffs on you, tanks or party/raid members/pets.
 -------------------------------------------------------------------------------
 
-SMARTBUFF_DATE			= "180122";
-SMARTBUFF_VERSION       = "r39."..SMARTBUFF_DATE;
+SMARTBUFF_DATE			= "180123";
+SMARTBUFF_VERSION       = "r40."..SMARTBUFF_DATE;
 SMARTBUFF_VERSIONMIN	= 11403;			-- min version
 SMARTBUFF_VERSIONNR     = 30401;			-- max version
 SMARTBUFF_TITLE         = "SmartBuff";
@@ -23,7 +23,7 @@ local SmartbuffSession = true;
 local SmartbuffVerCheck = false;	-- for my use when checking guild users/testers versions  :)
 local wowVersionString, wowBuild, _, wowTOC = GetBuildInfo();
 local isWOTLKC = (_G.WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC and wowTOC >= 30400);
-local SmartbuffRevision = 39;
+local SmartbuffRevision = 40;
 local SmartbuffVerNotifyList = {}
 
 -- Smartbuff now uses LibRangeCheck-2.0 by Mitchnull, not fully implemented
@@ -2118,10 +2118,10 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
 			  if (cBuff.Type == SMARTBUFF_CONST_TRACK) then   			        
 				  if wowTOC >= 20502 then  
 					  -- assume we are TBC Classic or higher
-					  local count = (GetNumTrackingTypes())+1;	-- GetNumTrackingTypes doesnt count "none" so add one to include it.
+					  local count = (C_Minimap.GetNumTrackingTypes())+1;	-- GetNumTrackingTypes doesnt count "none" so add one to include it.
 					  local trackingFound;
 					  for n = 1, count do 
-						local trackN, trackT, trackA, trackC = GetTrackingInfo(n);
+						local trackN, trackT, trackA, trackC = C_Minimap.GetTrackingInfo(n);
 						if trackN == buffnS and trackA then 
 						trackingFound = true;
 						break;
@@ -3088,6 +3088,7 @@ function SMARTBUFF_CountReagent(reagent, chain)
   local id = nil;
   local bag = 0;
   local slot = 0;
+  local itemsInfo;
   local itemLink, itemName, count;
   if (chain == nil) then chain = { reagent }; end
   for bag = 0, NUM_BAG_FRAMES do
@@ -3095,15 +3096,11 @@ function SMARTBUFF_CountReagent(reagent, chain)
       itemLink = C_Container.GetContainerItemLink(bag, slot); 
       if (itemLink ~= nil) then
         itemName = string.match(itemLink, "%[.-%]");
-        --print(bag, slot, itemName);
         for i = 1, #chain, 1 do
-          --print(chain[i]);
           if (chain[i] and string.find(itemName, chain[i], 1, true)) then
-          --if (chain[i] and string.find(itemLink, "["..chain[i].."]", 1, true)) then
-            --print("Item found: "..chain[i]);
-            _, count = C_Container.GetContainerItemInfo(bag, slot);
+            itemsInfo = C_Container.GetContainerItemInfo(bag, slot);
             id = C_Container.GetContainerItemID(bag, slot);
-            n = n + count;
+            n = n + itemsInfo.stackCount;
           end
         end
       end
@@ -3123,7 +3120,6 @@ function SMARTBUFF_FindItem(reagent, chain)
   local itemsInfo;
   local itemLink, itemName, texture, count;
   if (chain == nil) then chain = { reagent }; end
-
   for bag = 0, NUM_BAG_FRAMES do
     for slot = 1, C_Container.GetContainerNumSlots(bag) do
       itemLink = C_Container.GetContainerItemLink(bag, slot);
