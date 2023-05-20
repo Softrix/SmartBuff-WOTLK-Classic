@@ -1,5 +1,5 @@
 ## Interface: 30401
-## Title: SmartBuff |cffffffff(Classic)|r by |cff00ff00Codermik & Aeldra|r
+## Title: SmartBuff |cffffffff(WOTLK)|r by |cff00ff00Codermik & Aeldra|r
 ## Version: 41.30401
 ## Author: |cff20d2ffCodermik & Aeldra|r (EU-Proudmoore)
 ## Contributing Author: |cff20d2ffSpeedwaystar
