@@ -15,7 +15,6 @@ Run the mod when ever you wish, if nothing is buffed, there is no penalty or coo
 - Checks buffs and rebuffs you, raid, party members and pets.
 - Setup your own buff templates (Solo, Party, Raid, Battleground, MC, Onyxia, BWL, AQ, ZG, Custom 1-5)
 - Auto switch templates when playing solo, in a party or raid etc.
-- Auto switch Gathering Trackers such as Find Herbs, Find Minerals and Find Fish
 - Individual setup for each buff.
 - Supports group buffs: 'Gift of the Wild'/'Arcane Brilliance'/'Prayer of Fortitude'/'Prayer of Spirit', incl. group size and reagence checks.
 - Supports class buffs: all greater blessings of the Paladin.
@@ -23,6 +22,7 @@ Run the mod when ever you wish, if nothing is buffed, there is no penalty or coo
 - Supports weapon buffs (individual for main and off hand): Shaman, all poisons (Rogue), all stones and oils, incl. reagence checks.
 - Supports character level based buffs.
 - Supports tracking abilities.
+    - Auto switch Gathering Trackers such as Find Herbs, Find Minerals and Find Fish
 - Reminder if a buff is missing (Splash/chat/sound).
 - ReBuff Timers.
 - Scrollwheel or only one key is needed.
