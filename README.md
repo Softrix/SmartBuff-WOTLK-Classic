@@ -1,6 +1,6 @@
-# SmartBuff Classic, SoM, TBC Classic & WOTLK CLassic
+# SmartBuff Wrath of the Lich King CLassic
 
-For clarity, this repository is ONLY for the Classic version of the client as listed above, and it is not the Retail version of the client.
+For clarity, this repository is ONLY for the WOTLK Classic version of the client as listed above, and it is not the Retail or Classic Era.
 
 SmartBuff is a buff addon to monitor you, your party or raids buffs easily and quickly allowing you to cast those that are missing - all classes are supported.
 
@@ -15,6 +15,7 @@ Run the mod when ever you wish, if nothing is buffed, there is no penalty or coo
 - Checks buffs and rebuffs you, raid, party members and pets.
 - Setup your own buff templates (Solo, Party, Raid, Battleground, MC, Onyxia, BWL, AQ, ZG, Custom 1-5)
 - Auto switch templates when playing solo, in a party or raid etc.
+- Auto switch Gathering Trackers such as Find Herbs, Find Minerals and Find Fish
 - Individual setup for each buff.
 - Supports group buffs: 'Gift of the Wild'/'Arcane Brilliance'/'Prayer of Fortitude'/'Prayer of Spirit', incl. group size and reagence checks.
 - Supports class buffs: all greater blessings of the Paladin.
@@ -36,7 +37,7 @@ Run the mod when ever you wish, if nothing is buffed, there is no penalty or coo
 Minimap button:
 - Left click: opens SmartBuff options frame
 - Right click: enables/disables SmartBuff
-- Alt-Left click: SmartDebuff
+- Alt-Left click: Toggle Gathering Switcher
 - Shift-Left click: move minimap button
 
 
@@ -64,10 +65,17 @@ If you prefer to use Smartbuff in a macro rather than scrolling your mouse or us
 /click SmartBuff_KeyButton
 
 
+
+## Known Issues & Reminders/TODO
+
+- Rogue poison links need implementing for Lethal / Non-Lethal.
+
+
+
 ## Contact / Support
 
 You will find me on:
-- Classic Server: Mik/Castanova/Amarantine/Paramedic on EU-Mirage Raceway
+- Classic Server: Gabella/Mik/Castanova/Amarantine/Paramedic on EU-Mirage Raceway
 - Retail: Challenger, Castanova, Paramedic and many others on EU-Aszune
 
 Join me on discord to offer feedback, report bugs and much more: https://discord.gg/R6EkZ94TKK

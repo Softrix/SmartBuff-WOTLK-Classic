@@ -3,44 +3,39 @@
 -------------------------------------------------------------------------------
 
 -- Whats new info
-SMARTBUFF_WHATSNEW = "\n\n|cffffffff        Whats new:|r\n\n"
-  .."          |cffffffffClassic version by Codermik\n"
-  .."          Please report any issues on Curse or Discord.|r\n\n\n"
-  .."          Changes in r40:\n\n"
-  .."             * Fixed LUA errors caused by recent API changes \n"
-  .."               in client 30401.\n\n\n\n"
-  .."          Note that this is a quick fix to get addon working,\n"
-  .."          there are additional fixes incoming later today or\n"
-  .."          tomorrow.. please be patient.\n"
+SMARTBUFF_WHATSNEW = "\n\n|cffffffff         Whats new:|r\n\n"
+  .."          |cffffffffClassic version by Codermik, additional coding\n"
+  .."          by Speedwaystar.|cff00e0ff\n\n\n"
+  .."          Changes in r41.200523:\n\n"
+  .."             * Classic versions now use the codebase from the\n"
+  .."                retail version with other additional changes to\n"
+  .."                correctly work under this client.\n\n"
+  .."             * Added prompt to do a GUI reload when new versions\n"
+  .."                release to ensure addon is initialised correctly.\n\n"
+  .."             * Added support for a mage's conjured food, water\n"
+  .."                and their mana gems.\n\n"
+  .."             * Added support for hunters revive pet.\n\n"
+  .."             * Added more missing food and consumables, please\n"
+  .."                report if you find anything not showing up.\n\n"
+  .."             * Added automatic gathering switcher toggled by\n"
+  .."                alt-left clicking minimap icon or in options.\n\n"
   .."\n"
   .."          |c0000FF96Many thanks to Chris S., Samantha R. and\n"
-  .."          Twilight's Sundries for their kind donations.\n\n\n"
-  .."          |cffffffffIf you appreciate my work on the various addons\n"
-  .."          for wow then please consider supporting me, you\n"
-  .."          can do this several ways which include:\n\n"
-  .."          |cffffffffPatreon: |cff00e0ffhttps://www.patreon.com/codermik\n"
-  .."          |cffffffffTwitch: |cff00e0ffhttps://www.twitch.tv/codermik\n"
-  .."          |cffffffffPayPal.Me: |cff00e0ffhttps://paypal.me/codermik\n\n\n"
-
-  .."          |cff00e0ffHuge thanks to Aeldra for creating the original\n" 
-  .."          addon and the framework for this working release.\n\n"
+  .."          Twilight's Sundries for their kind donations.\n"
+ .."\n\n"
 ;
 
--- addon credits
 SMARTBUFF_CREDITS = "|cffffffff"
-  .."Classic version by Codermik.  Please report any issues on CurseForge or my discord at:\n\n"
+  .."Retail & Classic by Codermik & Speedwaystar.  Please join to get support on our discord server:\n"
   .."|cff00e0ffhttps://discord.gg/R6EkZ94TKK\n\n"
-  .."|cffffffffIf you appreciate the amount of work involved and the time taken to bring you these various addons please consider supporting me by:\n\n"
+  .."|cffffffffIf you want to help support us and the development of this addon then please always download from Curse or use one of the following links:\n\n(We only ever upload to Curseforge)\n\n"
   .."|cffffffffPatreon: |cff00e0ffhttps://www.patreon.com/codermik\n"
   .."|cffffffffTwitch: |cff00e0ffhttps://www.twitch.tv/codermik\n"
   .."|cffffffffPayPal.Me: |cff00e0ffhttps://paypal.me/codermik\n\n"
 ;
 
--- Alchemy
-SMARTBUFF_ALCHEMY_TITLE = "Alchemy";
-
 -- Weapon types
-SMARTBUFF_WEAPON_STANDARD = {"Daggers", "Axes", "Swords", "Maces", "Staves", "Fist Weapons", "Polearms", "Thrown"};
+SMARTBUFF_WEAPON_STANDARD = {"Daggers", "Axes", "Swords", "Maces", "Staves", "Fist Weapons", "Polearms", "Thrown", "Crossbows", "Bows"};
 SMARTBUFF_WEAPON_BLUNT = {"Maces", "Staves", "Fist Weapons"};
 SMARTBUFF_WEAPON_BLUNT_PATTERN = "Weightstone$";
 SMARTBUFF_WEAPON_SHARP = {"Daggers", "Axes", "Swords", "Polearms"};
@@ -55,11 +50,13 @@ SMARTBUFF_DEMONTYPE = "Imp";
 SMARTBUFF_UNDEAD    = "Undead";
 
 -- Classes
-SMARTBUFF_CLASSES = {"Druid", "Hunter", "Mage", "Paladin", "Priest", "Rogue", "Shaman", "Warlock", "Warrior", "Death Knight", "Monk", "Demon Hunter", "Hunter Pet", "Warlock Pet", "Death Knight Pet", "Tank", "Healer", "Damage Dealer"};
+SMARTBUFF_CLASSES = {"Druid", "Hunter", "Mage", "Paladin", "Priest", "Rogue", "Shaman", "Warlock", "Warrior", "Death Knight", "Monk", "Demon Hunter", "Evoker", "Hunter Pet", "Warlock Pet", "Death Knight Pet", "Tank", "Healer", "Damage Dealer"};
 
 -- Templates and Instances
-SMARTBUFF_TEMPLATES = {"Solo", "Party", "Raid", "Battleground", "Arena", "ICC", "TOC", "Ulduar", "MC", "Ony", "BWL", "Naxx", "AQ", "ZG", "Custom 1", "Custom 2", "Custom 3", "Custom 4", "Custom 5"};
-SMARTBUFF_INSTANCES = {"Icecrown Citadel", "Trial of the Crusader", "Ulduar", "Molten Core", "Onyxia's Lair", "Blackwing Lair", "Naxxramas", "Ahn'Qiraj", "Zul'Gurub"};
+--SMARTBUFF_TEMPLATES = {"Solo", "Party", "LFR", "Raid", "Mythic Keystone", "Battleground", "Arena", "Castle Nathria", "Sanctum of Domination", "Sepulcher of the First Ones", "Vault of the Incarnates", "Custom 1", "Custom 2", "Custom 3", "Custom 4", "Custom 5"};
+--SMARTBUFF_INSTANCES = {"Castle Nathria", "Sanctum of Domination", "Sepulcher of the First Ones", "Vault of the Incarnates"};
+SMARTBUFF_TEMPLATES = {"Solo", "Party", "Raid", "Battleground", "Arena", "ICC", "TOC", "Ulduar", "Ony", "Naxx", "Custom 1", "Custom 2", "Custom 3", "Custom 4", "Custom 5"};
+SMARTBUFF_INSTANCES = {"Icecrown Citadel", "Trial of the Crusader", "Ulduar", "Onyxia's Lair", "Naxxramas"};
 
 -- Mount
 SMARTBUFF_MOUNT = "Increases speed by (%d+)%%.";
@@ -73,7 +70,28 @@ BINDING_NAME_SMARTBUFF_BIND_TARGET  = "Target";
 BINDING_NAME_SMARTBUFF_BIND_OPTIONS = "Option menu";
 BINDING_NAME_SMARTBUFF_BIND_RESETBUFFTIMERS = "Reset buff timers";
 
+-- wrong version
+SMARTBUFF_NOTINTENDEDCLIENT	 = "This version of Smartbuff is not intended for this client, please download the correct version.";
+
 -- Options Frame Text
+
+-- Fix casting.
+SMARTBUFF_OFT_FIXBUFF		 = "Fix Casting"
+SMARTBUFF_OFTT_FIXBUFF		 = "Only tick this option if Smartbuff is failing to cast buffs while using the\nscroll mouse, action button or macro. Combat buffing will not work with\nthis setting active but you will be notified its missing for manual buffing."
+
+-- tracking switcher
+SMARTBUFF_TRACKSWITCHMSG	 = " has been detected but the auto switch find herbs, minerals and fish is turned on in the options. type /sbm to open options and either turn off the individual trackers or the automatic switching.";
+SMARTBUFF_TRACKINGDISABLE	 = "You will only get benefit from this feature if you have 2 or more gathering tracking abilities, option has been disabled."
+SMARTBUFF_AUTOGATHERON		 = "Automatic gathering switch is ON"
+SMARTBUFF_AUTOGATHEROFF		 = "Automatic gathering switch is OFF"
+SMARTBUFF_OFT_GATHERER		 = "Auto Switch Gathering Trackers"
+SMARTBUFF_OFT_FINDFISH		 = "Find Fish"
+SMARTBUFF_OFT_MINERALS		 = "Find Minerals"
+SMARTBUFF_OFT_HERBS			 = "Find Herbs"
+SMARTBUFF_OFTT_GATHERER		 = "Switches through your Find Herbs, Find Minerals and Find Fish (if available and selected)."
+SMARTBUFF_OFTT_GATHERERFISH	 = "Include Find Fish when switching through Gathering Trackers."
+
+
 SMARTBUFF_OFT                = "SmartBuff On/Off";
 SMARTBUFF_OFT_MENU           = "Show/hide options menu";
 SMARTBUFF_OFT_AUTO           = "Reminder";
@@ -96,6 +114,7 @@ SMARTBUFF_OFT_MSGNORMAL      = "normal";
 SMARTBUFF_OFT_MSGWARNING     = "warning";
 SMARTBUFF_OFT_MSGERROR       = "error";
 SMARTBUFF_OFT_HIDEMMBUTTON   = "Hide minimap button";
+SMARTBUFF_OFT_INCLUDETOYS	 = "Include toys";
 SMARTBUFF_OFT_REBUFFTIMER    = "Rebuff Timer";
 SMARTBUFF_OFT_AUTOSWITCHTMP  = "Switch template";
 SMARTBUFF_OFT_SELFFIRST      = "Self first";
@@ -111,8 +130,7 @@ SMARTBUFF_OFT_BUFFINCITIES   = "Buff in cities";
 SMARTBUFF_OFT_BLDURATION     = "Blacklisted";
 SMARTBUFF_OFT_ANTIDAZE       = "Anti daze";
 SMARTBUFF_OFT_HIDESABUTTON   = "Hide action button";
-SMARTBUFF_OFT_WARNWHILEMOUNTED = "Warn while mounted";
-SMARTBUFF_OFT_INCOMBAT       = "Buff in combat";
+SMARTBUFF_OFT_INCOMBAT       = "in combat";
 SMARTBUFF_OFT_SMARTDEBUFF    = "SmartDebuff";
 SMARTBUFF_OFT_INSHAPESHIFT   = "Shapeshift";
 SMARTBUFF_OFT_LINKGRPBUFFCHECK  = "Grp link";
@@ -121,12 +139,15 @@ SMARTBUFF_OFT_RESETALL       = "Reset All";
 SMARTBUFF_OFT_RESETLIST      = "Reset List";
 SMARTBUFF_OFT_YES            = "Yes";
 SMARTBUFF_OFT_NO             = "No";
+SMARTBUFF_OFT_OKAY			 = "Continue"
 SMARTBUFF_OFT_PURGE_DATA     = "Are you sure you want to reset ALL SmartBuff data?\nThis action will force a reload of the UI!";
+SMARTBUFF_OFT_REQ_RELOAD     = "New versions require a reload of the GUI\nClick Continue when ready.";
 SMARTBUFF_OFT_SPLASHICON     = "Show Icon";
 SMARTBUFF_OFT_SPLASHMSGSHORT = "Short Message";
 SMARTBUFF_OFT_FONTSTYLE      = "Font";
 SMARTBUFF_OFT_FONTSIZE       = "Font Size";
 SMARTBUFF_OFT_ICONSIZE       = "Icon Size";
+SMARTBUFF_OFT_FRODWARN		 = "You are in combat with your fishing rod equipped.";
 
 
 -- Options Frame Tooltip Text
@@ -142,6 +163,7 @@ SMARTBUFF_OFTT_HUNTERPETS    = "Buff the Hunter pets as well.";
 SMARTBUFF_OFTT_WARLOCKPETS   = "Buff the Warlock pets as well, except the " .. SMARTBUFF_DEMONTYPE .. ".";
 SMARTBUFF_OFTT_ARULES        = "Does not cast:\n- Thorns on Mages, Priests and Warlocks\n- Arcane Intellect on units without Mana\n- Divine Spirit on units without Mana";
 SMARTBUFF_OFTT_HIDEMMBUTTON  = "Hides the SmartBuff minimap button.";
+SMARTBUFF_OFTT_INCLUDETOYS	 = "Include toys in the list alongside your spells and food.";
 SMARTBUFF_OFTT_REBUFFTIMER   = "How many seconds before a buff expires,\nthe reminder should alert you.\n0 = Deactivated";
 SMARTBUFF_OFTT_SELFFIRST     = "Buffs your character first of all others.";
 SMARTBUFF_OFTT_SCROLLWHEELUP = "Cast buffs when you roll your\nscrollwheel forward.";
@@ -157,18 +179,17 @@ SMARTBUFF_OFTT_BLDURATION    = "How many seconds, players will be blacklisted.\n
 SMARTBUFF_OFTT_ANTIDAZE      = "Automatically cancels the\naspect of the cheetah/pack\nif someone gets dazed\n(self or group).";
 SMARTBUFF_OFTT_SPLASHSTYLE   = "Changes the fontstyle of\nthe buff messages.";
 SMARTBUFF_OFTT_HIDESABUTTON  = "Hides the SmartBuff action button.";
-SMARTBUFF_OFTT_WARNWHILEMOUNTED = "Check and warn for missing buffs while you are mounted.";
-SMARTBUFF_OFTT_SOUNDSELECT	 = "Select the required splash sound.";
 SMARTBUFF_OFTT_INCOMBAT      = "At the moment it only works on yourself.\nThe first buff you mark as in combat,\nwill set on the button before combat\nand you can use it in combat.\n!!! Warning !!!\nAll logic is disabled in combat!";
 SMARTBUFF_OFTT_SMARTDEBUFF   = "Shows the SmartDebuff frame.";
 SMARTBUFF_OFTT_SPLASHDURATION= "How many seconds the splash\nmessage will displayed,\nbefore it fades.";
 SMARTBUFF_OFTT_INSHAPESHIFT  = "Cast buffs also if you\nare shapeshifted.";
 SMARTBUFF_OFTT_LINKGRPBUFFCHECK  = "Checks if a buff of an other\nclass with similar effect\nis already active.";
 SMARTBUFF_OFTT_LINKSELFBUFFCHECK = "Checks if a self buff is active,\nwhose only one can be\nactive at a time.";
+SMARTBUFF_OFTT_SOUNDSELECT	 = "Select the required splash sound.";
 
 -- Buffsetup Frame Text
 SMARTBUFF_BST_SELFONLY       = "Myself only";
-SMARTBUFF_BST_SELFNOT        = "Not myself";
+SMARTBUFF_BST_SELFNOT        = "Myself not";
 SMARTBUFF_BST_COMBATIN       = "In combat";
 SMARTBUFF_BST_COMBATOUT      = "Out of combat";
 SMARTBUFF_BST_MAINHAND       = "Main Hand";
@@ -193,7 +214,7 @@ SMARTBUFF_BSTT_MANALIMIT     = "Mana/Rage/Energy threshold\nIf you are below thi
 SMARTBUFF_PSTT_RESIZE        = "Minimize/maximize\nthe main options frame";
 
 -- Messages
-SMARTBUFF_MSG_LOADED         = "loaded! - Classic version by Codermik - please report any errors found.";
+SMARTBUFF_MSG_LOADED         = "loaded! - Please report any problems on Curse or join discord at |cffffff00discord.gg/R6EkZ94TKK|cffffffff for improved support.";
 SMARTBUFF_MSG_NEWVER1		 = "|cff00e0ffSmartbuff : |cffffffff There is a new version available, you are using |cffFFFF00";
 SMARTBUFF_MSG_NEWVER2		 = "|cffffffff and revision |cffFFFF00r"
 SMARTBUFF_MSG_NEWVER3		 = "|cffffffff is currently available for download.  Join Discord for all the latest information at https://discord.gg/R6EkZ94TKK.";
@@ -206,7 +227,7 @@ SMARTBUFF_MSG_OOR            = "is out of range to buff!";
 SMARTBUFF_MSG_CD             = "Global cooldown!";
 SMARTBUFF_MSG_CHAT           = "not possible in chat mode!";
 SMARTBUFF_MSG_SHAPESHIFT     = "Casting is not allowed in shapeshift form!";
-SMARTBUFF_MSG_NOACTIONSLOT   = "needs a slot in an actionbar to work properly!";
+SMARTBUFF_MSG_NOACTIONSLOT   = "needs a slot in an actionbar to working properly!";
 SMARTBUFF_MSG_GROUP          = "Group";
 SMARTBUFF_MSG_NEEDS          = "needs";
 SMARTBUFF_MSG_OOM            = "Not enough mana/rage/energy!";
@@ -221,24 +242,24 @@ SMARTBUFF_MSG_SOUNDS		 = "Splash Sound Selection: "
 SMARTBUFF_MSG_SPECCHANGED    = "Spec changed (%s), loading buff templates...";
 
 -- Support
-SMARTBUFF_MINIMAP_TT         = "Left click: options menu\nRight click: On/Off\nAlt-Left Click: SmartDebuff\nShift drag: Move button";
-SMARTBUFF_TITAN_TT           = "Left Click: Open options\nRight Click: On/Off\nAlt-Left Click: SmartDebuff";
-SMARTBUFF_FUBAR_TT           = "\nLeft Click: Open options\nShift-Left Click: On/Off\nAlt-Left Click: SmartDebuff";
+SMARTBUFF_MINIMAP_TT         = "Left mouse for options\nRight mouse to toggle On/Off\nAlt-Left mouse to toggle auto tracking\nShift drag: Move button";
+SMARTBUFF_TITAN_TT           = "Left mouse for options\nRight mouse to toggle On/Off\nAlt-Left mouse to toggle auto tracking";
+SMARTBUFF_FUBAR_TT           = "\nLeft mouse for options\nRight mouse to toggle On/Off\nAlt-Left mouse to toggle auto tracking";
 
 SMARTBUFF_DEBUFF_TT          = "Shift-Left drag: Move frame\n|cff20d2ff- S button -|r\nLeft click: Show by classes\nShift-Left click: Class colors\nAlt-Left click: Highlight L/R\n|cff20d2ff- P button -|r\nLeft click: Hide pets on/off";
 
 
 -- Code table
--- à : \195\160    è : \195\168    ì : \195\172    ò : \195\178    ù : \195\185
--- á : \195\161    é : \195\169    í : \195\173    ó : \195\179    ú : \195\186
--- â : \195\162    ê : \195\170    î : \195\174    ô : \195\180    û : \195\187
--- ã : \195\163    ë : \195\171    ï : \195\175    õ : \195\181    ü : \195\188
--- ä : \195\164                    ñ : \195\177    ö : \195\182
--- æ : \195\166                                    ø : \195\184
--- ç : \195\167                                    œ : \197\147
--- 
--- Ä : \195\132
--- Ö : \195\150
--- Ü : \195\156
--- ß : \195\159
+-- Ã  : \195\160    Ã¨ : \195\168    Ã¬ : \195\172    Ã² : \195\178    Ã¹ : \195\185
+-- Ã¡ : \195\161    Ã© : \195\169    Ã­ : \195\173    Ã³ : \195\179    Ãº : \195\186
+-- Ã¢ : \195\162    Ãª : \195\170    Ã® : \195\174    Ã´ : \195\180    Ã» : \195\187
+-- Ã£ : \195\163    Ã« : \195\171    Ã¯ : \195\175    Ãµ : \195\181    Ã¼ : \195\188
+-- Ã¤ : \195\164                    Ã± : \195\177    Ã¶ : \195\182
+-- Ã¦ : \195\166                                    Ã¸ : \195\184
+-- Ã§ : \195\167                                    Âœ : \197\147
+--
+-- Ã„ : \195\132
+-- Ã– : \195\150
+-- Ãœ : \195\156
+-- ÃŸ : \195\159
 

@@ -4,7 +4,7 @@
 
 if (GetLocale() == "deDE") then
 
--- addon credits
+-- credits
 SMARTBUFF_CREDITS = "|cffffffff"
   .."Classic-Version von Codermik. Bitte melde alle Probleme auf CurseForge oder meinem Discord unter:\n\n"
   .."|cff00e0ffhttps://discord.gg/R6EkZ94TKK\n\n"
@@ -13,9 +13,6 @@ SMARTBUFF_CREDITS = "|cffffffff"
   .."|cffffffffTwitch: |cff00e0ffhttps://www.twitch.tv/codermik\n"
   .."|cffffffffPayPal.Me: |cff00e0ffhttps://paypal.me/codermik\n\n"
 ;
-
--- Alchemy
-SMARTBUFF_ALCHEMY_TITLE = "Alchemie";
 
 -- Weapon types
 SMARTBUFF_WEAPON_STANDARD = {"Dolche", "äxte", "schwerter", "streitkolben", "Stäbe", "Faustwaffen", "Stangenwaffen", "Wurfwaffe"};
@@ -33,7 +30,7 @@ SMARTBUFF_DEMONTYPE = "Wichtel";
 SMARTBUFF_UNDEAD    = "Untot";
 
 -- Classes
-SMARTBUFF_CLASSES = {"Druide", "Jäger", "Magier", "Paladin", "Priester", "Schurke", "Schamane", "Hexenmeister", "Krieger", "Todesritter", "Mönch", "Dämonenjäger", "Jäger Pet", "Hexer Pet", "Todesritter Pet", "Tank", "Heiler", "Schadensverursacher"};
+SMARTBUFF_CLASSES = {"Druide", "Jäger", "Magier", "Paladin", "Priester", "Schurke", "Schamane", "Hexenmeister", "Krieger", "Todesritter", "Mönch", "Dämonenjäger", "Evoker", "Jäger Pet", "Hexer Pet", "Todesritter Pet", "Tank", "Heiler", "Schadensverursacher"};
 
 -- Templates and Instances
 SMARTBUFF_TEMPLATES = {"Solo", "Gruppe", "Raid", "Schlachtfeld", "Arena", "ICC", "PDK", "Ulduar", "MC", "Ony", "BWL", "Naxx", "AQ", "ZG", "Custom 1", "Custom 2", "Custom 3", "Custom 4", "Custom 5"};
@@ -51,7 +48,39 @@ BINDING_NAME_SMARTBUFF_BIND_TARGET  = "Ziel";
 BINDING_NAME_SMARTBUFF_BIND_OPTIONS = "Optionen";
 BINDING_NAME_SMARTBUFF_BIND_RESETBUFFTIMERS = "Buff Timer löschen";
 
+
+-- purge/reload messages
+SMARTBUFF_OFT_YES            = "Ja";
+SMARTBUFF_OFT_NO             = "NEIN";
+SMARTBUFF_OFT_OKAY			 = "Neu laden"
+SMARTBUFF_OFT_PURGE_DATA     = "Sind Sie sicher, dass Sie ALLE SmartBuff-Daten zurücksetzen möchten?\nDiese Aktion erzwingt ein Neuladen der Benutzeroberfläche!";
+SMARTBUFF_OFT_REQ_RELOAD     = "Neue Versionen erfordern ein Neuladen der GUI\nKlicke um Fortzufahren";
+
+-- fishing rod check
+SMARTBUFF_OFT_FRODWARN		 = "Sie befinden sich mit ausgerüsteter Angelrute im Kampf.";
+
+-- tracking switcher
+SMARTBUFF_TRACKSWITCHMSG	 = " wurde erkannt, aber die automatische Umschaltverfolgung ist aktiviert. Geben Sie /sbm ein, um Optionen anzuzeigen und die individuelle Nachverfolgung oder automatische Umschaltung zu deaktivieren.";
+SMARTBUFF_TRACKINGDISABLE	 = "Sie profitieren von dieser Funktion nur, wenn Sie über zwei oder mehr Sammelfähigkeiten verfügen. Die Option wurde deaktiviert."
+SMARTBUFF_AUTOGATHERON		 = "Die automatische Umschaltung ist eingeschaltet"
+SMARTBUFF_AUTOGATHEROFF		 = "Die automatische Umschaltung ist AUS"
+SMARTBUFF_OFT_GATHERER		 = "Automatischer Wechsel von Sammel-Trackern"
+SMARTBUFF_OFT_FINDFISH		 = GetSpellInfo(43308)
+SMARTBUFF_OFT_MINERALS		 = GetSpellInfo(2580)
+SMARTBUFF_OFT_HERBS			 = GetSpellInfo(2383)
+SMARTBUFF_OFTT_GATHERER		 = "Wechselt zwischen „Kräuter suchen“, „Mineralien suchen“ und „Fisch suchen“ (falls verfügbar und ausgewählt)."
+SMARTBUFF_OFTT_GATHERERFISH	 = "Schließen Sie „Fische finden“ ein, wenn Sie durch Gathering Trackers wechseln."
+
+-- wrong version
+SMARTBUFF_NOTINTENDEDCLIENT	 = "Diese Version von Smartbuff ist nicht für diesen Client gedacht. Bitte laden Sie die richtige Version herunter.";
+
+
 -- Options Frame Text
+
+-- experimental feature - for testing.
+SMARTBUFF_OFT_FIXBUFF		 = "Gießen reparieren"
+SMARTBUFF_OFTT_FIXBUFF		 = "Ankreuzen, wenn Smartbuff keine Buffs wirkt."
+
 SMARTBUFF_OFT                = "SmartBuff An/Aus";
 SMARTBUFF_OFT_MENU           = "Zeige/verberge Optionen Menü";
 SMARTBUFF_OFT_AUTO           = "Erinnerung";
@@ -77,6 +106,7 @@ SMARTBUFF_OFT_MSGNORMAL      = "Normal";
 SMARTBUFF_OFT_MSGWARNING     = "Warnung";
 SMARTBUFF_OFT_MSGERROR       = "Fehler";
 SMARTBUFF_OFT_HIDEMMBUTTON   = "Verberge Minimap-Knopf";
+SMARTBUFF_OFT_INCLUDETOYS	 = "Spielzeug einbeziehen";
 SMARTBUFF_OFT_REBUFFTIMER    = "Rebuff Timer";
 SMARTBUFF_OFT_AUTOSWITCHTMP  = "Vorlagenwechsel";
 SMARTBUFF_OFT_SELFFIRST      = "Mich zuerst";
@@ -95,8 +125,7 @@ SMARTBUFF_OFT_COMPMODE       = "Komp. Modus";
 SMARTBUFF_OFT_MINIGRP        = "Mini Gruppe";
 SMARTBUFF_OFT_ANTIDAZE       = "Anti-Daze";
 SMARTBUFF_OFT_HIDESABUTTON   = "Verberge Action-Knopf";
-SMARTBUFF_OFT_WARNWHILEMOUNTED = "Warnen, während montiert";
-SMARTBUFF_OFT_INCOMBAT       = "Bufft im Kampf";
+SMARTBUFF_OFT_INCOMBAT       = "im Kampf";
 SMARTBUFF_OFT_SMARTDEBUFF    = "SmartDebuff";
 SMARTBUFF_OFT_INSHAPESHIFT   = "Verwandelt";
 SMARTBUFF_OFT_LINKGRPBUFFCHECK  = "Grp Link";
@@ -124,6 +153,7 @@ SMARTBUFF_OFTT_ARULES        = "Bufft nicht:\n- Dornen auf Magier, Priester und 
 SMARTBUFF_OFTT_SUBGRPCHANGED = "Öffnet automatisch das SmartBuff Menü,\nwenn du die Sub-Gruppe gewechselt hast.";
 SMARTBUFF_OFTT_GRPBUFFSIZE   = "Anzahl Spieler die in der Gruppe/Raid sein\nmüssen und den Gruppen-Buff nicht haben,\ndamit der Gruppen-Buff verwendet wird.";
 SMARTBUFF_OFTT_HIDEMMBUTTON  = "Verbirgt den SmartBuff Minimap-Knopf.";
+SMARTBUFF_OFTT_INCLUDETOYS	 = "Fügen Sie neben Ihren Zaubersprüchen und Lebensmitteln auch Spielzeuge in die Liste ein.";
 SMARTBUFF_OFTT_REBUFFTIMER   = "Wieviele Sekunden vor Ablauf der Buffs,\nsoll daran erinnert werden.\n0 = Deaktivert";
 SMARTBUFF_OFTT_SELFFIRST     = "Bufft den eigenen Charakter immer zuerst.";
 SMARTBUFF_OFTT_SCROLLWHEELUP = "Bufft beim Bewegen des Scrollrads nach vorne.";
@@ -142,14 +172,13 @@ SMARTBUFF_OFTT_MINIGRP       = "Zeigt die Raid-Subgruppen Einstellungen in einem
 SMARTBUFF_OFTT_ANTIDAZE      = "Bricht automatisch den\nAspekt des Geparden/Rudels ab,\nwenn jemand betäubt wird\n(Selbst oder Gruppe).";
 SMARTBUFF_OFTT_SPLASHSTYLE   = "Wechselt die Schriftart\nder Buff-Meldungen.";
 SMARTBUFF_OFTT_HIDESABUTTON  = "Verbirgt den SmartBuff Action-Knopf.";
-SMARTBUFF_OFTT_WARNWHILEMOUNTED = "Überprüfen und warnen Sie vor fehlenden Buffs, während Sie auf einem Reittier sind.";
-SMARTBUFF_OFTT_SOUNDSELECT	 = "Wählen Sie den gewünschten Splash.";
 SMARTBUFF_OFTT_INCOMBAT      = "Funktioniert nur auf dich selbst.\nDer erste Buff, welcher als 'im Kampf'\ngesetzt ist, wird verwendet\nund kann im Kampf benutzt werden.\n!!! Achtung !!!\nSämtliche Buff-Logik ist inaktiv im Kampf!";
 SMARTBUFF_OFTT_SMARTDEBUFF   = "Zeigt das SmartDebuff Fenster.";
 SMARTBUFF_OFTT_SPLASHDURATION= "Wieviele Sekunden die Splash Meldung angezeigt wird,\nbevor sie ausgeblendet wird.";
 SMARTBUFF_OFTT_INSHAPESHIFT  = "Bufft auch wenn du\nverwandelt bist.";
 SMARTBUFF_OFTT_LINKGRPBUFFCHECK  = "Prüft ob schon ein Buff\nmit gleichem Effekt von einer\nanderen Klasse aktiv ist.";
 SMARTBUFF_OFTT_LINKSELFBUFFCHECK = "Prüft ob ein Eigen-Buff\naktiv ist, von welchen jeweils\nnur einer aktiv sein kann.";
+SMARTBUFF_OFTT_SOUNDSELECT	 = "Wählen Sie den gewünschten Splash.";
 
 -- Buffsetup Frame Text
 SMARTBUFF_BST_SELFONLY       = "Nur mich";
@@ -178,10 +207,10 @@ SMARTBUFF_BSTT_MANALIMIT     = "Mana/Wut/Energie Grenzwert\nWenn du unter diesen
 SMARTBUFF_PSTT_RESIZE        = "Minimiert/Maximiert\ndas Optionenfenster";
 
 -- Messages
-SMARTBUFF_MSG_LOADED         = "geladen. Classic von Codermik - bitte alle gefundenen Fehler melden.";
-SMARTBUFF_MSG_NEWVER1		 = "|cff00e0ffSmartbuff : |cffffffff Es ist eine neue Version verfügbar, Sie verwenden |cffFFFF00";
+SMARTBUFF_MSG_LOADED         = "geladen! - Bitte melden Sie alle Probleme auf Curse oder treten Sie Discord bei |cffffff00discord.gg/R6EkZ94TKK|cffffffff für eine verbesserte Unterstützung.";
+SMARTBUFF_MSG_NEWVER1		 = "|cff00e0ffSmartbuff : |cffffffff Es ist eine neue Version verfügbar. Du benutzt |cffFFFF00";
 SMARTBUFF_MSG_NEWVER2		 = "|cffffffff und Überarbeitung |cffFFFF00r"
-SMARTBUFF_MSG_NEWVER3		 = "|cffffffff ist derzeit zum Download verfügbar.  Treten Sie Discord bei, um alle aktuellen Informationen zu erhalten unter https://discord.gg/R6EkZ94TKK.";
+SMARTBUFF_MSG_NEWVER3		 = "|cffffffff steht aktuell zum Download bereit. Tritt Discord bei, um die neuesten Informationen zu erhalten https://discord.gg/R6EkZ94TKK.";
 SMARTBUFF_MSG_DISABLED       = "SmartBuff ist deaktiviert!";
 SMARTBUFF_MSG_SUBGROUP       = "Du hast die Subgruppe gewechselt, bitte überprüfe die Einstellungen!";
 SMARTBUFF_MSG_NOTHINGTODO    = "Nichts zu buffen";
@@ -206,9 +235,9 @@ SMARTBUFF_MSG_SOUNDS		 = "Splash-Sound-Auswahl: "
 SMARTBUFF_MSG_SPECCHANGED    = "Spec gewechselt (%s), lade Buff-Vorlagen...";
 
 -- Support
-SMARTBUFF_MINIMAP_TT         = "Links Klick: Optionen Menü\nRechts Klick: An/Aus\nAlt-Links Klick: SmartDebuff\nShift-Ziehen: Knopf verschieben";
-SMARTBUFF_TITAN_TT           = "Links Klick: Optionen Menü\nRechts Klick: An/Aus\nAlt-Links Klick: SmartDebuff";
-SMARTBUFF_FUBAR_TT           = "\nLinks Klick: Optionen Menü\nShift-Links Klick: An/Aus\nAlt-Links Klick: SmartDebuff";
+SMARTBUFF_MINIMAP_TT         = "Linke Maustaste für Optionen\nRechte Maustaste zum Ein-/Ausschalten\nAlt-Links-Maustaste zum Umschalten der automatischen Verfolgung\nUmschalttaste ziehen: Schaltfläche „Verschieben“.";
+SMARTBUFF_TITAN_TT           = "Linke Maustaste für Optionen\nRechte Maustaste zum Ein-/Ausschalten\nAlt-Links-Maustaste zum Umschalten der automatischen Verfolgung";
+SMARTBUFF_FUBAR_TT           = "\nLinke Maustaste für Optionen\nRechte Maustaste zum Ein-/Ausschalten\nAlt-Links-Maustaste zum Umschalten der automatischen Verfolgung";
 
 SMARTBUFF_DEBUFF_TT          = "Shift-Links ziehen: Fenster verschieben\n|cff20d2ff- S Knopf -|r\nLinks Klick: Ordne nach Klassen\nShift-Links Klick: Klassen-Farben\nAlt-Links Klick: Zeige L/R\n|cff20d2ff- P Knopf -|r\nLinks Klick: Verberge Pets";
 

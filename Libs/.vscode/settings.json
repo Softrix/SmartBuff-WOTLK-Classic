@@ -1,0 +1,20 @@
+{
+	"Lua.diagnostics.globals": [
+		"LibStub",
+		"LibStub",
+		"SMARTBUFF_TITLE",
+		"SMARTBUFF_TITLE",
+		"SMARTBUFF_Options",
+		"SMARTBUFF_Options",
+		"SMARTBUFF_OToggleBuff",
+		"SMARTBUFF_OToggleBuff",
+		"SMARTDEBUFF_ToggleSF",
+		"SMARTDEBUFF_ToggleSF",
+		"SMARTBUFF_OptionsFrame_Toggle",
+		"SMARTBUFF_OptionsFrame_Toggle",
+		"SMARTBUFF_TITAN_TT",
+		"SMARTBUFF_TITAN_TT",
+		"SMARTBUFF_OToggle",
+		"SMARTBUFF_OToggle"
+	]
+}

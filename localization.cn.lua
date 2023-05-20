@@ -15,8 +15,31 @@ SMARTBUFF_CREDITS = "|cffffffff"
   .."|cffffffffPayPal.Me: |cff00e0ffhttps://paypal.me/codermik\n\n"
 ;
 
--- Alchemy
-SMARTBUFF_ALCHEMY_TITLE = "炼金术";
+-- purge/reload messages
+SMARTBUFF_OFT_YES            = "是的";
+SMARTBUFF_OFT_NO             = "不";
+SMARTBUFF_OFT_OKAY			 = "继续"
+SMARTBUFF_OFT_PURGE_DATA     = "您确定要重置所有 SmartBuff 数据吗？\n此操作将强制重新加载 UI！";
+SMARTBUFF_OFT_REQ_RELOAD     = "新版本需要重新加载 GUI\n准备就绪后单击继续。";
+
+-- fishing rod check
+SMARTBUFF_OFT_FRODWARN		 = "您正在使用装备好的钓鱼竿进行战斗。";
+
+-- tracking switcher
+SMARTBUFF_TRACKSWITCHMSG	 = " 已检测到，但自动切换跟踪已打开。 键入 /sbm 以查看选项并关闭个人跟踪或自动切换。";
+SMARTBUFF_TRACKINGDISABLE	 = "如果你有两个或更多收集能力，你将只能从这个功能中受益，该选项已被禁用。"
+SMARTBUFF_AUTOGATHERON		 = "自动曲目切换开启"
+SMARTBUFF_AUTOGATHEROFF		 = "自动跟踪关闭"
+SMARTBUFF_OFT_GATHERER		 = "汽车开关收集跟踪"
+SMARTBUFF_OFT_FINDFISH		 = GetSpellInfo(43308)
+SMARTBUFF_OFT_MINERALS		 = GetSpellInfo(2580)
+SMARTBUFF_OFT_HERBS			 = GetSpellInfo(2383)
+SMARTBUFF_OFTT_GATHERER		 = "在“寻找草药”、“寻找矿物质”和“寻找鱼”之间切换（如果可用并已选择）。"
+SMARTBUFF_OFTT_GATHERERFISH	 = "切换收集追踪器时包括“寻找鱼”。"
+
+-- wrong version
+SMARTBUFF_NOTINTENDEDCLIENT	 = "此版本的 Smartbuff 不适用于此客户端，请下载正确的版本。";
+
 
 -- 德鲁伊
 SMARTBUFF_DRUID_CAT = "猎豹形态";
@@ -266,7 +289,7 @@ SMARTBUFF_ELEMENTAL = "元素生物";
 SMARTBUFF_DEMONTYPE = "小鬼";
 
 -- 职业
-SMARTBUFF_CLASSES = {"德鲁伊", "猎人", "法师", "圣骑士", "牧师", "潜行者", "萨满祭司", "术士", "战士", "死亡骑士", "武僧", "恶魔猎手", "猎人宠物", "术士宠物", "Death Knight Pet", "Tank", "Healer", "Damage Dealer"};
+SMARTBUFF_CLASSES = {"德鲁伊", "猎人", "法师", "圣骑士", "牧师", "潜行者", "萨满祭司", "术士", "战士", "死亡骑士", "武僧", "恶魔猎手", "唤魔者", "猎人宠物", "术士宠物", "Death Knight Pet", "Tank", "Healer", "Damage Dealer"};
 
 -- 模板和地图
 SMARTBUFF_TEMPLATES = {"Solo", "组队", "团队", "战场", "卡拉赞", "祖阿曼", "地狱火堡垒", "盘牙水库", "奥金顿", "风暴要塞", "格鲁尔巢穴", "时光之穴", "黑暗神庙", "自定义 1", "自定义 2", "自定义 3"};
@@ -282,6 +305,11 @@ BINDING_NAME_SMARTBUFF_BIND_OPTIONS = "设置窗口";
 BINDING_NAME_SMARTBUFF_BIND_RESETBUFFTIMERS = "重新设定BUFF定时器";
 
 -- 设置窗口
+
+-- experimental feature - for testing.
+SMARTBUFF_OFT_FIXBUFF		 = "修复 铸造"
+SMARTBUFF_OFTT_FIXBUFF		 = "如果施放 buff 失败，请勾选此选项。"
+
 SMARTBUFF_OFT                = "启用SmartBuff";
 SMARTBUFF_OFT_MENU           = "显示/隐藏配置菜单";
 SMARTBUFF_OFT_AUTO           = "提醒";
@@ -307,6 +335,7 @@ SMARTBUFF_OFT_MSGNORMAL      = "正常";
 SMARTBUFF_OFT_MSGWARNING     = "警告";
 SMARTBUFF_OFT_MSGERROR       = "错误";
 SMARTBUFF_OFT_HIDEMMBUTTON   = "隐藏小地图按钮";
+SMARTBUFF_OFT_INCLUDETOYS	 = "展示玩具";
 SMARTBUFF_OFT_REBUFFTIMER    = "提醒时间";
 SMARTBUFF_OFT_AUTOSWITCHTMP  = "自动开启配置";
 SMARTBUFF_OFT_SELFFIRST      = "首选自身";
@@ -328,8 +357,6 @@ SMARTBUFF_OFT_COMPMODE       = "兼容模式";
 SMARTBUFF_OFT_MINIGRP        = "迷你团队";
 SMARTBUFF_OFT_ANTIDAZE       = "自动切换守护";
 SMARTBUFF_OFT_HIDESABUTTON   = "隐藏动作按钮";
-SMARTBUFF_OFT_WARNWHILEMOUNTED = "在坐骑上发出警告";
-SMARTBUFF_OFTT_SOUNDSELECT	 = "选择所需的飞溅声.";
 SMARTBUFF_OFT_INCOMBAT       = "战斗中触发";
 SMARTBUFF_OFT_SMARTDEBUFF    = "SmartDebuff";
 
@@ -348,6 +375,7 @@ SMARTBUFF_OFTT_ARULES        = "设定以下情况不施法：法师、牧师和
 SMARTBUFF_OFTT_SUBGRPCHANGED = "当你所在队伍发生变动后，自动开启Smartbuff配置窗口。";
 SMARTBUFF_OFTT_GRPBUFFSIZE   = "设定所在小队中玩家的BUFF消失的人数上限，来触发群体BUFF的施放。";
 SMARTBUFF_OFTT_HIDEMMBUTTON  = "隐藏小地图按钮。";
+SMARTBUFF_OFTT_INCLUDETOYS	 = "将玩具与您的咒语和食物一起列入清单。";
 SMARTBUFF_OFTT_REBUFFTIMER   = "设定当BUFF消失前多少秒，提示你重新施法。0 = 不提示";
 SMARTBUFF_OFTT_SELFFIRST     = "优先给自己施放BUFF。";
 SMARTBUFF_OFTT_SCROLLWHEELUP = "当鼠标滚轴向上滚动时触发技能。";
@@ -368,10 +396,11 @@ SMARTBUFF_OFTT_MINIGRP       = "用迷你团队模式显示合理化的团队框
 SMARTBUFF_OFTT_ANTIDAZE      = "当自己队伍中有成员晕眩时，自动取消猎豹守护/豹群守护。";
 SMARTBUFF_OFTT_SPLASHSTYLE   = "改变BUFF提示信息的字体。";
 SMARTBUFF_OFTT_HIDESABUTTON  = "隐藏SmartBuff动作按钮。";
-SMARTBUFF_OFTT_WARNWHILEMOUNTED = "在坐骑时检查并警告丢失的增益。";
 SMARTBUFF_OFTT_INCOMBAT      = "目前只能用于你自己身上。\n你设定的第一个战斗中可释放的BUFF将在战斗前放置到动作按钮上，\n因此你可以在战斗中施放这个法术。\n警告：战斗中所有逻辑判断都将不可用！";
 SMARTBUFF_OFTT_SMARTDEBUFF   = "显示SmartDebuff窗口。";
 SMARTBUFF_OFTT_SPLASHDURATION= "设定多少秒后提示信息消失。";
+SMARTBUFF_OFTT_SOUNDSELECT	 = "选择所需的飞溅声.";
+
 
 -- BUFF设置内容
 SMARTBUFF_BST_SELFONLY       = "仅对自身施法";
@@ -398,7 +427,7 @@ SMARTBUFF_BSTT_MANALIMIT     = "当魔法值/怒气值/能量值低于你设置�
 SMARTBUFF_PSTT_RESIZE        = "最小化/最大化\n主设置窗口";
 
 -- 命令行信息提示内容
-SMARTBUFF_MSG_LOADED         = "已加载";
+SMARTBUFF_MSG_LOADED         = "初始化！ - 请在我的 Discord 上报告任何问题 |cffffff00discord.gg/R6EkZ94TKK|cffffffff 以获得更好的支持。";
 SMARTBUFF_MSG_NEWVER1		 = "|cff00e0ffSmartbuff : |cffffffff 有可用的新版本，您正在使用 |cffFFFF00";
 SMARTBUFF_MSG_NEWVER2		 = "|cffffffff 和修订 |cffFFFF00r"
 SMARTBUFF_MSG_NEWVER3		 = "|cffffffff 目前可供下载。 加入 Discord 以获取所有最新信息： https://discord.gg/R6EkZ94TKK.";
@@ -425,9 +454,9 @@ SMARTBUFF_MSG_CHARGES        = "次数";
 SMARTBUFF_MSG_SOUNDS		 = "飞溅声音选择: "
 
 -- Support
-SMARTBUFF_MINIMAP_TT         = "左键：选项菜单\n右键：开/关\nAlt+左键：SmartDebuff\n按Shift拖拽：移动按钮";
-SMARTBUFF_TITAN_TT           = "左键：选项菜单\n右键：开/关\nAlt+左键：SmartDebuff";
-SMARTBUFF_FUBAR_TT           = "左键：选项菜单\n右键：开/关\nAlt+左键：SmartDebuff";
+SMARTBUFF_MINIMAP_TT         = "鼠标左键设置\n鼠标右键切换开/关\nAlt-左鼠标切换自动跟踪\nShift 拖动：移动按钮";
+SMARTBUFF_TITAN_TT           = "鼠标左键设置\n鼠标右键切换开/关\nAlt-左鼠标切换自动跟踪";
+SMARTBUFF_FUBAR_TT           = "\n鼠标左键设置\n鼠标右键切换开/关\nAlt-左鼠标切换自动跟踪";
 
 SMARTBUFF_DEBUFF_TT          = "按Shift和左键拖拽：移动窗口\n|cff20d2ff- S按钮 -|r\n左键：按职业显示\nShift和左键：职业颜色\nAlt和左键：高亮左/右\n|cff20d2ff- P按钮 -|r\n左键：开/关隐藏宠物";
 

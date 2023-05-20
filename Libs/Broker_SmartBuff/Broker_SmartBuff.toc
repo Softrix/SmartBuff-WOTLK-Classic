@@ -1,0 +1,10 @@
+## Interface: 90207
+## Title: Broker: Smart|cffffffffBuff|r
+## Version: 1.90207
+## Notes: SmartBuff support for Data Broker
+## Author: |cff20d2ffAeldra|r (EU-Proudmoore)
+## Dependencies: SmartBuff
+## X-Category: Miscellaneous
+
+LibDataBroker-1.1.lua
+Broker_SmartBuff.lua

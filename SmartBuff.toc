@@ -1,19 +1,19 @@
 ## Interface: 30401
-## Title: |TInterface\Addons\Smartbuff\Icons\IconEnabled:0|t SmartBuff |cffffffff(WOTLK Classic)|r
-## Version: 40.30401
-## Author: |cff20d2ffCodermik (Mik / Castanova on EU-Mirage Raceway) & Aeldra|r (EU-Proudmoore)
-## Notes: Cast the most important buffs on you or party, raid, pets and assigned tanks. Use /sbm for options menu.
+## Title: SmartBuff |cffffffff(Classic)|r by |cff00ff00Codermik & Aeldra|r
+## Version: 41.30401
+## Author: |cff20d2ffCodermik & Aeldra|r (EU-Proudmoore)
+## Contributing Author: |cff20d2ffSpeedwaystar
+## Notes: Cast the most important buffs on you or party/raid members/pets. Use /sbm for options menu.
 ## DefaultState: Enabled
 ## LoadOnDemand: 0
 ## SavedVariables: SMARTBUFF_OptionsGlobal
 ## SavedVariablesPerCharacter: SMARTBUFF_Options, SMARTBUFF_Buffs
 
-lib\LibStub\LibStub.lua
-lib\CallbackHandler-1.0\CallbackHandler-1.0.lua
-lib\LibClassicDurations\LibClassicDurations.xml
-lib\LibRangeCheck-2.0\LibRangeCheck-2.0.lua
+Libs\LibStub\LibStub.lua
+Libs\CallbackHandler-1.0\CallbackHandler-1.0.lua
+Libs\LibRangeCheck-2.0\LibRangeCheck-2.0.lua
 SmartBuff.globals.lua
 SmartBuff.xml
 
-lib\Broker_SmartBuff\LibDataBroker-1.1.lua
-lib\Broker_SmartBuff\Broker_SmartBuff.lua
+Libs\Broker_SmartBuff\LibDataBroker-1.1.lua
+Libs\Broker_SmartBuff\Broker_SmartBuff.lua
