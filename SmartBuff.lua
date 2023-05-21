@@ -9,7 +9,7 @@
 
 SMARTBUFF_DATE          = "210523";
 
-SMARTBUFF_VERSION       = "r42."..SMARTBUFF_DATE;
+SMARTBUFF_VERSION       = "r43."..SMARTBUFF_DATE;
 SMARTBUFF_VERSIONNR     = 30401;
 SMARTBUFF_TITLE         = "SmartBuff";
 SMARTBUFF_SUBTITLE      = "Supports you in casting buffs";
@@ -25,7 +25,7 @@ local SmartbuffCommands = { "SBCVER", "SBCCMD", "SBCSYC" }
 local SmartbuffSession = true;
 local SmartbuffVerCheck = false;					-- for my use when checking guild users/testers versions  :)
 local buildInfo = select(4, GetBuildInfo())
-local SmartbuffRevision = 42;
+local SmartbuffRevision = 43;
 local SmartbuffVerNotifyList = {}
 
 -- Using LibRangeCheck-2.0 by Mitchnull
@@ -1760,9 +1760,9 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
 
   SMARTBUFF_CheckUnitBuffTimers(unit);
 
-  if (UnitExists(unit) and UnitIsFriend("player", unit) and not UnitIsDeadOrGhost(unit) and not UnitIsCorpse(unit) and (UnitInRange(unit) or unit == "player")
-    and UnitIsConnected(unit) and UnitIsVisible(unit) and not UnitOnTaxi(unit) and not cBlacklist[unit] and ((not UnitIsPVP(unit) and (not isPvP or O.BuffPvP))
-    or (UnitIsPVP(unit) and (isPvP or O.BuffPvP)))) then
+  if (UnitExists(unit) and UnitIsFriend("player", unit) and not UnitIsDeadOrGhost(unit) and not UnitIsCorpse(unit) and (UnitInRange(unit) or unit == "player" or unit == "target"))
+    and UnitIsConnected(unit) and UnitIsVisible(unit) and not UnitOnTaxi(unit) and not cBlacklist[unit] and ((not UnitIsPVP(unit) and (not isPvP or O.BuffPvP)) or (UnitIsPVP(unit) 
+	and (isPvP or O.BuffPvP))) then
 
     _, uc = UnitClass(unit);
     un = UnitName(unit);

@@ -1733,7 +1733,7 @@
 	</Frame>
 	<Frame name="SmartBuff_BuffSetup" hidden="true" parent="SmartBuffOptionsFrame" toplevel="true" frameStrata="DIALOG" enableMouse="true">
 		<Size>
-			<AbsDimension x="213" y="800" />
+			<AbsDimension x="213" y="770" />
 		</Size>
 		<Anchors>
 			<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame" relativePoint="TOPRIGHT">
@@ -2977,7 +2977,7 @@
 	</Frame>
 	<Frame name="SmartBuff_PlayerSetup" hidden="true" parent="SmartBuffOptionsFrame" toplevel="true" frameStrata="DIALOG" enableMouse="true">
 		<Size>
-			<AbsDimension x="160" y="800" />
+			<AbsDimension x="160" y="770" />
 		</Size>
 		<Anchors>
 			<Anchor point="TOPLEFT" relativeTo="SmartBuff_BuffSetup" relativePoint="TOPRIGHT">
@@ -3156,7 +3156,7 @@
 	</Frame>
 	<Frame name="SmartBuffWNF" hidden="true" parent="UIParent" toplevel="true" movable="true" frameStrata="DIALOG" enableMouse="true">
 		<Size>
-			<AbsDimension x="360" y="800" />
+			<AbsDimension x="360" y="770" />
 		</Size>
 		<Anchors>
 			<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame" relativePoint="TOPRIGHT">
@@ -3168,7 +3168,7 @@
 		<Frames>
 			<EditBox name="$parent_lblText" multiLine="true" autoFocus="false">
 				<Size>
-					<AbsDimension x="313" y="740" />
+					<AbsDimension x="313" y="730" />
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="$parent" relativePoint="TOPLEFT">
