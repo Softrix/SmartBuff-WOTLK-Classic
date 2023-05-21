@@ -25,6 +25,7 @@ SMARTBUFF_OFT_REQ_RELOAD     = "Les nouvelles versions nécessitent un rechargem
 
 -- fishing rod check
 SMARTBUFF_OFT_FRODWARN		 = "Vous êtes au combat avec votre canne à pêche équipée.";
+SMARTBUFF_OFT_FRINSWARN		 = "Vous êtes en groupe ou en raid avec votre canne à pêche équipée.";
 
 -- Weapon types
 SMARTBUFF_WEAPON_STANDARD = {"Dagues", "Haches", "Ep\195\169es", "Masses", "B\195\162tons", "Armes de pugilat", "Armes d\'hast", "Armes de jet"};
@@ -68,6 +69,8 @@ SMARTBUFF_OFT_MINERALS		 = GetSpellInfo(2580)
 SMARTBUFF_OFT_HERBS			 = GetSpellInfo(2383)
 SMARTBUFF_OFTT_GATHERER		 = "Bascule entre vos options Trouver des herbes, Trouver des minéraux et Trouver du poisson (si disponible et sélectionné)."
 SMARTBUFF_OFTT_GATHERERFISH	 = "Inclure Find Fish lors du passage à Gathering Trackers."
+SMARTBUFF_OFT_AUTOGATHOFF	 = "Éteindre en groupe"
+SMARTBUFF_OFTT_AUTOGATHOFF	 = "Désactivez automatiquement cette fonctionnalité lorsque vous êtes dans un groupe ou un raid et passez à vos préférences actuelles."
 
 -- wrong version
 SMARTBUFF_NOTINTENDEDCLIENT	 = "Cette version de Smartbuff n'est pas destinée à ce client, veuillez télécharger la bonne version.";

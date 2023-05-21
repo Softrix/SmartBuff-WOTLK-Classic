@@ -7,9 +7,9 @@
 -- Cast the most important buffs on you, tanks or party/raid members/pets.
 -------------------------------------------------------------------------------
 
-SMARTBUFF_DATE          = "200523";
+SMARTBUFF_DATE          = "210523";
 
-SMARTBUFF_VERSION       = "r41."..SMARTBUFF_DATE;
+SMARTBUFF_VERSION       = "r42."..SMARTBUFF_DATE;
 SMARTBUFF_VERSIONNR     = 30401;
 SMARTBUFF_TITLE         = "SmartBuff";
 SMARTBUFF_SUBTITLE      = "Supports you in casting buffs";
@@ -25,7 +25,7 @@ local SmartbuffCommands = { "SBCVER", "SBCCMD", "SBCSYC" }
 local SmartbuffSession = true;
 local SmartbuffVerCheck = false;					-- for my use when checking guild users/testers versions  :)
 local buildInfo = select(4, GetBuildInfo())
-local SmartbuffRevision = 41;
+local SmartbuffRevision = 42;
 local SmartbuffVerNotifyList = {}
 
 -- Using LibRangeCheck-2.0 by Mitchnull
@@ -868,9 +868,9 @@ function SMARTBUFF_SetTemplate()
   if (InCombatLockdown()) then return end
   if (SmartBuffOptionsFrame:IsVisible()) then return end
   local newTemplate = currentTemplate 
+  cDisableTrackSwitch = false;    -- on unless otherwise changed
   if O.AutoSwitchTemplate then
     newTemplate = SMARTBUFF_TEMPLATES[Enum.SmartBuffGroup.Solo];
-    cDisableTrackSwitch = false;    -- on unless otherwise changed
     local name, instanceType, difficultyID, difficultyName, maxPlayers, dynamicDifficulty, isDynamic, instanceID, instanceGroupSize, LfgDungeonID = GetInstanceInfo()
     if IsInRaid() then
       newTemplate = SMARTBUFF_TEMPLATES[Enum.SmartBuffGroup.Raid];
@@ -880,10 +880,8 @@ function SMARTBUFF_SetTemplate()
     -- check instance type (allows solo raid clearing, etc)
     if instanceType == "raid" then
       newTemplate = SMARTBUFF_TEMPLATES[Enum.SmartBuffGroup.Raid];
-      cDisableTrackSwitch = true;
     elseif instanceType == "party" then
       newTemplate = SMARTBUFF_TEMPLATES[Enum.SmartBuffGroup.Party];
-      cDisableTrackSwitch = true;
     end
   end
   -- if autoswitch on instance change is enabled, load new instance template if any
@@ -894,7 +892,7 @@ function SMARTBUFF_SetTemplate()
     local i = instances[zone]
     if i and SMARTBUFF_TEMPLATES[i + Enum.SmartBuffGroup.Arena] then
       newTemplate = SMARTBUFF_TEMPLATES[i + Enum.SmartBuffGroup.Arena]
-      isRaidInstanceTemplate = true
+      isRaidInstanceTemplate = true      
     end
   end
   if currentTemplate ~= newTemplate then
@@ -918,7 +916,17 @@ function SMARTBUFF_SetTemplate()
     cClassGroups = { };
     local name, server, rank, subgroup, level, class, classeng, zone, online, isDead;
     local sRUnit = nil;
-
+    -- do we want to disable the gathering switcher?
+    if O.TrackDisableGrp and O.TrackSwitchActive then
+        cDisableTrackSwitch = true;
+        SMARTBUFF_AddMsg("Raid -> Auto gathering tracker disabled while in a raid, switching to preset (if any).");
+	end
+    -- do we have a fishing rod equipped and entered a raid?
+    if SMARTBUFF_IsFishingPoleEquiped() and O.WarnGroupFishingRod then
+      -- warn the player he/she is in combat with a fishing pole equipped.
+      DEFAULT_CHAT_FRAME:AddMessage("|cffff0000Smartbuff Warning: |cffff6060"..SMARTBUFF_OFT_FRINSWARN)
+      PlaySound(12197);
+    end
     j = 1;
     for n = 1, maxRaid, 1 do
       name, rank, subgroup, level, class, classeng, zone, online, isDead = GetRaidRosterInfo(n);
@@ -965,10 +973,19 @@ function SMARTBUFF_SetTemplate()
   -- Party Setup
   elseif (currentTemplate == (SMARTBUFF_TEMPLATES[Enum.SmartBuffGroup.Party])) then
     cClassGroups = { };
+    if O.TrackDisableGrp and O.TrackSwitchActive then
+        cDisableTrackSwitch = true;
+        SMARTBUFF_AddMsg("Party -> Auto gathering tracker disabled while in a party, switching to preset (if any).");
+	end
+    -- do we have a fishing rod equipped and entered a party?
+    if SMARTBUFF_IsFishingPoleEquiped() and O.WarnGroupFishingRod then
+      -- warn the player he/she is in combat with a fishing pole equipped.
+      DEFAULT_CHAT_FRAME:AddMessage("|cffff0000Smartbuff Warning: |cffff6060"..SMARTBUFF_OFT_FRINSWARN)
+      PlaySound(12197);
+    end
     if (B[CS()][currentTemplate].SelfFirst) then
       SMARTBUFF_AddSoloSetup();
     end
-
     cGroups[1] = { };
     cGroups[1][0] = "player";
     SMARTBUFF_AddUnitToClass("player", 0);
@@ -3006,6 +3023,7 @@ function SMARTBUFF_Options_Init(self)
   if (O.LinkGrpBuffCheck == nil) then O.LinkGrpBuffCheck = true; end
   if (O.AntiDaze == nil) then O.AntiDaze = true; end
   if (O.WarnCombatFishingRod == nil) then O.WarnCombatFishingRod = true; end
+  if (O.WarnGroupFishingRod == nil) then O.WarnGroupFishingRod = true; end
   if (O.ScrollWheel ~= nil and O.ScrollWheelUp == nil) then  O.ScrollWheelUp = O.ScrollWheel; end
   if (O.ScrollWheel ~= nil and O.ScrollWheelDown == nil) then  O.ScrollWheelDown = O.ScrollWheel; end
   if (O.ScrollWheelUp == nil) then O.ScrollWheelUp = true; end
@@ -3026,6 +3044,7 @@ function SMARTBUFF_Options_Init(self)
   if (O.TrackSwitchDelay == nil) then O.TrackSwitchDelay = 2; end
   if (O.TrackMaxPosition == nil) then O.TrackMaxPosition = 1; end
   if (O.TrackPosition == nil) then O.TrackPosition = 1; end
+  if (O.TrackDisableGrp == nil) then O.TrackDisableGrp = true; end
   -- leaving this here in classic just in case we even need it, its possible blizzard make the same
   -- changes to the secure action button as they did in the retail version.. 
   if (O.SBButtonFix == nil) then O.SBButtonFix = false; end
@@ -3422,6 +3441,12 @@ end
 function SMARTBUFF_OTrackSwitchFish()
     O.TrackSwitchFish = not O.TrackSwitchFish;
 end
+function SMARTBUFF_OTrackDisableGrp()
+    O.TrackDisableGrp = not O.TrackDisableGrp;
+    if not O.TrackDisableGrp then
+        cDisableTrackSwitch = false;
+    end
+end
 
 function SMARTBUFF_OToggleBuff(s, i)
   local bs = GetBuffSettings(cBuffs[i].BuffS);
@@ -3746,6 +3771,7 @@ function SMARTBUFF_Options_OnShow()
 
   SmartBuffOptionsFrame_cbGatherAutoSwitch:SetChecked(O.TrackSwitchActive);
   SmartBuffOptionsFrame_cbGatherAutoSwitchFish:SetChecked(O.TrackSwitchFish);
+  SmartBuffOptionsFrame_cbGatherAutoDisableTracker:SetChecked(O.TrackDisableGrp);
 
   SmartBuffOptionsFrameRebuffTimer:SetValue(O.RebuffTimer);
   SmartBuff_SetSliderText(SmartBuffOptionsFrameRebuffTimer, SMARTBUFF_OFT_REBUFFTIMER, O.RebuffTimer, INT_SPELL_DURATION_SEC);

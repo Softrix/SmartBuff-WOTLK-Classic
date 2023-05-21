@@ -4,8 +4,8 @@
 
 -- Whats new info
 SMARTBUFF_WHATSNEW = "\n\n|cffffffff         Whats new:|r\n\n"
-  .."          |cffffffffClassic version by Codermik, additional coding\n"
-  .."          by Speedwaystar.|cff00e0ff\n\n\n"
+  .."          |cffffffffClassic version by Codermik, additional retail coding\n"
+  .."          by Speedwaystar.\n\n\n"
   .."          Changes in r41.200523:\n\n"
   .."             * Classic versions now use the codebase from the\n"
   .."                retail version with other additional changes to\n"
@@ -19,9 +19,20 @@ SMARTBUFF_WHATSNEW = "\n\n|cffffffff         Whats new:|r\n\n"
   .."                report if you find anything not showing up.\n\n"
   .."             * Added automatic gathering switcher toggled by\n"
   .."                alt-left clicking minimap icon or in options.\n\n"
-  .."             * Tons of fixes, too many to mention here.\n\n"
+  .."             * Tons of fixes, too many to mention here.\n\n\n"
+  .."          Changes in r42.210523:\n\n"
+  .."             * In addition to above released yesterday, Ive \n"
+  .."                added an option to automatically switch off\n"
+  .."                the automatic tracking switch in raids etc.\n\n"
+  .."             * Added check for fishing rod in party/raids.\n\n"
+  .."             * Added missing Lesser Invisibility for Warlocks.\n\n\n"
   .."\n"
-  .."          |c0000FF96Many thanks to Chris S., Samantha R. and\n"
+  .."          |cffffff00I currently play on the Mirage Raceway EU\n"
+  .."          classic WOTLK server as Alliance, I play Mik,\n"
+  .."          Gabella, Castanova, Amarantine and various\n"
+  .."          alts... too many actually  :)\n\n"
+  .."          Please feel free to say hello!\n\n\n"
+  .."          |cff00FF7FMany thanks to Chris S., Samantha R. and\n"
   .."          Twilight's Sundries for their kind donations.\n"
  .."\n\n"
 ;
@@ -91,7 +102,8 @@ SMARTBUFF_OFT_MINERALS		 = "Find Minerals"
 SMARTBUFF_OFT_HERBS			 = "Find Herbs"
 SMARTBUFF_OFTT_GATHERER		 = "Switches through your Find Herbs, Find Minerals and Find Fish (if available and selected)."
 SMARTBUFF_OFTT_GATHERERFISH	 = "Include Find Fish when switching through Gathering Trackers."
-
+SMARTBUFF_OFT_AUTOGATHOFF	 = "Auto switch OFF in Party/Raids"
+SMARTBUFF_OFTT_AUTOGATHOFF	 = "Automatically switch this feature OFF when in a party or raid and switch to your current template preference."
 
 SMARTBUFF_OFT                = "SmartBuff On/Off";
 SMARTBUFF_OFT_MENU           = "Show/hide options menu";
@@ -149,6 +161,7 @@ SMARTBUFF_OFT_FONTSTYLE      = "Font";
 SMARTBUFF_OFT_FONTSIZE       = "Font Size";
 SMARTBUFF_OFT_ICONSIZE       = "Icon Size";
 SMARTBUFF_OFT_FRODWARN		 = "You are in combat with your fishing rod equipped.";
+SMARTBUFF_OFT_FRINSWARN		 = "You have entered a party or raid with your fishing rod equipped.";
 
 
 -- Options Frame Tooltip Text

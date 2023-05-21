@@ -58,6 +58,7 @@ SMARTBUFF_OFT_REQ_RELOAD     = "Neue Versionen erfordern ein Neuladen der GUI\nK
 
 -- fishing rod check
 SMARTBUFF_OFT_FRODWARN		 = "Sie befinden sich mit ausgerüsteter Angelrute im Kampf.";
+SMARTBUFF_OFT_FRINSWARN		 = "Sie befinden sich in einer Gruppe mit ausgerüsteter Angelrute.";
 
 -- tracking switcher
 SMARTBUFF_TRACKSWITCHMSG	 = " wurde erkannt, aber die automatische Umschaltverfolgung ist aktiviert. Geben Sie /sbm ein, um Optionen anzuzeigen und die individuelle Nachverfolgung oder automatische Umschaltung zu deaktivieren.";
@@ -70,6 +71,8 @@ SMARTBUFF_OFT_MINERALS		 = GetSpellInfo(2580)
 SMARTBUFF_OFT_HERBS			 = GetSpellInfo(2383)
 SMARTBUFF_OFTT_GATHERER		 = "Wechselt zwischen „Kräuter suchen“, „Mineralien suchen“ und „Fisch suchen“ (falls verfügbar und ausgewählt)."
 SMARTBUFF_OFTT_GATHERERFISH	 = "Schließen Sie „Fische finden“ ein, wenn Sie durch Gathering Trackers wechseln."
+SMARTBUFF_OFT_AUTOGATHOFF	 = "In der Gruppe AUSschalten"
+SMARTBUFF_OFTT_AUTOGATHOFF	 = "Schalten Sie diese Funktion aus, wenn Sie sich in einer Gruppe oder einem Raid befinden, und wechseln Sie zu Ihrer aktuellen Vorlageneinstellung."
 
 -- wrong version
 SMARTBUFF_NOTINTENDEDCLIENT	 = "Diese Version von Smartbuff ist nicht für diesen Client gedacht. Bitte laden Sie die richtige Version herunter.";

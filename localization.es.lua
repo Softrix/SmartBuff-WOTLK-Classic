@@ -55,6 +55,7 @@ SMARTBUFF_OFT_REQ_RELOAD     = "Las nuevas versiones requieren una recarga de la
 
 -- fishing rod check
 SMARTBUFF_OFT_FRODWARN		 = "Estás en combate con tu caña de pescar equipada.";
+SMARTBUFF_OFT_FRINSWARN		 = "Has entrado en una fiesta o incursión con tu caña de pescar equipada.";
 
 -- tracking switcher
 SMARTBUFF_TRACKSWITCHMSG	 = " ha sido detectado pero el seguimiento de cambio automático está activado. Escriba /sbm para ver las opciones y desactivar el seguimiento individual o el cambio automático.";
@@ -67,6 +68,8 @@ SMARTBUFF_OFT_MINERALS		 = GetSpellInfo(2580)
 SMARTBUFF_OFT_HERBS			 = GetSpellInfo(2383)
 SMARTBUFF_OFTT_GATHERER		 = "Cambia entre Buscar hierbas, Buscar minerales y Buscar pescado (si está disponible y seleccionado)."
 SMARTBUFF_OFTT_GATHERERFISH	 = "Incluya Find Fish cuando cambie a través de Gathering Trackers."
+SMARTBUFF_OFT_AUTOGATHOFF	 = "Desactivar esta función en Grupo"
+SMARTBUFF_OFTT_AUTOGATHOFF	 = "Desactive automáticamente esta función cuando esté en un grupo o redada y cambie a su preferencia de plantilla actual."
 
 -- wrong version
 SMARTBUFF_NOTINTENDEDCLIENT	 = "Esta versión de Smartbuff no está diseñada para este cliente, descargue la versión correcta.";

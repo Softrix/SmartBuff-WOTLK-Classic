@@ -58,6 +58,7 @@ SMARTBUFF_OFT_REQ_RELOAD     = "新版本需要重新加载 GUI\n准备就绪后
 
 -- fishing rod check
 SMARTBUFF_OFT_FRODWARN		 = "您正在使用装备好的钓鱼竿进行战斗。";
+SMARTBUFF_OFT_FRINSWARN		 = "您正在参加派对或突袭，并配备了钓鱼竿。";
 
 -- tracking switcher
 SMARTBUFF_TRACKSWITCHMSG	 = " 已检测到，但自动切换跟踪已打开。 键入 /sbm 以查看选项并关闭个人跟踪或自动切换。";
@@ -70,6 +71,8 @@ SMARTBUFF_OFT_MINERALS		 = GetSpellInfo(2580)
 SMARTBUFF_OFT_HERBS			 = GetSpellInfo(2383)
 SMARTBUFF_OFTT_GATHERER		 = "[ハーブの検索]、[ミネラルの検索]、[魚の検索] (利用可能で選択されている場合) を切り替えます。"
 SMARTBUFF_OFTT_GATHERERFISH	 = "収集トラッカーを切り替えるときに「魚を探す」を含めます。"
+SMARTBUFF_OFT_AUTOGATHOFF	 = "在組中時禁用"
+SMARTBUFF_OFTT_AUTOGATHOFF	 = "在聚會或突襲中自動關閉此功能，並切換到您當前的模板首選項。"
 
 -- wrong version
 SMARTBUFF_NOTINTENDEDCLIENT	= "此版本的 Smartbuff 不適用於此客戶端，請下載正確的版本。";

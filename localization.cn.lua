@@ -24,6 +24,7 @@ SMARTBUFF_OFT_REQ_RELOAD     = "新版本需要重新加载 GUI\n准备就绪后
 
 -- fishing rod check
 SMARTBUFF_OFT_FRODWARN		 = "您正在使用装备好的钓鱼竿进行战斗。";
+SMARTBUFF_OFT_FRINSWARN		 = "你带着你的钓鱼竿进入了一个聚会或突袭。";
 
 -- tracking switcher
 SMARTBUFF_TRACKSWITCHMSG	 = " 已检测到，但自动切换跟踪已打开。 键入 /sbm 以查看选项并关闭个人跟踪或自动切换。";
@@ -36,6 +37,8 @@ SMARTBUFF_OFT_MINERALS		 = GetSpellInfo(2580)
 SMARTBUFF_OFT_HERBS			 = GetSpellInfo(2383)
 SMARTBUFF_OFTT_GATHERER		 = "在“寻找草药”、“寻找矿物质”和“寻找鱼”之间切换（如果可用并已选择）。"
 SMARTBUFF_OFTT_GATHERERFISH	 = "切换收集追踪器时包括“寻找鱼”。"
+SMARTBUFF_OFT_AUTOGATHOFF	 = "成群结队时关掉"
+SMARTBUFF_OFTT_AUTOGATHOFF	 = "在聚会或突袭中自动关闭此功能，并切换到您当前的模板首选项。"
 
 -- wrong version
 SMARTBUFF_NOTINTENDEDCLIENT	 = "此版本的 Smartbuff 不适用于此客户端，请下载正确的版本。";

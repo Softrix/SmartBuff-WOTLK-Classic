@@ -460,7 +460,7 @@
 	</Button>
 	<Frame name="SmartBuffOptionsFrame" hidden="true" parent="UIParent" toplevel="true" movable="true" frameStrata="DIALOG" enableMouse="true">
 		<Size>
-			<AbsDimension x="560" y="800" />
+			<AbsDimension x="560" y="770" />
 		</Size>
 		<Anchors>
 			<Anchor x="30" y="-42" point="CENTER" />
@@ -1245,7 +1245,7 @@
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbInCombat" relativePoint="BOTTOMLEFT">
-						<Offset y="-107" />
+						<Offset y="-119" />
 					</Anchor>
 				</Anchors>
 				<HitRectInsets>
@@ -1414,7 +1414,7 @@
 			</Button>
 			<ScrollFrame name="SmartBuffOptionsFrame_ScrollFrameBuffs" inherits="FauxScrollFrameTemplate">
 				<Size>
-					<AbsDimension x="240" y="620" />
+					<AbsDimension x="240" y="600" />
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT">
@@ -1535,14 +1535,14 @@
 			</Button>
 			<EditBox name="SmartBuffOptionsCredits_lblText" letters="2000" multiLine="true" autoFocus="false">
 				<Size>
-					<AbsDimension x="240" y="188" />
+					<AbsDimension x="240" y="147" />
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="$parent" relativePoint="TOPLEFT">
-						<Offset x="30" y="-540" />
+						<Offset x="30" y="-557" />
 					</Anchor>
 				</Anchors>
-				<FontString inherits="GameFontNormalSmall" justifyH="LEFT" />
+				<FontString inherits="GameFontNormalTiny" justifyH="LEFT" />
 			</EditBox>
 			<Button name="SmartBuffOptionsFrame_btnPlaySound" inherits="UIPanelButtonTemplate" text="&gt;">
 				<Size x="27" y="16" />
@@ -1624,7 +1624,7 @@
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbBuffInCities" relativePoint="TOPLEFT">
-						<Offset y="-90" />
+						<Offset y="-84" />
 					</Anchor>
 				</Anchors>
 				<HitRectInsets>
@@ -1653,7 +1653,7 @@
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbBuffInCities" relativePoint="TOPLEFT">
-						<Offset x="10" y="-110" />
+						<Offset x="10" y="-104" />
 					</Anchor>
 				</Anchors>
 				<HitRectInsets>
@@ -1674,6 +1674,35 @@
 					<OnLeave>
 						GameTooltip:Hide();
 					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuffOptionsFrame_cbGatherAutoDisableTracker" inherits="UICheckButtonTemplate">
+				<Size>
+					<AbsDimension x="24" y="24" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbBuffInCities" relativePoint="TOPLEFT">
+						<Offset x="10" y="-124" />
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						GameTooltip:SetText(SMARTBUFF_OFTT_AUTOGATHOFF, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide();
+					</OnLeave>
+					<OnLoad>
+						getglobal(self:GetName().."Text"):SetText(SMARTBUFF_OFT_AUTOGATHOFF);
+						getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnClick>
+						SMARTBUFF_OTrackDisableGrp();
+					</OnClick>
 				</Scripts>
 			</CheckButton>
 		</Frames>
