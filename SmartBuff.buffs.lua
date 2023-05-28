@@ -176,6 +176,10 @@ function SMARTBUFF_InitItemList()
   _,SMARTBUFF_GRILLEDMUDFISH                = GetItemInfo(27664);       --"Grilled Mudfish"
   _,SMARTBUFF_CLAMBAR                       = GetItemInfo(30155);       --"Clam Bar"
   _,SMARTBUFF_SAGEFISHDELIGHT               = GetItemInfo(21217);       --"Sagefish Delight"  
+  _,SMARTBUFF_STEAMINGCHICKENSOUP           = GetItemInfo(42779);       --"Steaming Chicken Soup"
+  _,SMARTBUFF_GRILLEDSQUID                  = GetItemInfo(13928);       --"Grilled Squid"  
+  _,SMARTBUFF_BARBECUEDBUZZARDWING          = GetItemInfo(4457);        --"Barbecued Buzzard Wing"  
+  
   -- poisons
   _,SMARTBUFF_INSTANTPOISON1				= GetItemInfo(6947);	    -- Instant Poison
   _,SMARTBUFF_INSTANTPOISON2				= GetItemInfo(6949);	    -- Instant Poison II
@@ -211,7 +215,9 @@ function SMARTBUFF_InitItemList()
   _,SMARTBUFF_ANESTHETICPOISON2			    = GetItemInfo(43237);	    -- Anesthetic Poison II 
 
   -- Food item IDs
-  S.FoodItems = GetItems({39691, 34125, 42779, 42997, 42998, 42999, 43000, 34767, 42995, 34769, 34754, 34758, 34766, 42994, 42996, 34756, 34768, 42993, 34755, 43001, 34757, 34752, 34751, 34750, 34749, 34764, 34765, 34763, 34762, 42942, 43268, 34748, });
+  S.FoodItems = GetItems({39691, 34125, 42997, 42998, 42999, 43000, 43015, 34767, 42995, 34769, 34753, 34754, 
+                        34758, 34766, 42994, 42996, 34756, 34768, 42993, 34755, 43001, 34757, 34752, 34751, 
+                        34750, 34749, 34764, 34765, 34763, 34762, 42942, 43268, 34748, 45279});
 
   -- Conjured items
   ConjuredMageFood = { 5349, 1113, 1114, 1487, 8075, 8076, 22895, 22019, 43518, 43523 };        -- classic > wotlk conjured mage food
@@ -293,22 +299,23 @@ function SMARTBUFF_InitItemList()
   _,SMARTBUFF_ELIXIRTBC15         = GetItemInfo(22827);  --"Elixir of Major Frost Power"
   _,SMARTBUFF_ELIXIRTBC16         = GetItemInfo(31679);  --"Fel Strength Elixir"
   _,SMARTBUFF_ELIXIRTBC17         = GetItemInfo(22833);  --"Elixir of Major Firepower"
-  _,SMARTBUFF_ELIXIR1             = GetItemInfo(39666);  --"Elixir of Mighty Agility"
-  _,SMARTBUFF_ELIXIR2             = GetItemInfo(44332);  --"Elixir of Mighty Thoughts"
-  _,SMARTBUFF_ELIXIR3             = GetItemInfo(40078);  --"Elixir of Mighty Fortitude"
-  _,SMARTBUFF_ELIXIR4             = GetItemInfo(40073);  --"Elixir of Mighty Strength"
-  _,SMARTBUFF_ELIXIR5             = GetItemInfo(40072);  --"Elixir of Spirit"
-  _,SMARTBUFF_ELIXIR6             = GetItemInfo(40097);  --"Elixir of Protection"
-  _,SMARTBUFF_ELIXIR7             = GetItemInfo(44328);  --"Elixir of Mighty Defense"
-  _,SMARTBUFF_ELIXIR8             = GetItemInfo(44331);  --"Elixir of Lightning Speed"
-  _,SMARTBUFF_ELIXIR9             = GetItemInfo(44329);  --"Elixir of Expertise"
-  _,SMARTBUFF_ELIXIR10            = GetItemInfo(44327);  --"Elixir of Deadly Strikes"
-  _,SMARTBUFF_ELIXIR11            = GetItemInfo(44330);  --"Elixir of Armor Piercing"
-  _,SMARTBUFF_ELIXIR12            = GetItemInfo(44325);  --"Elixir of Accuracy"
-  _,SMARTBUFF_ELIXIR13            = GetItemInfo(40076);  --"Guru's Elixir"
-  _,SMARTBUFF_ELIXIR14            = GetItemInfo(9187);   --"Elixir of Greater Agility"
-  _,SMARTBUFF_ELIXIR15            = GetItemInfo(28103);  --"Adept's Elixir"
-  _,SMARTBUFF_ELIXIR16            = GetItemInfo(40070);  --"Spellpower Elixir"
+  _,SMARTBUFF_ELIXIR1             = GetItemInfo(8949);   --"Elixir of Agility"
+  _,SMARTBUFF_ELIXIR2             = GetItemInfo(39666);  --"Elixir of Mighty Agility"
+  _,SMARTBUFF_ELIXIR3             = GetItemInfo(44332);  --"Elixir of Mighty Thoughts"
+  _,SMARTBUFF_ELIXIR4             = GetItemInfo(40078);  --"Elixir of Mighty Fortitude"
+  _,SMARTBUFF_ELIXIR5             = GetItemInfo(40073);  --"Elixir of Mighty Strength"
+  _,SMARTBUFF_ELIXIR6             = GetItemInfo(40072);  --"Elixir of Spirit"
+  _,SMARTBUFF_ELIXIR7             = GetItemInfo(40097);  --"Elixir of Protection"
+  _,SMARTBUFF_ELIXIR8             = GetItemInfo(44328);  --"Elixir of Mighty Defense"
+  _,SMARTBUFF_ELIXIR9             = GetItemInfo(44331);  --"Elixir of Lightning Speed"
+  _,SMARTBUFF_ELIXIR10            = GetItemInfo(44329);  --"Elixir of Expertise"
+  _,SMARTBUFF_ELIXIR11            = GetItemInfo(44327);  --"Elixir of Deadly Strikes"
+  _,SMARTBUFF_ELIXIR12            = GetItemInfo(44330);  --"Elixir of Armor Piercing"
+  _,SMARTBUFF_ELIXIR13            = GetItemInfo(44325);  --"Elixir of Accuracy"
+  _,SMARTBUFF_ELIXIR14            = GetItemInfo(40076);  --"Guru's Elixir"
+  _,SMARTBUFF_ELIXIR15            = GetItemInfo(9187);   --"Elixir of Greater Agility"
+  _,SMARTBUFF_ELIXIR16            = GetItemInfo(28103);  --"Adept's Elixir"
+  _,SMARTBUFF_ELIXIR17            = GetItemInfo(40070);  --"Spellpower Elixir"
 
   -- fishing pole
   _, _, _, _, _, _, S.FishingPole = GetItemInfo(6256);  --"Fishing Pole"
@@ -406,7 +413,7 @@ function SMARTBUFF_InitSpellIDs()
   SMARTBUFF_GOTW                = GetSpellInfo(21849);      --"Gift of the Wild"
   SMARTBUFF_THORNS              = GetSpellInfo(467);        --"Thorns"
   SMARTBUFF_BARKSKIN            = GetSpellInfo(22812);      --"Barkskin"
-
+  SMARTBUFF_NATURESGRASP        = GetSpellInfo(16689);      --"Nature's Grasp"
   -- forms
   SMARTBUFF_DRUID_CAT           = GetSpellInfo(768);        --"Cat Form"
   SMARTBUFF_DRUID_TREE          = GetSpellInfo(33891);      --"Incarnation: Tree of Life"
@@ -597,7 +604,7 @@ function SMARTBUFF_InitSpellIDs()
   SMARTBUFF_SBINTELLECT     = GetSpellInfo(8096);   --"Scroll buff: Intellect"
   SMARTBUFF_SBSTAMINA       = GetSpellInfo(8099);   --"Scroll buff: Stamina"
   SMARTBUFF_SBSPIRIT        = GetSpellInfo(8112);   --"Scroll buff: Spirit"
-  SMARTBUFF_SBSTRENGHT      = GetSpellInfo(8118);   --"Scroll buff: Strength"
+  SMARTBUFF_SBSTRENGTH      = GetSpellInfo(8118);   --"Scroll buff: Strength"
   SMARTBUFF_SBPROTECTION    = GetSpellInfo(89344);  --"Scroll buff: Armor"
   SMARTBUFF_BMiscItem1      = GetSpellInfo(326396); --"WoW's 16th Anniversary"
   SMARTBUFF_BMiscItem2      = GetSpellInfo(62574);  --"Warts-B-Gone Lip Balm"
@@ -847,13 +854,14 @@ function SMARTBUFF_InitSpellList()
   end
 
   -- Druid
-  if (SMARTBUFF_PLAYERCLASS == "DRUID") then          -- updated 7/5/2023 Codermik
+  if (SMARTBUFF_PLAYERCLASS == "DRUID") then          -- updated 28/5/2023 Codermik
     SMARTBUFF_BUFFLIST = {
       -- buffs
       {SMARTBUFF_MOTW, 30, SMARTBUFF_CONST_GROUP, {1,10,20,30,40,50,60,70,80}, "HPET;WPET;DKPET"},
       {SMARTBUFF_GOTW, 60, SMARTBUFF_CONST_GROUP, {50,60,70,80}, "HPET;WPET;DKPET"},
       {SMARTBUFF_THORNS, 10, SMARTBUFF_CONST_GROUP, nil, "MAGE;WARLOCK;ROGUE;PALADIN;WARRIOR;DRUID;HUNTER;SHAMAN;DEATHKNIGHT;MONK;DEMONHUNTER;EVOKER;HPET;WPET;DKPET"},
       {SMARTBUFF_BARKSKIN, 0.25, SMARTBUFF_CONST_FORCESELF},
+	  {SMARTBUFF_NATURESGRASP, 0.25, SMARTBUFF_CONST_FORCESELF},
       -- forms
       {SMARTBUFF_DRUID_CAT, -1, SMARTBUFF_CONST_SELF},
       {SMARTBUFF_DRUID_TREE, -1, SMARTBUFF_CONST_SELF},
@@ -1180,7 +1188,10 @@ function SMARTBUFF_InitSpellList()
     {SMARTBUFF_NIGHTFINSOUP, 15, SMARTBUFF_CONST_FOOD},
     {SMARTBUFF_GRILLEDSQUID, 10, SMARTBUFF_CONST_FOOD},
     {SMARTBUFF_RUNNTUMTUBERSURPRISE, 10, SMARTBUFF_CONST_FOOD},
-    {SMARTBUFF_SMOKEDDESERTDUMPLINGS, 15, SMARTBUFF_CONST_FOOD},	    
+    {SMARTBUFF_SMOKEDDESERTDUMPLINGS, 15, SMARTBUFF_CONST_FOOD},	
+    {SMARTBUFF_STEAMINGCHICKENSOUP, 15, SMARTBUFF_CONST_FOOD},   
+    {SMARTBUFF_GRILLEDSQUID, 10, SMARTBUFF_CONST_FOOD}, 
+    {SMARTBUFF_BARBECUEDBUZZARDWING, 15, SMARTBUFF_CONST_FOOD}, 
   };
 
   for n, name in pairs(S.FoodItems) do
@@ -1249,15 +1260,15 @@ function SMARTBUFF_InitSpellList()
     {SMARTBUFF_SOSPIRIT3, 30, SMARTBUFF_CONST_SCROLL, nil, SMARTBUFF_SBSPIRIT},
     {SMARTBUFF_SOSPIRIT2, 30, SMARTBUFF_CONST_SCROLL, nil, SMARTBUFF_SBSPIRIT},
     {SMARTBUFF_SOSPIRIT1, 30, SMARTBUFF_CONST_SCROLL, nil, SMARTBUFF_SBSPIRIT},
-    {SMARTBUFF_SOSTRENGHT9, 30, SMARTBUFF_CONST_SCROLL, nil, SMARTBUFF_SBSTRENGHT},
-    {SMARTBUFF_SOSTRENGHT8, 30, SMARTBUFF_CONST_SCROLL, nil, SMARTBUFF_SBSTRENGHT},
-    {SMARTBUFF_SOSTRENGHT7, 30, SMARTBUFF_CONST_SCROLL, nil, SMARTBUFF_SBSTRENGHT},
-    {SMARTBUFF_SOSTRENGHT6, 30, SMARTBUFF_CONST_SCROLL, nil, SMARTBUFF_SBSTRENGHT},
-    {SMARTBUFF_SOSTRENGHT5, 30, SMARTBUFF_CONST_SCROLL, nil, SMARTBUFF_SBSTRENGHT},
-    {SMARTBUFF_SOSTRENGHT4, 30, SMARTBUFF_CONST_SCROLL, nil, SMARTBUFF_SBSTRENGHT},
-    {SMARTBUFF_SOSTRENGHT3, 30, SMARTBUFF_CONST_SCROLL, nil, SMARTBUFF_SBSTRENGHT},
-    {SMARTBUFF_SOSTRENGHT2, 30, SMARTBUFF_CONST_SCROLL, nil, SMARTBUFF_SBSTRENGHT},
-    {SMARTBUFF_SOSTRENGHT1, 30, SMARTBUFF_CONST_SCROLL, nil, SMARTBUFF_SBSTRENGHT},
+    {SMARTBUFF_SOSTRENGHT9, 30, SMARTBUFF_CONST_SCROLL, nil, SMARTBUFF_SBSTRENGTH},
+    {SMARTBUFF_SOSTRENGHT8, 30, SMARTBUFF_CONST_SCROLL, nil, SMARTBUFF_SBSTRENGTH},
+    {SMARTBUFF_SOSTRENGHT7, 30, SMARTBUFF_CONST_SCROLL, nil, SMARTBUFF_SBSTRENGTH},
+    {SMARTBUFF_SOSTRENGHT6, 30, SMARTBUFF_CONST_SCROLL, nil, SMARTBUFF_SBSTRENGTH},
+    {SMARTBUFF_SOSTRENGHT5, 30, SMARTBUFF_CONST_SCROLL, nil, SMARTBUFF_SBSTRENGTH},
+    {SMARTBUFF_SOSTRENGHT4, 30, SMARTBUFF_CONST_SCROLL, nil, SMARTBUFF_SBSTRENGTH},
+    {SMARTBUFF_SOSTRENGHT3, 30, SMARTBUFF_CONST_SCROLL, nil, SMARTBUFF_SBSTRENGTH},
+    {SMARTBUFF_SOSTRENGHT2, 30, SMARTBUFF_CONST_SCROLL, nil, SMARTBUFF_SBSTRENGTH},
+    {SMARTBUFF_SOSTRENGHT1, 30, SMARTBUFF_CONST_SCROLL, nil, SMARTBUFF_SBSTRENGTH},
     {SMARTBUFF_SOPROTECTION9, 30, SMARTBUFF_CONST_SCROLL, nil, SMARTBUFF_SBPROTECTION},
   };
 

@@ -7,9 +7,9 @@
 -- Cast the most important buffs on you, tanks or party/raid members/pets.
 -------------------------------------------------------------------------------
 
-SMARTBUFF_DATE          = "210523";
+SMARTBUFF_DATE          = "280523";
 
-SMARTBUFF_VERSION       = "r43."..SMARTBUFF_DATE;
+SMARTBUFF_VERSION       = "r44."..SMARTBUFF_DATE;
 SMARTBUFF_VERSIONNR     = 30401;
 SMARTBUFF_TITLE         = "SmartBuff";
 SMARTBUFF_SUBTITLE      = "Supports you in casting buffs";
@@ -25,7 +25,7 @@ local SmartbuffCommands = { "SBCVER", "SBCCMD", "SBCSYC" }
 local SmartbuffSession = true;
 local SmartbuffVerCheck = false;					-- for my use when checking guild users/testers versions  :)
 local buildInfo = select(4, GetBuildInfo())
-local SmartbuffRevision = 43;
+local SmartbuffRevision = 44;
 local SmartbuffVerNotifyList = {}
 
 -- Using LibRangeCheck-2.0 by Mitchnull
@@ -864,6 +864,7 @@ Enum.SmartBuffGroup = {
 }
 
 -- Set the current template and create an array of units
+local GatherDisableAnnounce = true
 function SMARTBUFF_SetTemplate()
   if (InCombatLockdown()) then return end
   if (SmartBuffOptionsFrame:IsVisible()) then return end
@@ -919,11 +920,14 @@ function SMARTBUFF_SetTemplate()
     -- do we want to disable the gathering switcher?
     if O.TrackDisableGrp and O.TrackSwitchActive then
         cDisableTrackSwitch = true;
-        SMARTBUFF_AddMsg("Raid -> Auto gathering tracker disabled while in a raid, switching to preset (if any).");
+        if GatherDisableAnnounce then   -- make sure we only announce the once for this session (unless a reloadui ofc)
+            SMARTBUFF_AddMsg("Raid -> Auto gathering tracker disabled while in a raid, switching to preset (if any).");
+            GatherDisableAnnounce = false
+		end
 	end
     -- do we have a fishing rod equipped and entered a raid?
     if SMARTBUFF_IsFishingPoleEquiped() and O.WarnGroupFishingRod then
-      -- warn the player he/she is in combat with a fishing pole equipped.
+      -- warn the player he/she has a fishing pole equipped.
       DEFAULT_CHAT_FRAME:AddMessage("|cffff0000Smartbuff Warning: |cffff6060"..SMARTBUFF_OFT_FRINSWARN)
       PlaySound(12197);
     end
