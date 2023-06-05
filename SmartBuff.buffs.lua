@@ -282,6 +282,8 @@ function SMARTBUFF_InitItemList()
   _,SMARTBUFF_FLASK2              = GetItemInfo(46376);  --"Flask of the Frost Wyrm"
   _,SMARTBUFF_FLASK3              = GetItemInfo(46379);  --"Flask of Stoneblood"
   _,SMARTBUFF_FLASK4              = GetItemInfo(46378);  --"Flask of Pure Mojo"
+  _,SMARTBUFF_FLASK5              = GetItemInfo(44939);  --"Lesser Flask of Resistance"
+  _,SMARTBUFF_FLASK6              = GetItemInfo(40079);  --"Lesser Flask of Toughness"
   _,SMARTBUFF_ELIXIRTBC1          = GetItemInfo(22831);  --"Elixir of Major Agility"
   _,SMARTBUFF_ELIXIRTBC2          = GetItemInfo(28104);  --"Elixir of Mastery"
   _,SMARTBUFF_ELIXIRTBC3          = GetItemInfo(22825);  --"Elixir of Healing Power"
@@ -639,6 +641,8 @@ function SMARTBUFF_InitSpellIDs()
   SMARTBUFF_BFLASK2         = GetSpellInfo(53755);  --"Flask of the Frost Wyrm"
   SMARTBUFF_BFLASK3         = GetSpellInfo(53758);  --"Flask of Stoneblood"
   SMARTBUFF_BFLASK4         = GetSpellInfo(54212);  --"Flask of Pure Mojo"
+  SMARTBUFF_BFLASK5         = GetSpellInfo(62213);  --"Lesser Flask of Resistance"
+  SMARTBUFF_BFLASK6         = GetSpellInfo(53899);  --"Lesser Flask of Toughness"
   SMARTBUFF_BFLASKCT1       = GetSpellInfo(79471);  --"Flask of the Winds"
   SMARTBUFF_BFLASKCT2       = GetSpellInfo(79472);  --"Flask of Titanic Strength"
   SMARTBUFF_BFLASKCT3       = GetSpellInfo(79470);  --"Flask of the Draconic Mind"
@@ -944,8 +948,8 @@ function SMARTBUFF_InitSpellList()
       {SMARTBUFF_AOTB, -1, SMARTBUFF_CONST_SELF, nil, nil, nil, S.ChainAspects},
       {SMARTBUFF_AOTC, -1, SMARTBUFF_CONST_SELF, nil, nil, nil, S.ChainAspects},
       {SMARTBUFF_AOTP, -1, SMARTBUFF_CONST_SELF, nil, nil, nil, S.ChainAspects},
-      {SMARTBUFF_CALLPET, -1, SMARTBUFF_CONST_SELF, nil, S.CheckPet},
 	  {SMARTBUFF_REVIVEPET, -1, SMARTBUFF_CONST_SELF}, 
+      {SMARTBUFF_CALLPET, -1, SMARTBUFF_CONST_SELF, nil, S.CheckPet},
     };
   end
   
@@ -1433,6 +1437,8 @@ function SMARTBUFF_InitSpellList()
     {SMARTBUFF_FLASK2, 60, SMARTBUFF_CONST_POTION, nil, SMARTBUFF_BFLASK2},
     {SMARTBUFF_FLASK3, 60, SMARTBUFF_CONST_POTION, nil, SMARTBUFF_BFLASK3},
     {SMARTBUFF_FLASK4, 60, SMARTBUFF_CONST_POTION, nil, SMARTBUFF_BFLASK4},
+    {SMARTBUFF_FLASK5, 60, SMARTBUFF_CONST_POTION, nil, SMARTBUFF_BFLASK5},
+    {SMARTBUFF_FLASK6, 60, SMARTBUFF_CONST_POTION, nil, SMARTBUFF_BFLASK6},
     {SMARTBUFF_ELIXIR1,  60, SMARTBUFF_CONST_POTION, nil, SMARTBUFF_BELIXIR1},
     {SMARTBUFF_ELIXIR2,  60, SMARTBUFF_CONST_POTION, nil, SMARTBUFF_BELIXIR2},
     {SMARTBUFF_ELIXIR3,  60, SMARTBUFF_CONST_POTION, nil, SMARTBUFF_BELIXIR3},

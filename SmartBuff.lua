@@ -7,9 +7,9 @@
 -- Cast the most important buffs on you, tanks or party/raid members/pets.
 -------------------------------------------------------------------------------
 
-SMARTBUFF_DATE          = "280523";
+SMARTBUFF_DATE          = "050623";
 
-SMARTBUFF_VERSION       = "r44."..SMARTBUFF_DATE;
+SMARTBUFF_VERSION       = "r46."..SMARTBUFF_DATE;
 SMARTBUFF_VERSIONNR     = 30401;
 SMARTBUFF_TITLE         = "SmartBuff";
 SMARTBUFF_SUBTITLE      = "Supports you in casting buffs";
@@ -25,7 +25,7 @@ local SmartbuffCommands = { "SBCVER", "SBCCMD", "SBCSYC" }
 local SmartbuffSession = true;
 local SmartbuffVerCheck = false;					-- for my use when checking guild users/testers versions  :)
 local buildInfo = select(4, GetBuildInfo())
-local SmartbuffRevision = 44;
+local SmartbuffRevision = 46;
 local SmartbuffVerNotifyList = {}
 
 -- Using LibRangeCheck-2.0 by Mitchnull
@@ -66,6 +66,7 @@ local isParrot = false;
 local isSync = false;
 local isSyncReq = false;
 local isInitBtn = false;
+local isPrompting = false
 
 local isShapeshifted = false;
 local sShapename = "";
@@ -1910,6 +1911,9 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
         or (mode == 1 and bs.Reminder and ((not isCombat and bs.COut)
         or (isCombat and (bs.CIn or O.ToggleAutoCombat)))))) then
 
+        -- do we want to disable zoom while pending buffs exist?
+        if O.ScrollWheelSurpress then isPrompting = true; end
+
         if (not bs.SelfOnly or (bs.SelfOnly and SMARTBUFF_IsPlayer(unit))) then
           -- get current spell cooldown
           cd = 0;
@@ -2054,9 +2058,8 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
                 tOh = offHandExpiration;
                 cOh = offHandCharges;
 
-
                 if (bs.MH) then
-                  iSlot = INVSLOT_MAINHAND;
+                  iSlot = 16;
                   iId = GetInventoryItemID("player", iSlot);
                   if (iId and SMARTBUFF_CanApplyWeaponBuff(buffnS, iSlot)) then
                     if (bMh) then
@@ -2065,7 +2068,6 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
                         charges = cMh;
                         if (charges == nil) then charges = -1; end
                         if (charges > 1) then cBuff.CanCharge = true; end
-                        SMARTBUFF_AddMsgD(un .. " (WMH): " .. buffnS .. string.format(" %.0f sec left", tMh) .. ", " .. charges .. " charges left");
                         if (tMh <= rbTime or (O.CheckCharges and cBuff.CanCharge and charges > 0 and charges <= O.MinCharges)) then
                           buff = buffnS;
                           bt = tMh;
@@ -2081,8 +2083,8 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
                   end
                 end
 
-                if (bs.OH and not bExpire and not buffloc) then
-                  iSlot = INVSLOT_OFFHAND
+                if (bs.OH and not bExpire and handtype == "") then
+                  iSlot = 17
                   iId = GetInventoryItemID("player", iSlot);
                   if (iId and SMARTBUFF_CanApplyWeaponBuff(buffnS, iSlot)) then
                     if (bOh) then
@@ -2091,7 +2093,6 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
                         charges = cOh;
                         if (charges == nil) then charges = -1; end
                         if (charges > 1) then cBuff.CanCharge = true; end
-                        SMARTBUFF_AddMsgD(un .. " (WOH): " .. buffnS .. string.format(" %.0f sec left", tOh) .. ", " .. charges .. " charges left");
                         if (tOh <= rbTime or (O.CheckCharges and cBuff.CanCharge and charges > 0 and charges <= O.MinCharges)) then
                           buff = buffnS;
                           bt = tOh;
@@ -2183,8 +2184,8 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
                 end
               end
 
-              if (buff) then
- 
+              if (buff) then 
+
                 if (cBuff.IDS) then
                   SMARTBUFF_AddMsgD("Checking " ..i .. " - " .. cBuff.IDS .. " " .. buffnS);
                 end
@@ -2253,9 +2254,9 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
                 -- Check mode ---------------------------------------------------------------------------------------
                 elseif (mode == 1) then
                   currentUnit = nil;
-                  currentSpell = nil;
+                  currentSpell = nil;                  
+                  if type(bt) ~= "number" then bt = 0; end    
                   if (bufftarget == nil) then bufftarget = un; end
-
                   if (cBuff.IDS ~= nil or SMARTBUFF_IsItem(cBuff.Type) or cBuff.Type == SMARTBUFF_CONST_TRACK) then
                     -- clean up buff timer, if expired
                     if (bt and bt < 0 and bExpire) then
@@ -2274,7 +2275,6 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
                       tLastCheck = time - O.AutoTimer + 0.5;
                       return 0;
                     end
-
                     SMARTBUFF_SetMissingBuffMessage(bufftarget, buff, cBuff.IconS, cBuff.CanCharge, charges, bt, bExpire);
                     SMARTBUFF_SetButtonTexture(SmartBuff_KeyButton, cBuff.IconS);
                     return 0;
@@ -2337,6 +2337,9 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
             end
           end
         end -- group or self
+	  else
+          -- revert camera zoom back to normal.
+          isPrompting = false
       end
     end -- for buff
   end
@@ -2419,29 +2422,25 @@ function SMARTBUFF_SetMissingBuffMessage(target, buff, icon, bCanCharge, nCharge
   end
 end
 
+local cWeaponStandard = {0, 1, 4, 5, 6, 7, 8, 10, 13, 15, 16}; -- "Daggers", "Axes", "Swords", "Maces", "Staves", "Fist Weapons", "Polearms", "Thrown"
+local cWeaponBlunt = {4, 5, 10, 13}; -- "Maces", "Staves", "Fist Weapons"
+local cWeaponSharp = {0, 1, 6, 7, 8, 15}; -- "Daggers", "Axes", "Swords", "Polearms"
 
 -- check if a spell/reagent could applied on a weapon
 function SMARTBUFF_CanApplyWeaponBuff(buff, slot)
   local cWeaponTypes = nil;
   if (string.find(buff, SMARTBUFF_WEAPON_SHARP_PATTERN)) then
-    cWeaponTypes = SMARTBUFF_WEAPON_SHARP;
+    cWeaponTypes = cWeaponSharp;
   elseif (string.find(buff, SMARTBUFF_WEAPON_BLUNT_PATTERN)) then
-    cWeaponTypes = SMARTBUFF_WEAPON_BLUNT;
+    cWeaponTypes = cWeaponBlunt;
   else
-    cWeaponTypes = SMARTBUFF_WEAPON_STANDARD;
-  end
-
+    cWeaponTypes = cWeaponStandard;
+  end  
   local itemLink = GetInventoryItemLink("player", slot);
-  local _, _, itemCode = string.find(itemLink, "(%d+):");
-  local _, _, _, _, _, itemType, itemSubType = GetItemInfo(itemCode);
-
-  if (cWeaponTypes and itemSubType) then
-    for _, weapon in pairs(cWeaponTypes) do
-      if (string.find(itemSubType, weapon)) then
-        return true, weapon;
-      end
-    end
-
+  if (itemLink == nil) then return false end
+  local itemType, itemSubType, _, _, _, _, classId, subclassId = select(6, GetItemInfo(itemLink));
+  if (tcontains(cWeaponTypes, subclassId)) then
+    return true, itemSubType;
   end
   return false;
 end
@@ -3032,6 +3031,7 @@ function SMARTBUFF_Options_Init(self)
   if (O.ScrollWheel ~= nil and O.ScrollWheelDown == nil) then  O.ScrollWheelDown = O.ScrollWheel; end
   if (O.ScrollWheelUp == nil) then O.ScrollWheelUp = true; end
   if (O.ScrollWheelDown == nil) then O.ScrollWheelDown = true; end
+  if (O.ScrollWheelSurpress == nil) then O.ScrollWheelSurpress = true; end
   if (O.InCombat == nil) then  O.InCombat = true; end
   if (O.AutoSwitchTemplate == nil) then  O.AutoSwitchTemplate = true; end
   if (O.AutoSwitchTemplateInst == nil) then  O.AutoSwitchTemplateInst = true; end
@@ -3341,6 +3341,13 @@ function SMARTBUFF_command(msg)
   elseif (msg == "reload") then
     SMARTBUFF_BuffOrderReset();
     SMARTBUFF_OptionsFrame_Open(true);
+  elseif (msg == "zoom") then
+    O.ScrollWheelSurpress = not O.ScrollWheelSurpress;
+    if O.ScrollWheelSurpress then
+      SMARTBUFF_AddMsg("Camera will no longer zoom when scrolling the mouse to buff.", true);
+    else
+	  SMARTBUFF_AddMsg("Camera will zoom when scrolling the mouse to buff (old default behaviour).", true);
+	end
   else
     SMARTBUFF_AddMsg(SMARTBUFF_VERS_TITLE, true);
     SMARTBUFF_AddMsg("Syntax: /sbo [command] or /sbuff [command] or /smartbuff [command]", true);
@@ -4286,7 +4293,7 @@ end
 
 function SMARTBUFF_OnPostClick(self, button, down)
   if (not isInit) then return end
-  if (button) then
+  if (button and not isPrompting) then
     if (button == "MOUSEWHEELUP") then
       CameraZoomIn(1);
     elseif (button == "MOUSEWHEELDOWN") then
@@ -4535,7 +4542,6 @@ end
 function SMARTBUFF_BuffOrderBtnOnClick(self, button)
   local n = self:GetID() + FauxScrollFrame_GetOffset(self:GetParent());
   local i = cBuffIndex[B[CS()].Order[n]];
-  --SMARTBUFF_AddMsgD("Buff OnClick = "..n..", "..button);
   if (button == "LeftButton") then
     SMARTBUFF_OToggleBuff("S", i);
   else
