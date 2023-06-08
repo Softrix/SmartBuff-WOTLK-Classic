@@ -3043,7 +3043,7 @@ function SMARTBUFF_Options_Init(self)
   if (O.HideMmButton == nil) then  O.HideMmButton = false; end
   if (O.HideSAButton == nil) then  O.HideSAButton = true; end
   -- tracking switcher, only works for herbs and minerals
-  if (O.TrackSwitchActive == nil) then O.TrackSwitchActive = true; end
+  if (O.TrackSwitchActive == nil) then O.TrackSwitchActive = false; end
   if (O.TrackSwitchFish == nil) then O.TrackSwitchFish = false; end
   if (O.TrackSwitchDelay == nil) then O.TrackSwitchDelay = 2; end
   if (O.TrackMaxPosition == nil) then O.TrackMaxPosition = 1; end
@@ -3122,6 +3122,13 @@ function SMARTBUFF_Options_Init(self)
 
   DEFAULT_CHAT_FRAME:AddMessage("|cff00e0ffSmartbuff Build "..SMARTBUFF_VERSION.." (Client: "..buildInfo..")|cffffffff "..SMARTBUFF_MSG_LOADED)
 
+  -- check for DugisGuideViewerZ, this also attempts to update the tracker so
+  -- make sure to turn off the auto switcher if this addon is loaded.
+  -- Thanks TechnoHunter via Discord for the conflict report.
+  if IsAddOnLoaded("DugisGuideViewerZ") then
+    O.TrackSwitchActive = false;
+  end
+  
   isInit = true;
 
   SMARTBUFF_CheckMiniMapButton();
