@@ -7,10 +7,10 @@
 -- Cast the most important buffs on you, tanks or party/raid members/pets.
 -------------------------------------------------------------------------------
 
-SMARTBUFF_DATE          = "050623";
+SMARTBUFF_DATE          = "250623";
 
-SMARTBUFF_VERSION       = "r46."..SMARTBUFF_DATE;
-SMARTBUFF_VERSIONNR     = 30401;
+SMARTBUFF_VERSION       = "r48."..SMARTBUFF_DATE;
+SMARTBUFF_VERSIONNR     = 30402;
 SMARTBUFF_TITLE         = "SmartBuff";
 SMARTBUFF_SUBTITLE      = "Supports you in casting buffs";
 SMARTBUFF_DESC          = "Cast the most important buffs on you, your tanks, party/raid members/pets";
@@ -25,7 +25,7 @@ local SmartbuffCommands = { "SBCVER", "SBCCMD", "SBCSYC" }
 local SmartbuffSession = true;
 local SmartbuffVerCheck = false;					-- for my use when checking guild users/testers versions  :)
 local buildInfo = select(4, GetBuildInfo())
-local SmartbuffRevision = 46;
+local SmartbuffRevision = 48;
 local SmartbuffVerNotifyList = {}
 
 -- Using LibRangeCheck-2.0 by Mitchnull

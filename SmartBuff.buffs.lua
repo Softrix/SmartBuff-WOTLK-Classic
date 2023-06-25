@@ -377,6 +377,7 @@ function SMARTBUFF_InitSpellIDs()
   -- buffs
   SMARTBUFF_AI                  = GetSpellInfo(1459);       --"Arcane Intellect"
   SMARTBUFF_AB                  = GetSpellInfo(23028);      --"Arcane Brilliance"
+  SMARTBUFF_DALI                = GetSpellInfo(61024);      --"Dalaran Intellect"
   SMARTBUFF_DALARANB            = GetSpellInfo(61316);      --"Dalaran Brilliance"
   -- Armor
   SMARTBUFF_ICEARMOR            = GetSpellInfo(7302);       --"Ice Armor"
@@ -406,7 +407,7 @@ function SMARTBUFF_InitSpellIDs()
   SMARTBUFF_CREATEMGEM		    = GetSpellInfo(759);        --"Conjure Mana Gem"
   -- Mage buff links
   S.ChainMageArmor = { SMARTBUFF_ICEARMOR, SMARTBUFF_FROSTARMOR, SMARTBUFF_MAGEARMOR, SMARTBUFF_MOLTENARMOR };
-  S.ChainMageBuffs = { SMARTBUFF_AI, SMARTBUFF_AB, SMARTBUFF_DALARANB }
+  S.ChainMageBuffs = { SMARTBUFF_AI, SMARTBUFF_AB, SMARTBUFF_DALI, SMARTBUFF_DALARANB }
 
 
   -- Druid - Updated 7/5/2023 ------------------------------------------------------------------------
@@ -531,6 +532,7 @@ function SMARTBUFF_InitSpellIDs()
   SMARTBUFF_LOCKLESSERINVIS     = GetSpellInfo(6512);           --"Detect Lesser Invisibility"
   SMARTBUFF_LOCKINVISIBILITY    = GetSpellInfo(132);            --"Detect Invisibility"
   SMARTBUFF_LOCKSENSEDEMONS     = GetSpellInfo(5500);           --"Sense Demons"
+  SMARTBUFF_SOULLINK            = GetSpellInfo(19028);          --"Soul Link"
 
 
   -- Death Knight - Updated 20/5/2023 --------------------------------------------------------------------  
@@ -827,6 +829,7 @@ function SMARTBUFF_InitSpellList()
       -- buffs
       {SMARTBUFF_AI, 30, SMARTBUFF_CONST_GROUP, {1,14,28,42,56,70,80}, "WARRIOR;DEATHKNIGHT;ROGUE;HPET;WPET;DKPET", S.ChainMageBuffs},
       {SMARTBUFF_AB, 60, SMARTBUFF_CONST_GROUP, {56, 70, 80}, "WARRIOR;DEATHKNIGHT;ROGUE;HPET;WPET;DKPET", S.ChainMageBuffs},
+	  {SMARTBUFF_DALI, 30, SMARTBUFF_CONST_GROUP, {1,14,28,42,56,70,80}, "WARRIOR;DEATHKNIGHT;ROGUE;HPET;WPET;DKPET", S.ChainMageBuffs},
       {SMARTBUFF_DALARANB, 60, SMARTBUFF_CONST_GROUP, {80}, "WARRIOR;DEATHKNIGHT;ROGUE;HPET;WPET;DKPET", S.ChainMageBuffs},
       -- Armor
       {SMARTBUFF_ICEARMOR, -1, SMARTBUFF_CONST_SELF, nil, nil, nil, S.ChainMageArmor},
@@ -972,6 +975,7 @@ function SMARTBUFF_InitSpellList()
       {SMARTBUFF_SUMMONSUCCUBUS, -1, SMARTBUFF_CONST_SELF, nil, S.CheckPet},
       {SMARTBUFF_SUMMONINCUBUS, -1, SMARTBUFF_CONST_SELF, nil, S.CheckPet},
       {SMARTBUFF_SUMMONVOIDWALKER, -1, SMARTBUFF_CONST_SELF, nil, S.CheckPet},
+	  {SMARTBUFF_SOULLINK, 0, SMARTBUFF_CONST_SELF, nil, S.CheckPet},
       -- create stones
 	  {SMARTBUFF_CREATEHS, -1, SMARTBUFF_CONST_SELF},
 	  {SMARTBUFF_CREATESOULS, -1, SMARTBUFF_CONST_SELF},
