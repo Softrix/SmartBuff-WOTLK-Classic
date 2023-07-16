@@ -7,9 +7,9 @@
 -- Cast the most important buffs on you, tanks or party/raid members/pets.
 -------------------------------------------------------------------------------
 
-SMARTBUFF_DATE          = "250623";
+SMARTBUFF_DATE          = "160723";
 
-SMARTBUFF_VERSION       = "r48."..SMARTBUFF_DATE;
+SMARTBUFF_VERSION       = "r49."..SMARTBUFF_DATE;
 SMARTBUFF_VERSIONNR     = 30402;
 SMARTBUFF_TITLE         = "SmartBuff";
 SMARTBUFF_SUBTITLE      = "Supports you in casting buffs";
@@ -1764,6 +1764,8 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
   if (UnitIsPVP("player")) then isPvP = true end
 
   SMARTBUFF_CheckUnitBuffTimers(unit);
+  
+  isPrompting = false;
 
   if (UnitExists(unit) and UnitIsFriend("player", unit) and not UnitIsDeadOrGhost(unit) and not UnitIsCorpse(unit) and (UnitInRange(unit) or unit == "player" or unit == "target"))
     and UnitIsConnected(unit) and UnitIsVisible(unit) and not UnitOnTaxi(unit) and not cBlacklist[unit] and ((not UnitIsPVP(unit) and (not isPvP or O.BuffPvP)) or (UnitIsPVP(unit) 
@@ -2337,12 +2339,10 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
             end
           end
         end -- group or self
-	  else
-          -- revert camera zoom back to normal.
-          isPrompting = false
       end
     end -- for buff
   end
+  isPrompting = false
   return 3;
 end
 -- END SMARTBUFF_BuffUnit
