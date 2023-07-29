@@ -6,7 +6,7 @@
 SMARTBUFF_WHATSNEW = "\n\n|cffffffff         Whats new:|r\n\n"
   .."          |cffffffffClassic version by Codermik, additional retail coding\n"
   .."          by Speedwaystar.\n\n\n"
-  .."          Changes in r49.280723:\n\n"
+  .."          Changes in r49.290723:\n\n"
   .."             * Fixed an issue with the camera zoom.\n\n"
   .."             * Conjured items no longer prompt if moving.\n\n"
   .."             * Added option to prompt while mounted and\n"
