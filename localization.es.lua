@@ -46,6 +46,10 @@ BINDING_NAME_SMARTBUFF_BIND_TARGET  = "Objetivo";
 BINDING_NAME_SMARTBUFF_BIND_OPTIONS = "Men\195\186 de opciones";
 BINDING_NAME_SMARTBUFF_BIND_RESETBUFFTIMERS = "Restaurar temporizador de buffs";
 
+-- mounted warning
+SMARTBUFF_OFT_MOUNTEDWARN	 = "mientras está montado";
+SMARTBUFF_OFTT_MOUNTEDWARN	 = "%Continúe recordándome mientras estoy montando.";
+
 -- purge/reload messages
 SMARTBUFF_OFT_YES            = "Sí";
 SMARTBUFF_OFT_NO             = "No";

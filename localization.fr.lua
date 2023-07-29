@@ -42,6 +42,10 @@ SMARTBUFF_ELEMENTAL = "\195\137l\195\169mentaire";
 SMARTBUFF_DEMONTYPE = "Diablotin";
 SMARTBUFF_UNDEAD    = "Mort-vivant";
 
+-- mounted warning
+SMARTBUFF_OFT_MOUNTEDWARN	 = "Afficher une fois monté";
+SMARTBUFF_OFTT_MOUNTEDWARN	 = "Continuez à me rappeler les buffs ou les capacités manquants pendant que je roule.";
+
 -- Classes
 SMARTBUFF_CLASSES = {"Druide", "Chasseur", "Mage", "Paladin", "Pr\195\170tre", "Voleur", "Chaman", "D\195\169moniste", "Guerrier", "Chevalier de la mort", "Moine", "Chasseur de démons", "Evoker", "Chasseur Pet", "D\195\169moniste Pet", "Chevalier de la mort Pet", "Tank", "Gu\195\169risseur", "Sp\195\169cialiste des d\195\169g\195\162ts"};
 

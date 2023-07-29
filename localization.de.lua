@@ -48,6 +48,9 @@ BINDING_NAME_SMARTBUFF_BIND_TARGET  = "Ziel";
 BINDING_NAME_SMARTBUFF_BIND_OPTIONS = "Optionen";
 BINDING_NAME_SMARTBUFF_BIND_RESETBUFFTIMERS = "Buff Timer löschen";
 
+-- mounted warning
+SMARTBUFF_OFT_MOUNTEDWARN	 = "Beim Reiten vorzeigen";
+SMARTBUFF_OFTT_MOUNTEDWARN	 = "Erinnere mich während des Reitens weiterhin an fehlende Buffs oder Fähigkeiten.";
 
 -- purge/reload messages
 SMARTBUFF_OFT_YES            = "Ja";

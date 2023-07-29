@@ -6,13 +6,17 @@
 SMARTBUFF_WHATSNEW = "\n\n|cffffffff         Whats new:|r\n\n"
   .."          |cffffffffClassic version by Codermik, additional retail coding\n"
   .."          by Speedwaystar.\n\n\n"
-  .."          Changes in r48.250623:\n\n"
-  .."             * Fixed warlocks Soul Link\n"
-  .."             * Added missing Dalaran Intellect\n"
+  .."          Changes in r49.280723:\n\n"
+  .."             * Fixed an issue with the camera zoom.\n\n"
+  .."             * Conjured items no longer prompt if moving.\n\n"
+  .."             * Added option to prompt while mounted and\n"
+  .."               to automatically dismount you to buff.\n\n"
+  .."             * Class buffs should now use the correct\n"
+  .."               ranks when casting on lower levels.\n"
   .."\n\n"
   .."          |cffffff00I currently play on the Mirage Raceway EU classic\n"
   .."          WOTLK server as Alliance, I play on Mik, Gabella,\n"
-  .."          Castanova, Amarantine and various alts...\n"
+  .."          Castanova, Amarantine and various alts...\n\n"
   .."          ...too many actually  :)\n\n"
   .."          Please feel free to say hello!\n\n\n"
   .."          |cff00FF7FMany thanks to Chris S., Samantha R. and\n"
@@ -23,8 +27,7 @@ SMARTBUFF_WHATSNEW = "\n\n|cffffffff         Whats new:|r\n\n"
 SMARTBUFF_CREDITS = "|cffffffff"
   .."Retail & Classic by Codermik & Speedwaystar.  Please join to get support on our discord server:\n"
   .."|cff00e0ffhttps://discord.gg/R6EkZ94TKK\n\n"
-  .."|cffffffffIf you want to help support us and the development of this addon then please always download from Curse or use one of the following links:\n\n(We only ever upload to Curseforge)\n\n"
-  .."|cffffffffPatreon: |cff00e0ffhttps://www.patreon.com/codermik\n"
+  .."|cffffffffIf you want to help support me and the development of this addon then please always download from Curse or use one of the following links:\n\n(I only ever upload to Curseforge)\n\n"
   .."|cffffffffTwitch: |cff00e0ffhttps://www.twitch.tv/codermik\n"
   .."|cffffffffPayPal.Me: |cff00e0ffhttps://paypal.me/codermik\n\n"
 ;
@@ -48,8 +51,6 @@ SMARTBUFF_UNDEAD    = "Undead";
 SMARTBUFF_CLASSES = {"Druid", "Hunter", "Mage", "Paladin", "Priest", "Rogue", "Shaman", "Warlock", "Warrior", "Death Knight", "Monk", "Demon Hunter", "Evoker", "Hunter Pet", "Warlock Pet", "Death Knight Pet", "Tank", "Healer", "Damage Dealer"};
 
 -- Templates and Instances
---SMARTBUFF_TEMPLATES = {"Solo", "Party", "LFR", "Raid", "Mythic Keystone", "Battleground", "Arena", "Castle Nathria", "Sanctum of Domination", "Sepulcher of the First Ones", "Vault of the Incarnates", "Custom 1", "Custom 2", "Custom 3", "Custom 4", "Custom 5"};
---SMARTBUFF_INSTANCES = {"Castle Nathria", "Sanctum of Domination", "Sepulcher of the First Ones", "Vault of the Incarnates"};
 SMARTBUFF_TEMPLATES = {"Solo", "Party", "Raid", "Battleground", "Arena", "ICC", "TOC", "Ulduar", "Ony", "Naxx", "Custom 1", "Custom 2", "Custom 3", "Custom 4", "Custom 5"};
 SMARTBUFF_INSTANCES = {"Icecrown Citadel", "Trial of the Crusader", "Ulduar", "Onyxia's Lair", "Naxxramas"};
 
@@ -72,7 +73,7 @@ SMARTBUFF_NOTINTENDEDCLIENT	 = "This version of Smartbuff is not intended for th
 
 -- Fix casting.
 SMARTBUFF_OFT_FIXBUFF		 = "Fix Casting"
-SMARTBUFF_OFTT_FIXBUFF		 = "Only tick this option if Smartbuff is failing to cast buffs while using the\nscroll mouse, action button or macro. Combat buffing will not work with\nthis setting active but you will be notified its missing for manual buffing."
+SMARTBUFF_OFTT_FIXBUFF		 = "Only tick this option if Smartbuff is failing to cast buffs while using the\nscroll mouse, action button or macro. Combat buffing will not work with\nthis setting active but you will be notified its missing for manual buffing.\n\n** This should not be needed in classic clients **"
 
 -- tracking switcher
 SMARTBUFF_TRACKSWITCHMSG	 = " has been detected but the auto switch find herbs, minerals and fish is turned on in the options. type /sbm to open options and either turn off the individual trackers or the automatic switching.";
@@ -83,10 +84,14 @@ SMARTBUFF_OFT_GATHERER		 = "Auto Switch Gathering Trackers"
 SMARTBUFF_OFT_FINDFISH		 = "Find Fish"
 SMARTBUFF_OFT_MINERALS		 = "Find Minerals"
 SMARTBUFF_OFT_HERBS			 = "Find Herbs"
-SMARTBUFF_OFTT_GATHERER		 = "Switches through your Find Herbs, Find Minerals and Find Fish (if available and selected)."
+SMARTBUFF_OFTT_GATHERER		 = "Switches through your Find Herbs, Find Minerals and Find Fish (if available and selected). This feature\nwill disable automatically if you do not have two of the three listed."
 SMARTBUFF_OFTT_GATHERERFISH	 = "Include Find Fish when switching through Gathering Trackers."
 SMARTBUFF_OFT_AUTOGATHOFF	 = "Auto switch OFF in Party/Raids"
 SMARTBUFF_OFTT_AUTOGATHOFF	 = "Automatically switch this feature OFF when in a party or raid and switch to your current template preference."
+
+-- mounted warning
+SMARTBUFF_OFT_MOUNTEDWARN	 = "Prompt while mounted";
+SMARTBUFF_OFTT_MOUNTEDWARN	 = "Continue to remind me of missing buffs or abilities while I am mounted and automatically dismount to buff.";
 
 SMARTBUFF_OFT                = "SmartBuff On/Off";
 SMARTBUFF_OFT_MENU           = "Show/hide options menu";
@@ -241,7 +246,7 @@ SMARTBUFF_MSG_SPECCHANGED    = "Spec changed (%s), loading buff templates...";
 -- Support
 SMARTBUFF_MINIMAP_TT         = "Left mouse for options\nRight mouse to toggle On/Off\nAlt-Left mouse to toggle auto tracking\nShift drag: Move button";
 SMARTBUFF_TITAN_TT           = "Left mouse for options\nRight mouse to toggle On/Off\nAlt-Left mouse to toggle auto tracking";
-SMARTBUFF_FUBAR_TT           = "\nLeft mouse for options\nRight mouse to toggle On/Off\nAlt-Left mouse to toggle auto tracking";
+SMARTBUFF_FUBAR_TT           = "\nLeft mouse for options\nRight mouse to toggle On/Off\nAlt-Right mouse to toggle mounted prompts\nAlt-Left mouse to toggle auto tracking";
 
 SMARTBUFF_DEBUFF_TT          = "Shift-Left drag: Move frame\n|cff20d2ff- S button -|r\nLeft click: Show by classes\nShift-Left click: Class colors\nAlt-Left click: Highlight L/R\n|cff20d2ff- P button -|r\nLeft click: Hide pets on/off";
 

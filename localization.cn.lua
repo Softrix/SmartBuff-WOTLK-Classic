@@ -43,6 +43,9 @@ SMARTBUFF_OFTT_AUTOGATHOFF	 = "在聚会或突袭中自动关闭此功能，并�
 -- wrong version
 SMARTBUFF_NOTINTENDEDCLIENT	 = "此版本的 Smartbuff 不适用于此客户端，请下载正确的版本。";
 
+-- mounted warning
+SMARTBUFF_OFT_MOUNTEDWARN	 = "骑行时显示";
+SMARTBUFF_OFTT_MOUNTEDWARN	 = "继续提醒我在骑行时缺少的增益或能力。";
 
 -- 德鲁伊
 SMARTBUFF_DRUID_CAT = "猎豹形态";

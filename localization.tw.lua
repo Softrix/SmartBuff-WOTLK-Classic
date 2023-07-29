@@ -60,6 +60,11 @@ SMARTBUFF_OFT_REQ_RELOAD     = "新版本需要重新加载 GUI\n准备就绪后
 SMARTBUFF_OFT_FRODWARN		 = "您正在使用装备好的钓鱼竿进行战斗。";
 SMARTBUFF_OFT_FRINSWARN		 = "您正在参加派对或突袭，并配备了钓鱼竿。";
 
+-- mounted warning
+SMARTBUFF_OFT_MOUNTEDWARN	 = "騎行時顯示";
+SMARTBUFF_OFTT_MOUNTEDWARN	 = "繼續提醒我在騎行時缺少的增益或能力。";
+
+
 -- tracking switcher
 SMARTBUFF_TRACKSWITCHMSG	 = " 已检测到，但自动切换跟踪已打开。 键入 /sbm 以查看选项并关闭个人跟踪或自动切换。";
 SMARTBUFF_TRACKINGDISABLE	 = "如果你有两个或更多收集能力，你将只能从这个功能中受益，该选项已被禁用。"

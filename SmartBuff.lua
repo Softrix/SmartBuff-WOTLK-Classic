@@ -7,7 +7,7 @@
 -- Cast the most important buffs on you, tanks or party/raid members/pets.
 -------------------------------------------------------------------------------
 
-SMARTBUFF_DATE          = "160723";
+SMARTBUFF_DATE          = "290723";
 
 SMARTBUFF_VERSION       = "r49."..SMARTBUFF_DATE;
 SMARTBUFF_VERSIONNR     = 30402;
@@ -25,7 +25,7 @@ local SmartbuffCommands = { "SBCVER", "SBCCMD", "SBCSYC" }
 local SmartbuffSession = true;
 local SmartbuffVerCheck = false;					-- for my use when checking guild users/testers versions  :)
 local buildInfo = select(4, GetBuildInfo())
-local SmartbuffRevision = 48;
+local SmartbuffRevision = 49;
 local SmartbuffVerNotifyList = {}
 
 -- Using LibRangeCheck-2.0 by Mitchnull
@@ -101,6 +101,7 @@ local cBuffTimer = { };
 local cBlacklist = { };
 local cUnits = { };
 local cBuffsCombat = { };
+local cSpellRankInfo = { };
 
 local cScrBtnBO = nil;
 
@@ -945,8 +946,6 @@ function SMARTBUFF_SetTemplate()
         end
         sRUnit = "raid"..n;
 
-        --SMARTBUFF_AddMsgD(name .. ", " .. sRUnit .. ", " .. UnitName(sRUnit));
-
         SMARTBUFF_AddUnitToClass("raid", n);
         SmartBuff_AddToUnitList(1, sRUnit, subgroup);
         SmartBuff_AddToUnitList(2, sRUnit, subgroup);
@@ -1165,6 +1164,7 @@ function SMARTBUFF_SetBuff(buff, i, ia)
   if (SMARTBUFF_IsSpell(cBuffs[i].Type)) then
     cBuffs[i].IDS, cBuffs[i].BookID = SMARTBUFF_GetSpellID(cBuffs[i].BuffS);
   end
+
   if (cBuffs[i].IDS == nil and not(SMARTBUFF_IsItem(cBuffs[i].Type) or cBuffs[i].Type == SMARTBUFF_CONST_TRACK)) then
     cBuffs[i] = nil;
     return i;
@@ -1174,6 +1174,7 @@ function SMARTBUFF_SetBuff(buff, i, ia)
   if (buff[5] ~= nil) then cBuffs[i].Params = buff[5] else cBuffs[i].Params = SG.NIL end
   cBuffs[i].Links = buff[6];
   cBuffs[i].Chain = buff[7];
+
   if (cBuffs[i].IDS ~= nil) then
     cBuffs[i].IconS = GetSpellTexture(cBuffs[i].BuffS);
   else
@@ -1308,7 +1309,7 @@ function SMARTBUFF_PreCheck(mode, force)
   elseif (sPlayerClass == "DEATHKNIGHT" and IsMounted() and not SMARTBUFF_CheckBuff("player", SMARTBUFF_PATHOFFROST)) then
     return true;
   end
-  if ((mode == 1 and not O.ToggleAuto) or IsMounted() or IsFlying() or LootFrame:IsVisible()
+  if ((mode == 1 and not O.ToggleAuto) or IsMounted() and not O.ToggleMountedPrompt or IsFlying() or LootFrame:IsVisible()
     or UnitOnTaxi("player") or UnitIsDeadOrGhost("player") or UnitIsCorpse("player")
     or (mode ~= 1 and (SMARTBUFF_IsPicnic("player") or SMARTBUFF_IsFishing("player")))
     or (UnitInVehicle("player") or UnitHasVehicleUI("player"))
@@ -1552,26 +1553,21 @@ function SMARTBUFF_SyncBuffTimers()
           while (cBuffs[i] and cBuffs[i].BuffS) do
             rbTime = 0;
             buffS = cBuffs[i].BuffS;
-
-            -- TOCHECK
             rbTime = B[CS()][ct][buffS].RBTime;
             if (rbTime <= 0) then
               rbTime = O.RebuffTimer;
             end
-
             if (buffS and B[CS()][ct][buffS].EnableS and cBuffs[i].IDS ~= nil and cBuffs[i].DurationS > 0) then
               if (cBuffs[i].Type ~= SMARTBUFF_CONST_SELF or (cBuffs[i].Type == SMARTBUFF_CONST_SELF and SMARTBUFF_IsPlayer(unit))) then
                 SMARTBUFF_SyncBuffTimer(unit, unit, cBuffs[i]);
               end
             end
-
             i = i + 1;
           end -- END while
         end
       end -- END for
     end
   end -- END for
-
   isSync = false;
   isSyncReq = false;
 end
@@ -1620,6 +1616,48 @@ function SMARTBUFF_IsShapeshifted()
 end
 -- END SMARTBUFF_IsShapeshifted
 
+-- build spell rank info.
+local function buildSpellRankInfo(spell)
+  local spellName, spellSubName, name, spellID;
+  local rank = 1;
+  cSpellRankInfo = {};  -- always clear it
+  for i = 1, 300 do -- 300 is more than enough
+    spellName, spellSubName = GetSpellBookItemName(i, BOOKTYPE_SPELL);
+    if spellName == spell then
+        name, _, _, _, _, _, spellID, _ = GetSpellInfo(spellName.."("..spellSubName..")");
+        tinsert(cSpellRankInfo, {rank, spellName, spellSubName, spellName.."("..spellSubName..")", spellID});
+        rank = rank + 1;
+	end
+  end  
+end
+
+-- get spell rank info
+local function getSpellRankInfo(rank)
+  for rankcount, ranks in ipairs(cSpellRankInfo) do 
+      if ranks[1] == rank then
+      return ranks[1], ranks[2], ranks[3], ranks[4], ranks[5];
+      end
+  end
+end
+
+-- make sure we have the correct rank to cast for unit.
+local function SMARTBUFF_CheckSpellLevel(spell, unit, buffLevels)  
+  if not buffLevels then return nil; end
+  local uLevel = nil; 
+  local bSpellRank = 0;  
+  local rank, spellName, spellSubName, spellNameRank, spellID;
+  uLevel = UnitLevel(unit);   
+  if uLevel == 80 then return nil; end  -- no reason to down-rank on a max level, just exit.
+  buildSpellRankInfo(spell);  
+  -- get rank
+  for count, levelrange in next, buffLevels do 
+	  if uLevel >= levelrange then 
+		  bSpellRank = count;
+	  end 
+  end
+  rank, spellName, spellSubName, spellNameRank, spellID = getSpellRankInfo(bSpellRank)
+  return rank, spellName, spellSubName, spellNameRank, spellID;
+end
 
 local IsChecking = false;
 function SMARTBUFF_Check(mode, force)
@@ -1632,9 +1670,6 @@ function SMARTBUFF_Check(mode, force)
   local unitB = nil;
   local unitL = nil;
   local unitU = nil;
-  local uLevel = nil;
-  local uLevelL = nil;
-  local uLevelU = nil;
   local idL = nil;
   local idU = nil;
   local subgroup = 0;
@@ -1716,7 +1751,6 @@ function SMARTBUFF_Check(mode, force)
           end
         end
       end
-
     end
   end -- for groups
 
@@ -1760,6 +1794,7 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
   local cBuff = nil;
   local iId = nil;
   local iSlot = -1;
+  local spellNameRank = nil
 
   if (UnitIsPVP("player")) then isPvP = true end
 
@@ -1835,7 +1870,7 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
         if (buffnS == SMARTBUFF_CONJFOOD or buffnS == SMARTBUFF_CONJREFRESHMENT) then lookupData = ConjuredMageFood
 		elseif (buffnS == SMARTBUFF_CONJWATER or buffnS == SMARTBUFF_CONJREFRESHMENT) then lookupData = ConjuredMageWater
 		elseif buffnS == SMARTBUFF_CREATEMGEM then lookupData = ConjuredMageGems end
-        if lookupData then
+        if lookupData and isPlayerMoving == false then
 	        for count, value in next, lookupData do  
 		        if value then 
                     itemInfo = GetItemInfo(value)
@@ -1844,6 +1879,8 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
 				    end
 		        end
 	        end
+        elseif lookupData and isPlayerMoving then
+            bUsable = false;
 		end
 	  end
       
@@ -1857,7 +1894,7 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
 			  elseif buffnS == SMARTBUFF_CREATESOULS then lookupData = ConjuredLockSoulstones
 			  elseif buffnS == SMARTBUFF_CREATESPELLS then lookupData = ConjuredLockSpellstones
 			  elseif buffnS == SMARTBUFF_CREATEFIRES then lookupData = ConjuredLockFirestones end
-              if lookupData then
+              if lookupData and isPlayerMoving == false then
 	              for count, value in next, lookupData do  
 		              if value then 
                           itemInfo = GetItemInfo(value)
@@ -1866,6 +1903,8 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
 				          end
 		              end
 	              end
+              elseif lookupData and isPlayerMoving then
+                bUsable = false;
 			  end
           else
               SMARTBUFF_AddMsgD(itemInfo.." is missing in bag, cannot continue.");
@@ -1885,7 +1924,7 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
 	  end
 
       -- extra testing for revive pet on hunters, 
-	  --  only allow if the pet is actually dead
+	  -- only allow if the pet is actually dead
       if (bUsable and sPlayerClass == "HUNTER") and buffnS == SMARTBUFF_REVIVEPET then
 	    if not UnitIsDead("pet") then
             SMARTBUFF_AddMsgD("Pet appears to be very much alive!");
@@ -2245,7 +2284,7 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
                     end
 
                   -- cast spell
-                  else
+                  else                    
                     r = SMARTBUFF_doCast(unit, cBuff.IDS, buffnS, cBuff.LevelsS, cBuff.Type);
                     if (r == 0) then
                       currentUnit = unit;
@@ -2287,7 +2326,15 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
                   -- target buffed
                   -- Message will printed in the "SPELLCAST_STOP" event
                   sMsgWarning = "";
-                  return 0, SMARTBUFF_ACTION_SPELL, buffnS, -1, unit, cBuff.Type;
+                  _, _, _, spellNameRank, _ = SMARTBUFF_CheckSpellLevel(buffnS, unit, cBuff.LevelsS)
+                  if spellNameRank then
+                    -- we have ranks, process them.
+                    SMARTBUFF_AddMsgD("Buff down-ranked to: " .. spellNameRank);
+                    return 0, SMARTBUFF_ACTION_SPELL, spellNameRank, -1, unit, cBuff.Type;
+				  else
+                    -- nothing special here, just continue.
+                    return 0, SMARTBUFF_ACTION_SPELL, buffnS, -1, unit, cBuff.Type;
+                  end
                 elseif (r == 1) then
                   -- spell cooldown
                   if (mode == 0) then SMARTBUFF_AddMsgWarn(buffnS .. " " .. SMARTBUFF_MSG_CD); end
@@ -2319,13 +2366,13 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
                   if (mode == 0) then SMARTBUFF_AddMsgD(buffnS .. " spellID not found"); end
                 elseif (r == 10) then
                   -- target could not buffed
-                  if (mode == 0) then SMARTBUFF_AddMsgD(buffnS .. " could not buffed on " .. un); end
+                  if (mode == 0) then SMARTBUFF_AddMsgD(buffnS .. " could not be buffed on " .. un); end
                 elseif (r == 20) then
                   -- item not found
-                  if (mode == 0) then SMARTBUFF_AddMsgD(buffnS .. " could not used"); end
+                  if (mode == 0) then SMARTBUFF_AddMsgD(buffnS .. " could not be used"); end
                 elseif (r == 50) then
                   -- weapon buff could not applied
-                  if (mode == 0) then SMARTBUFF_AddMsgD(buffnS .. " could not applied"); end
+                  if (mode == 0) then SMARTBUFF_AddMsgD(buffnS .. " could not be applied"); end
                 else
                   -- no spell selected
                   if (mode == 0) then SMARTBUFF_AddMsgD(SMARTBUFF_MSG_CHAT); end
@@ -2465,7 +2512,6 @@ function SMARTBUFF_doCast(unit, id, spellName, levels, type)
   if (type == SMARTBUFF_CONST_TRACK and (GetTrackingTexture() ~= "Interface\\Minimap\\Tracking\\None")) then
     return 7;
   end
-
   -- check if spell has cooldown
   local _, cd = GetSpellCooldown(spellName)
   if (not cd) then
@@ -2475,9 +2521,7 @@ function SMARTBUFF_doCast(unit, id, spellName, levels, type)
   elseif (cd > 0) then
     return 1;
   end
-
   -- Rangecheck
-  --SMARTBUFF_AddMsgD("Spell has range: "..spellName.." = "..ChkS(SpellHasRange(spellName)));
   if ((type == SMARTBUFF_CONST_GROUP or type == SMARTBUFF_CONST_ITEMGROUP)) then
     local minRange, maxRange = LRC:GetRange(unit)
 	if (UnitInRange(unit) or unit == "player" or (unit == "target" and O.BuffTarget)) then
@@ -2491,13 +2535,11 @@ function SMARTBUFF_doCast(unit, id, spellName, levels, type)
         return 3;
 	end
   end
-
   -- check if you have enough mana/energy/rage to cast
   local isUsable, notEnoughMana = IsUsableSpell(spellName);
   if (notEnoughMana) then
     return 6;
   end
-
   return 0;
 end
 -- END SMARTBUFF_doCast
@@ -2635,7 +2677,6 @@ function SMARTBUFF_CheckUnitBuffs(unit, buffN, buffT, buffL, buffC)
       return nil, 0, defBuff, timeleft, count;
     end
   end
-
   -- Buff not found, return default buff
   return defBuff, nil, nil, nil, nil;
 end
@@ -3013,6 +3054,7 @@ function SMARTBUFF_Options_Init(self)
   if (O.ToggleAutoChat == nil) then O.ToggleAutoChat = false; end
   if (O.ToggleAutoSplash == nil) then O.ToggleAutoSplash = true; end
   if (O.ToggleAutoSound == nil) then O.ToggleAutoSound = true; end
+  if (O.ToggleMountedPrompt == nil) then O.ToggleMountedPrompt = true; end
   if (O.AutoSoundSelection == nil) then O.AutoSoundSelection = 4; end;
   if (O.CheckCharges == nil) then O.CheckCharges = true; end
   --if (O.ToggleAutoRest == nil) then  O.ToggleAutoRest = true; end
@@ -3398,6 +3440,9 @@ end
 function SMARTBUFF_OToggleAutoSound()
   O.ToggleAutoSound = not O.ToggleAutoSound;
 end
+function SMARTBUFF_OToggleMountedPrompt()
+  O.ToggleMountedPrompt = not O.ToggleMountedPrompt;
+end
 function SMARTBUFF_OAutoSwitchTmp()
   O.AutoSwitchTemplate = not O.AutoSwitchTemplate;
 end
@@ -3765,6 +3810,7 @@ function SMARTBUFF_Options_OnShow()
   SmartBuffOptionsFrame_cbAutoChat:SetChecked(O.ToggleAutoChat);
   SmartBuffOptionsFrame_cbAutoSplash:SetChecked(O.ToggleAutoSplash);
   SmartBuffOptionsFrame_cbAutoSound:SetChecked(O.ToggleAutoSound);
+  SmartBuffOptionsFrame_cbWarnWhenMounted:SetChecked(O.ToggleMountedPrompt);
 
   SmartBuffOptionsFrame_cbAutoSwitchTmp:SetChecked(O.AutoSwitchTemplate);
   SmartBuffOptionsFrame_cbAutoSwitchTmpInst:SetChecked(O.AutoSwitchTemplateInst);
@@ -4208,6 +4254,7 @@ local lastBuffType = "";
 function SMARTBUFF_OnPreClick(self, button, down)
   if (not isInit) then return end
   local mode = 0;
+  local unitsLevel = nil
   if (button) then
     if (button == "MOUSEWHEELUP" or button == "MOUSEWHEELDOWN") then
       mode = 5;
@@ -4225,20 +4272,10 @@ function SMARTBUFF_OnPreClick(self, button, down)
     self:SetAttribute("action", nil);
   end
 
-  -- leaving in for classic, its possible blizzard decide to make the 
-  -- same changes they did in retail.. you never know!
-
   if O.SBButtonFix then
-      -- macros really dont like the cvar set to 1 so lets test we are
-      -- actually clicking the action button rather than using the scroll
-      -- mouse to ensure buffing works for both.
       if button == "LeftButton" or button == "RightButton" then  
-          -- clicked manually either the action button or macro
-          -- using a mouse button - crazy blizzard issues strike
-          -- again :)
           C_CVar.SetCVar("ActionButtonUseKeyDown", 0 ); 
       else 
-          -- assume this is a scroll mouse.
           C_CVar.SetCVar("ActionButtonUseKeyDown", 1 );
       end
   end
@@ -4274,7 +4311,7 @@ function SMARTBUFF_OnPreClick(self, button, down)
           self:SetAttribute("macrotext", string.format("/use %s\n/use %i\n/click StaticPopup1Button1", spellName, slot));
           SMARTBUFF_AddMsgD("Weapon buff "..spellName..", "..slot);
         else
-          self:SetAttribute("spell", spellName);
+           self:SetAttribute("spell", spellName);
         end
 
         if (cBuffIndex[spellName]) then
