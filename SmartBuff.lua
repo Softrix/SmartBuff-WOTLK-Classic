@@ -7,9 +7,9 @@
 -- Cast the most important buffs on you, tanks or party/raid members/pets.
 -------------------------------------------------------------------------------
 
-SMARTBUFF_DATE          = "290723";
+SMARTBUFF_DATE          = "310823";
 
-SMARTBUFF_VERSION       = "r49."..SMARTBUFF_DATE;
+SMARTBUFF_VERSION       = "r50."..SMARTBUFF_DATE;
 SMARTBUFF_VERSIONNR     = 30402;
 SMARTBUFF_TITLE         = "SmartBuff";
 SMARTBUFF_SUBTITLE      = "Supports you in casting buffs";
@@ -25,7 +25,7 @@ local SmartbuffCommands = { "SBCVER", "SBCCMD", "SBCSYC" }
 local SmartbuffSession = true;
 local SmartbuffVerCheck = false;					-- for my use when checking guild users/testers versions  :)
 local buildInfo = select(4, GetBuildInfo())
-local SmartbuffRevision = 49;
+local SmartbuffRevision = 50;
 local SmartbuffVerNotifyList = {}
 
 -- Using LibRangeCheck-2.0 by Mitchnull
@@ -2170,6 +2170,9 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
                   if (SMARTBUFF_IsPlayer(unit)) then
                     if (cBuffTimer[unit] ~= nil and cBuffTimer[unit][buffnS] ~= nil) then
                       local tbt = cBuff.DurationS - (time - cBuffTimer[unit][buffnS]);
+                        if type(bt) ~= "number" then
+                            bt = 0
+                        end
                       if (not bt or bt - tbt > rbTime) then
                         bt = tbt;
                       end
