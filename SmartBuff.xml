@@ -465,7 +465,7 @@
 			<AbsDimension x="560" y="770" />
 		</Size>
 		<Anchors>
-			<Anchor point="CENTER" />
+			<Anchor x="-866" y="245" point="CENTER" />
 		</Anchors>
 		<Layers>
 			<Layer>
@@ -846,7 +846,7 @@
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrameRebuffTimer" relativePoint="TOPLEFT">
-						<Offset y="-73" />
+						<Offset y="-65" />
 					</Anchor>
 				</Anchors>
 				<HitRectInsets>
@@ -1093,7 +1093,7 @@
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbScrollWheelUp" relativePoint="TOPLEFT">
 						<Offset>
-							<AbsDimension x="160" y="0" />
+							<AbsDimension x="130" y="0" />
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -1123,9 +1123,7 @@
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbScrollWheelUp" relativePoint="TOPLEFT">
-						<Offset>
-							<AbsDimension x="0" y="-20" />
-						</Offset>
+						<Offset y="-20" />
 					</Anchor>
 				</Anchors>
 				<HitRectInsets>
@@ -1245,7 +1243,7 @@
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbInCombat" relativePoint="BOTTOMLEFT">
-						<Offset y="-119" />
+						<Offset y="-123" />
 					</Anchor>
 				</Anchors>
 				<HitRectInsets>
@@ -1386,11 +1384,11 @@
 			</CheckButton>
 			<Button name="SmartBuffOptionsFrame_ddTemplates" inherits="UIDropDownMenuTemplate">
 				<Size>
-					<AbsDimension x="160" y="16" />
+					<AbsDimension x="127" y="16" />
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="260" y="-40" />
+						<Offset x="293" y="-40" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -1414,11 +1412,11 @@
 			</Button>
 			<ScrollFrame name="SmartBuffOptionsFrame_ScrollFrameBuffs" inherits="FauxScrollFrameTemplate">
 				<Size>
-					<AbsDimension x="240" y="600" />
+					<AbsDimension x="212" y="600" />
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="280" y="-91" />
+						<Offset x="308" y="-91" />
 					</Anchor>
 				</Anchors>
 				<Layers>
@@ -1449,7 +1447,7 @@
 				</Size>
 				<Anchors>
 					<Anchor point="BOTTOMLEFT" relativeTo="SmartBuffOptionsFrame_ScrollFrameBuffs" relativePoint="TOPLEFT">
-						<Offset x="162" y="31" />
+						<Offset x="157" y="31" />
 					</Anchor>
 				</Anchors>
 				<HitRectInsets>
@@ -1535,11 +1533,11 @@
 			</Button>
 			<EditBox name="SmartBuffOptionsCredits_lblText" letters="2000" multiLine="true" autoFocus="false">
 				<Size>
-					<AbsDimension x="240" y="147" />
+					<AbsDimension x="240" y="141" />
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="$parent" relativePoint="TOPLEFT">
-						<Offset x="30" y="-557" />
+						<Offset x="30" y="-563" />
 					</Anchor>
 				</Anchors>
 				<FontString inherits="GameFontNormalTiny" justifyH="LEFT" />
@@ -1731,6 +1729,35 @@
 					<OnEnter>
 						GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
 						GameTooltip:SetText(SMARTBUFF_OFTT_MOUNTEDWARN, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
+					</OnEnter>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SmartBuffOptionsFrame_cbScrollWheelZoom" inherits="UICheckButtonTemplate">
+				<Size>
+					<AbsDimension x="24" y="24" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SmartBuffOptionsFrame_cbScrollWheelUp" relativePoint="TOPLEFT">
+						<Offset x="190" />
+					</Anchor>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Scripts>
+					<OnClick>
+						SMARTBUFF_OScrollWheelZoom()
+					</OnClick>
+					<OnLoad>
+						getglobal(self:GetName().."Text"):SetText(SMARTBUFF_OFT_SCROLLZOOMING);
+						getglobal(self:GetName().."Text"):SetFontObject(GameFontNormalSmall);
+					</OnLoad>
+					<OnLeave>
+						GameTooltip:Hide();
+					</OnLeave>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						GameTooltip:SetText(SMARTBUFF_OFTT_SCROLLZOOMING, SMARTBUFF_TTC_R, SMARTBUFF_TTC_G, SMARTBUFF_TTC_B, SMARTBUFF_TTC_A);
 					</OnEnter>
 				</Scripts>
 			</CheckButton>

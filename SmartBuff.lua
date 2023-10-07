@@ -7,9 +7,9 @@
 -- Cast the most important buffs on you, tanks or party/raid members/pets.
 -------------------------------------------------------------------------------
 
-SMARTBUFF_DATE          = "310823";
+SMARTBUFF_DATE          = "071023";
 
-SMARTBUFF_VERSION       = "r50."..SMARTBUFF_DATE;
+SMARTBUFF_VERSION       = "r51."..SMARTBUFF_DATE;
 SMARTBUFF_VERSIONNR     = 30402;
 SMARTBUFF_TITLE         = "SmartBuff";
 SMARTBUFF_SUBTITLE      = "Supports you in casting buffs";
@@ -25,7 +25,7 @@ local SmartbuffCommands = { "SBCVER", "SBCCMD", "SBCSYC" }
 local SmartbuffSession = true;
 local SmartbuffVerCheck = false;					-- for my use when checking guild users/testers versions  :)
 local buildInfo = select(4, GetBuildInfo())
-local SmartbuffRevision = 50;
+local SmartbuffRevision = 51;
 local SmartbuffVerNotifyList = {}
 
 -- Using LibRangeCheck-2.0 by Mitchnull
@@ -361,12 +361,12 @@ local function InitBuffOrder(reset)
   local b;
   local i;
   local ord = B[CS()].Order;
+
   if (reset) then
     wipe(ord);
-    SMARTBUFF_AddMsgD("Reset buff order");
   end
 
-  -- Remove not longer existing buffs in the order list
+  -- Remove no longer existing buffs in the order list
   for k, v in pairs(ord) do
     if (v and cBuffIndex[v] == nil) then
       SMARTBUFF_AddMsgD("Remove from buff order: "..v);
@@ -1146,7 +1146,7 @@ function SMARTBUFF_SetBuffs()
   wipe(cBuffsCombat);
   SMARTBUFF_SetInCombatBuffs();
 
-  InitBuffOrder();
+  InitBuffOrder(false);
 
   numBuffs = n - 1;
   isSetBuffs = false;
@@ -1952,8 +1952,8 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
         or (mode == 1 and bs.Reminder and ((not isCombat and bs.COut)
         or (isCombat and (bs.CIn or O.ToggleAutoCombat)))))) then
 
-        -- do we want to disable zoom while pending buffs exist?
-        if O.ScrollWheelSurpress then isPrompting = true; end
+        -- do we want to have normal camera zoom when buffing?
+        if not O.ScrollWheelZooming then isPrompting = true; end
 
         if (not bs.SelfOnly or (bs.SelfOnly and SMARTBUFF_IsPlayer(unit))) then
           -- get current spell cooldown
@@ -3076,7 +3076,7 @@ function SMARTBUFF_Options_Init(self)
   if (O.ScrollWheel ~= nil and O.ScrollWheelDown == nil) then  O.ScrollWheelDown = O.ScrollWheel; end
   if (O.ScrollWheelUp == nil) then O.ScrollWheelUp = true; end
   if (O.ScrollWheelDown == nil) then O.ScrollWheelDown = true; end
-  if (O.ScrollWheelSurpress == nil) then O.ScrollWheelSurpress = true; end
+  if (O.ScrollWheelZooming == nil) then O.ScrollWheelZooming = false; end
   if (O.InCombat == nil) then  O.InCombat = true; end
   if (O.AutoSwitchTemplate == nil) then  O.AutoSwitchTemplate = true; end
   if (O.AutoSwitchTemplateInst == nil) then  O.AutoSwitchTemplateInst = true; end
@@ -3225,7 +3225,7 @@ function SMARTBUFF_Options_Init(self)
   if (OG.FirstStart == nil) then OG.FirstStart = "V0";  end
 
   SMARTBUFF_Splash_ChangeFont(0);
-  SMARTBUFF_BuffOrderReset();
+  
   if (OG.FirstStart ~= SMARTBUFF_VERSION) then
     SmartBuffOptionsCredits_lblText:SetText(SMARTBUFF_CREDITS);
     SMARTBUFF_OptionsFrame_Open(true);
@@ -3393,13 +3393,6 @@ function SMARTBUFF_command(msg)
   elseif (msg == "reload") then
     SMARTBUFF_BuffOrderReset();
     SMARTBUFF_OptionsFrame_Open(true);
-  elseif (msg == "zoom") then
-    O.ScrollWheelSurpress = not O.ScrollWheelSurpress;
-    if O.ScrollWheelSurpress then
-      SMARTBUFF_AddMsg("Camera will no longer zoom when scrolling the mouse to buff.", true);
-    else
-	  SMARTBUFF_AddMsg("Camera will zoom when scrolling the mouse to buff (old default behaviour).", true);
-	end
   else
     SMARTBUFF_AddMsg(SMARTBUFF_VERS_TITLE, true);
     SMARTBUFF_AddMsg("Syntax: /sbo [command] or /sbuff [command] or /smartbuff [command]", true);
@@ -3477,6 +3470,9 @@ end
 function SMARTBUFF_OScrollWheelDown()
   O.ScrollWheelDown = not O.ScrollWheelDown;
   isKeyDownChanged = true;
+end
+function SMARTBUFF_OScrollWheelZoom()
+  O.ScrollWheelZooming = not O.ScrollWheelZooming;
 end
 function SMARTBUFF_OInShapeshift()
   O.InShapeshift = not O.InShapeshift;
@@ -3829,6 +3825,7 @@ function SMARTBUFF_Options_OnShow()
 
   SmartBuffOptionsFrame_cbScrollWheelUp:SetChecked(O.ScrollWheelUp);
   SmartBuffOptionsFrame_cbScrollWheelDown:SetChecked(O.ScrollWheelDown);
+  SmartBuffOptionsFrame_cbScrollWheelZoom:SetChecked(O.ScrollWheelZooming);
   SmartBuffOptionsFrame_cbInCombat:SetChecked(O.InCombat);
   SmartBuffOptionsFrame_cbMsgNormal:SetChecked(O.ToggleMsgNormal);
   SmartBuffOptionsFrame_cbMsgWarning:SetChecked(O.ToggleMsgWarning);

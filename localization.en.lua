@@ -3,11 +3,14 @@
 -------------------------------------------------------------------------------
 
 -- Whats new info
-SMARTBUFF_WHATSNEW = "\n\n|cffffffff         Whats new:|r\n\n"
-  .."          |cffffffffClassic version by Codermik, additional retail coding\n"
-  .."          by Speedwaystar.\n\n\n"
-  .."          Changes in r50.310823:\n\n"
-  .."             * Fixed druid linked buff prompts.\n\n"
+SMARTBUFF_WHATSNEW = "\n\n"
+  .."          |cff00e0ffClassic & Retail versions by Codermik with additional\n"
+  .."          retail coding by Speedwaystar.\n\n"
+  .."          |cffffffffChanges in r51.071023 (WOTLK Classic):\n\n"
+  .."             * Fixed default configuration for Thorns.\n"
+  .."             * Fixed Priest Inner Fire reminder.\n"
+  .."             * Fixed Buff order not being saved.\n"
+  .."             * Other fixes and improvements.\n"
   .."\n\n"
   .."          |cffffff00I currently play on the Mirage Raceway EU classic\n"
   .."          WOTLK server as Alliance, I play on Mik, Gabella,\n"
@@ -20,9 +23,9 @@ SMARTBUFF_WHATSNEW = "\n\n|cffffffff         Whats new:|r\n\n"
 ;
 
 SMARTBUFF_CREDITS = "|cffffffff"
-  .."Retail & Classic by Codermik & Speedwaystar.  Please join to get support on our discord server:\n"
+  .."Classic & Retail versions by Codermik with additional programming and support by Speedwaystar.\n\nPlease join my discord server for support or chat:\n"
   .."|cff00e0ffhttps://discord.gg/R6EkZ94TKK\n\n"
-  .."|cffffffffIf you want to help support me and the development of this addon then please always download from Curse or use one of the following links:\n\n(I only ever upload to Curseforge)\n\n"
+  .."|cffffffffIf you want to help support me and the development of this addon then please always download from Curse or use one of the following links:\n\n"
   .."|cffffffffTwitch: |cff00e0ffhttps://www.twitch.tv/codermik\n"
   .."|cffffffffPayPal.Me: |cff00e0ffhttps://paypal.me/codermik\n\n"
 ;
@@ -115,7 +118,8 @@ SMARTBUFF_OFT_REBUFFTIMER    = "Rebuff Timer";
 SMARTBUFF_OFT_AUTOSWITCHTMP  = "Switch template";
 SMARTBUFF_OFT_SELFFIRST      = "Self first";
 SMARTBUFF_OFT_SCROLLWHEELUP  = "Buff on scrollwheel up";
-SMARTBUFF_OFT_SCROLLWHEELDOWN= "down";
+SMARTBUFF_OFT_SCROLLWHEELDOWN= "Down";
+SMARTBUFF_OFT_SCROLLZOOMING	 = "Zoom";
 SMARTBUFF_OFT_TARGETSWITCH   = "target change";
 SMARTBUFF_OFT_BUFFTARGET     = "Buff target";
 SMARTBUFF_OFT_BUFFPVP        = "Buff PvP";
@@ -165,6 +169,7 @@ SMARTBUFF_OFTT_REBUFFTIMER   = "How many seconds before a buff expires,\nthe rem
 SMARTBUFF_OFTT_SELFFIRST     = "Buffs your character first of all others.";
 SMARTBUFF_OFTT_SCROLLWHEELUP = "Cast buffs when you roll your\nscrollwheel forward.";
 SMARTBUFF_OFTT_SCROLLWHEELDOWN = "Cast buffs when you roll your\nscrollwheel backward.";
+SMARTBUFF_OFTT_SCROLLZOOMING = "Allow normal camera zooming while buffing missing buffs or abilities (original Smartbuff behaviour).\nNote that when this option is turned off its possible your camera zoom will be temporarily disabled\nwhen a buff or ability fails for whatever reason.";
 SMARTBUFF_OFTT_TARGETSWITCH  = "Cast buffs when you switch your target.";
 SMARTBUFF_OFTT_BUFFTARGET    = "Buffs first the current target,\nif it is friendly.";
 SMARTBUFF_OFTT_BUFFPVP       = "Buff PvP flagged players,\nalso if you are not PvP flagged.";
