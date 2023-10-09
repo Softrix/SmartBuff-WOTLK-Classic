@@ -3218,7 +3218,10 @@ function SMARTBUFF_Options_Init(self)
     InitBuffOrder(true);
   end
 
-  if (SMARTBUFF_OptionsGlobal == nil) then SMARTBUFF_OptionsGlobal = { }; end
+  if (SMARTBUFF_OptionsGlobal == nil) then 
+	  SMARTBUFF_OptionsGlobal = { }; 
+      SMARTBUFF_BuffOrderReset();
+  end
   OG = SMARTBUFF_OptionsGlobal;
   if (OG.SplashIcon == nil) then OG.SplashIcon = true; end
   if (OG.SplashMsgShort == nil) then OG.SplashMsgShort = false; end
