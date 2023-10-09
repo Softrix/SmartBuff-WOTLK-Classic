@@ -7,15 +7,16 @@
 -- Cast the most important buffs on you, tanks or party/raid members/pets.
 -------------------------------------------------------------------------------
 
-SMARTBUFF_DATE          = "071023";
+SMARTBUFF_DATE          = "091023";
 
-SMARTBUFF_VERSION       = "r51."..SMARTBUFF_DATE;
+SMARTBUFF_VERSION       = "r52."..SMARTBUFF_DATE;
 SMARTBUFF_VERSIONNR     = 30402;
+SMARTBUFF_VERWOTLK      = false;
 SMARTBUFF_TITLE         = "SmartBuff";
 SMARTBUFF_SUBTITLE      = "Supports you in casting buffs";
 SMARTBUFF_DESC          = "Cast the most important buffs on you, your tanks, party/raid members/pets";
 SMARTBUFF_VERS_TITLE    = SMARTBUFF_TITLE .. " " .. SMARTBUFF_VERSION;
-SMARTBUFF_OPTIONS_TITLE = SMARTBUFF_VERS_TITLE.." WOTLK ";
+SMARTBUFF_OPTIONS_TITLE = SMARTBUFF_VERS_TITLE.." Classic ";
 
 -- addon name
 local addonName = ...
@@ -111,8 +112,22 @@ local cPlayerTrackers = { };
 local cDisableTrackSwitch = false;
 local cLootOpenedDisable = false;
 
-local cClasses       = {"DRUID", "HUNTER", "MAGE", "PALADIN", "PRIEST", "ROGUE", "SHAMAN", "WARLOCK", "WARRIOR", "DEATHKNIGHT", "MONK", "DEMONHUNTER", "EVOKER", "HPET", "WPET", "DKPET", "TANK", "HEALER", "DAMAGER"};
-local cIgnoreClasses = { 11, 12, 13, 19 };
+local cClasses;
+local cIgnoreClasses;
+
+-- client version check
+if buildInfo < SMARTBUFF_VERSIONNR then
+    -- assume we are classic era/hardcore.
+    cClasses       = {"DRUID", "HUNTER", "MAGE", "PALADIN", "PRIEST", "ROGUE", "SHAMAN", "WARLOCK", "WARRIOR", "DEATHKNIGHT", "MONK", "DEMONHUNTER", "EVOKER", "HPET", "WPET", "DKPET", "TANK", "HEALER", "DAMAGER"};
+    cIgnoreClasses = { 10, 11, 12, 13, 16, 19 };
+	SMARTBUFF_VERWOTLK = false
+else
+    -- wrath of the lich king.
+    cClasses       = {"DRUID", "HUNTER", "MAGE", "PALADIN", "PRIEST", "ROGUE", "SHAMAN", "WARLOCK", "WARRIOR", "DEATHKNIGHT", "MONK", "DEMONHUNTER", "EVOKER", "HPET", "WPET", "DKPET", "TANK", "HEALER", "DAMAGER"};
+    cIgnoreClasses = { 11, 12, 13, 19 };
+    SMARTBUFF_VERWOTLK = true
+end
+
 local cOrderGrp      = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
 local cFonts         = {"NumberFontNormal", "NumberFontNormalLarge", "NumberFontNormalHuge", "GameFontNormal", "GameFontNormalLarge", "GameFontNormalHuge", "ChatFontNormal", "QuestFont", "MailTextFontNormal", "QuestTitleFont"};
 
@@ -152,10 +167,35 @@ local Icons = {
   ["NONE"]        = { IconPaths.Roles, 20/64, 39/64, 22/64, 41/64 },
 };
 
--- available sounds (34)
-local Sounds = { 1141, 3784, 4574, 17318, 15262, 13830, 15273, 10042, 10720, 17316, 3337, 15263, 13267, 8698, 3660, 
-	            15712, 9203, 12279, 3273, 13179, 13327, 9632, 10590, 3322, 718, 149, 15686, 6189, 7095, 6341, 6267,
-	            7894, 7914, 10033 }
+local tracker = ""
+
+-- available sounds (20)
+local soundPath = "Interface\\AddOns\\SmartBuff\\Sounds\\";
+local Sounds = {
+    "igPlayerBind.ogg",
+    "Aggro_Enter_Warning_State.ogg",
+    "Aggro_Pulled_Aggro.ogg",
+    "LFG_DungeonReady.ogg",
+    "LFG_Rewards.ogg",
+    "FX_SONIC_SPHEREPULSE_01.ogg",
+    "EyeOfKilroggDeath.ogg",
+    "GM_ChatWarning.ogg",
+    "gruntling_horn_bb.ogg",
+    "WispPissed3.ogg",
+    "UR_Kologarn_Slay02.ogg",
+    "UI_PetBattle_Victory02.ogg",
+    "PVPWarning.ogg",
+    "PVPFlagTakenHordeMono.ogg",
+    "YouAreWeak.ogg",
+    "PeasantPissed5.ogg",
+    "HumanFemaleSigh01.ogg",
+    "HumanMaleSigh01.ogg",
+    "GnomeMaleLaugh01.ogg",
+    "Emote_Whistle_01.ogg",
+    "VO_701_IMage_OF_Millhouse_Manastorm_05.ogg",
+    "VO_703_Millhouse_Manastorm_29_M.ogg",
+    "VO_901_Millificent_Manastorm_193617.ogg",
+};
 
 local DebugChatFrame = DEFAULT_CHAT_FRAME;
 
@@ -217,7 +257,7 @@ local CY  = BCC(0.5, 1, 1);
 
 -- function to preview selected warning sound in options screen
 function SMARTBUFF_PlaySpashSound()
-  PlaySound(Sounds[O.AutoSoundSelection]);
+  PlaySoundFile(soundPath..Sounds[O.AutoSoundSelection]);
 end
 
 function SMARTBUFF_ChooseSplashSound()
@@ -425,7 +465,7 @@ end
 
 -- toggle the auto gathering switcher.
 function ToggleAutoGatherer()
-    if (not isInit) then return end
+    if (not isInit or not SMARTBUFF_VERWOTLK) then return end
     O.TrackSwitchActive = not O.TrackSwitchActive;
     if not SmartBuffOptionsFrame:IsShown() then         -- quiet while in options
 	    if O.TrackSwitchActive then 
@@ -439,7 +479,7 @@ end
 
 -- Read number of tracking abilities
 function ScanPlayerTrackers()
-    if (not isInit) then return end
+    if (not isInit or not SMARTBUFF_VERWOTLK) then return end
 	local count = C_Minimap.GetNumTrackingTypes();
 	local spellcount = 0;
 	cPlayerTrackers = { };
@@ -459,7 +499,7 @@ end
 -- toggle trackers
 local lastFire = GetTime()
 function ToggleGatheringTrackers()
-    if (not isInit) then return end
+    if (not isInit or not SMARTBUFF_VERWOTLK) then return end
     local tmptable
 	if O.TrackSwitchActive and not cDisableTrackSwitch and not cLootOpenedDisable then
 		local currentTime = GetTime()
@@ -520,6 +560,8 @@ function SMARTBUFF_OnLoad(self)
   self:RegisterEvent("UPDATE_MOUSEOVER_UNIT");
   self:RegisterEvent("UNIT_SPELLCAST_FAILED");
   self:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED");
+  self:RegisterEvent("MINIMAP_UPDATE_TRACKING")
+
   --auto template events
   self:RegisterEvent("ZONE_CHANGED_NEW_AREA")
   self:RegisterEvent("GROUP_ROSTER_UPDATE")
@@ -558,6 +600,12 @@ function SMARTBUFF_OnEvent(self, event, ...)
       isSetZone = true;
       tStartZone = GetTime();
     end
+
+  elseif event == "MINIMAP_UPDATE_TRACKING" and not SMARTBUFF_VERWOTLK then
+      if not GetTrackingTexture() then
+        -- we dont have a tracker so force a reset.
+        tracker = "";
+	  end
 
   elseif(event == "ADDON_LOADED" and arg1 == SMARTBUFF_TITLE) then
     isLoaded = true;
@@ -1165,7 +1213,7 @@ function SMARTBUFF_SetBuff(buff, i, ia)
     cBuffs[i].IDS, cBuffs[i].BookID = SMARTBUFF_GetSpellID(cBuffs[i].BuffS);
   end
 
-  if (cBuffs[i].IDS == nil and not(SMARTBUFF_IsItem(cBuffs[i].Type) or cBuffs[i].Type == SMARTBUFF_CONST_TRACK)) then
+  if (cBuffs[i].IDS == nil and not(SMARTBUFF_IsItem(cBuffs[i].Type) or cBuffs[i].Type == SMARTBUFF_CONST_TRACK or (cBuffs[i].Type == SMARTBUFF_CONST_GATHERING and not SMARTBUFF_VERWOTLK))) then
     cBuffs[i] = nil;
     return i;
   end
@@ -1178,7 +1226,25 @@ function SMARTBUFF_SetBuff(buff, i, ia)
   if (cBuffs[i].IDS ~= nil) then
     cBuffs[i].IconS = GetSpellTexture(cBuffs[i].BuffS);
   else
-    if (cBuffs[i].Type == SMARTBUFF_CONST_TRACK) then
+
+    if (cBuffs[i].Type == SMARTBUFF_CONST_GATHERING) and not SMARTBUFF_VERWOTLK then	
+        local b = false;
+        for key, spellId in ipairs(SBClassicGatherers) do
+		    spellName = GetSpellInfo(spellId)
+            if spellName ~= nil then
+		        if IsPlayerSpell(spellId) and spellName == cBuffs[i].BuffS then
+		            b = true;	
+			        cBuffs[i].IDS = spellId;
+			        cBuffs[i].IconS = GetSpellTexture(spellId);
+		        end
+            end
+	    end	
+      if (not b) then
+        cBuffs[i] = nil;
+        return i;
+      end
+
+    elseif (cBuffs[i].Type == SMARTBUFF_CONST_TRACK) and SMARTBUFF_VERWOTLK then
       local b = false;
       for n = 1, C_Minimap.GetNumTrackingTypes() do
 	      local trackN, trackT, trackA, trackC = C_Minimap.GetTrackingInfo(n);
@@ -1834,7 +1900,7 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
         SMARTBUFF_AddMsgD("Exclusive check on " .. spell .. ", current spell = " .. buffnS);
       end
       if (bUsable and cBuff.Type == SMARTBUFF_CONST_SELF and not SMARTBUFF_IsPlayer(unit)) then bUsable = false end
-      if (bUsable and not cBuff.Type == SMARTBUFF_CONST_TRACK and not SMARTBUFF_IsItem(cBuff.Type) and not IsUsableSpell(buffnS)) then bUsable = false end
+      if ((bUsable and not cBuff.Type == SMARTBUFF_CONST_TRACK) and not SMARTBUFF_IsItem(cBuff.Type) and not IsUsableSpell(buffnS)) then bUsable = false end
       if (bUsable and bs.SelfNot and SMARTBUFF_IsPlayer(unit)) then bUsable = false end
       if (bUsable and cBuff.Params == SG.CheckFishingPole and SMARTBUFF_IsFishingPoleEquiped()) then bUsable = false end
 
@@ -1992,8 +2058,24 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
               or SMARTBUFF_IsInList(unit, un, bs.AddList))) then
               buff = nil;
 
+              -- Gathering ability ------------------------------------------------------------------------
+              if (cBuff.Type == SMARTBUFF_CONST_GATHERING and not SMARTBUFF_VERWOTLK) then
+                local b = false;
+                for key, spellId in ipairs(SBClassicGatherers) do
+		            spellName = GetSpellInfo(spellId)
+                    if spellName ~= nil and spellName ~= tracker then
+		                if IsPlayerSpell(spellId) and spellName == buffnS then
+		                    CastSpellByName(spellName)
+                            tracker = spellName
+                            SMARTBUFF_AddMsgD(spellName.." applied.");
+		                end
+                    else
+                        isPrompting = false  
+                    end
+	            end	
+
               -- Tracking ability ------------------------------------------------------------------------
-              if (cBuff.Type == SMARTBUFF_CONST_TRACK) then
+              elseif (cBuff.Type == SMARTBUFF_CONST_TRACK) then
                 local count = C_Minimap.GetNumTrackingTypes();
                 for n = 1, C_Minimap.GetNumTrackingTypes() do
 	                local trackN, trackT, trackA, trackC = C_Minimap.GetTrackingInfo(n);
@@ -2468,7 +2550,7 @@ function SMARTBUFF_SetMissingBuffMessage(target, buff, icon, bCanCharge, nCharge
 
   -- play sound
   if (O.ToggleAutoSound) then
-    PlaySound(Sounds[O.AutoSoundSelection]);
+    PlaySoundFile(soundPath..Sounds[O.AutoSoundSelection]);
   end
 end
 
@@ -3023,7 +3105,7 @@ function SMARTBUFF_Options_Init(self)
   if (isInit) then return; end
 
   -- test if this is the intended client
-  if (buildInfo < SMARTBUFF_VERSIONNR) or (buildInfo > 100000) then    
+  if buildInfo > 100000 then    
     if smVerWarn then 
         DEFAULT_CHAT_FRAME:AddMessage("|cff00e0ffSmartbuff Build "..SMARTBUFF_VERSION.." (Client: "..buildInfo..")|cffffffff "..SMARTBUFF_NOTINTENDEDCLIENT)
 	end
@@ -3064,7 +3146,7 @@ function SMARTBUFF_Options_Init(self)
   if (O.RebuffTimer == nil) then O.RebuffTimer = 20; end
   if (O.SplashDuration == nil) then O.SplashDuration = 2; end
   if (O.SplashIconSize == nil) then O.SplashIconSize = 16; end
-  if (O.BuffTarget == nil) then O.BuffTarget = false; end
+  if (O.BuffTarget == nil) then O.BuffTarget = true; end
   if (O.BuffPvP == nil) then O.BuffPvP = false; end
   if (O.BuffInCities == nil) then O.BuffInCities = true; end
   if (O.LinkSelfBuffCheck == nil) then O.LinkSelfBuffCheck = true; end
@@ -3248,6 +3330,10 @@ function SMARTBUFF_Options_Init(self)
 
   -- regardless of the option in settings, grab info on gathering trackers
   ScanPlayerTrackers();
+
+  if not SMARTBUFF_VERWOTLK then
+    O.TrackSwitchActive = false;
+  end
 
   isSyncReq = true;
 
@@ -3545,7 +3631,6 @@ end
 
 function SMARTBUFF_OptionsFrame_Toggle()
   if (not isInit) then return; end
-
   if(SmartBuffOptionsFrame:IsVisible()) then
     if(iLastBuffSetup > 0) then
       SmartBuff_BuffSetup:Hide();
@@ -3850,6 +3935,16 @@ function SMARTBUFF_Options_OnShow()
   SmartBuffOptionsFrame_cbSelfFirst:SetChecked(B[CS()][currentTemplate].SelfFirst);
 
   SMARTBUFF_Splash_Show();
+
+  -- if we are classic era or hardcore, hide some
+  -- stuff we dont need or can't use.
+  if not SMARTBUFF_VERWOTLK then
+    SmartBuffOptionsFrame_cbGatherAutoSwitch:Disable();
+    SmartBuffOptionsFrame_cbGatherAutoSwitchFish:Disable();
+    SmartBuffOptionsFrame_cbGatherAutoDisableTracker:Disable();
+    SmartBuffOptionsFrame_cbFixBuffIssue:Disable();
+  end
+
 
   SMARTBUFF_AddMsgD("Option frame updated: " .. currentTemplate);
 end

@@ -465,7 +465,7 @@
 			<AbsDimension x="560" y="770" />
 		</Size>
 		<Anchors>
-			<Anchor x="-866" y="245" point="CENTER" />
+			<Anchor point="CENTER" />
 		</Anchors>
 		<Layers>
 			<Layer>
@@ -1578,7 +1578,7 @@
 						end
 					</OnShow>
 					<OnLoad>
-						SmartBuffOptionsFrameSlider_OnLoad(self, 1, 34, 1);
+						SmartBuffOptionsFrameSlider_OnLoad(self, 1, 23, 1);
 						BackdropTemplateMixin.OnBackdropLoaded(self);
 					</OnLoad>
 					<OnEnter>

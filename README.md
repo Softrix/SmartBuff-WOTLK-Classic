@@ -1,6 +1,6 @@
-# SmartBuff Wrath of the Lich King CLassic
+# SmartBuff Wrath of the Lich King CLassic / Classic ERA and Classic Hardcore
 
-For clarity, this repository is ONLY for the WOTLK Classic version of the client as listed above, and it is not the Retail or Classic Era.
+For clarity, this repository is ONLY for the Classic version of the client as listed above, and it is not the Retail.
 
 SmartBuff is a buff addon to monitor you, your party or raids buffs easily and quickly allowing you to cast those that are missing - all classes are supported.
 
