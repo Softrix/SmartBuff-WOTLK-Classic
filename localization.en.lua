@@ -6,12 +6,16 @@
 SMARTBUFF_WHATSNEW = "\n\n"
   .."          |cff00e0ffClassic & Retail versions by Codermik with additional\n"
   .."          retail coding by Speedwaystar.\n\n"
-  .."          |cffffffffChanges in r52.091023 (Classic):\n\n"
+  .."          |cffffffffChanges in r53.111023 (Classic):\n\n"
   .."             * Classic Era, Hardcore and WOTLK now share \n"
-  .."               the same codebase, this will make my life\n"
-  .."               so much easier moving forward :)\n"
+  .."                the same codebase, this will make my life\n"
+  .."                so much easier moving forward :)\n\n"
+  .."             * WOTLK TOC Updated to 30403 \n\n"
   .."             * Sounds are now local, this allows me to provide \n"
-  .."               retail or custom sounds for splash prompts.\n"
+  .."                retail or custom sounds for splash prompts.\n\n"
+  .."             * Under classic era and hardcore Mage Mana Gems \n"
+  .."                are separated and can now all be created.\n\n"
+  .."             * Added some missing sounds originally in ERA. \n\n"
   .."\n\n"
   .."          |cffffff00I currently play on the Mirage Raceway EU classic\n"
   .."          WOTLK server as Alliance, I play on Mik, Gabella,\n"
@@ -180,7 +184,7 @@ SMARTBUFF_OFTT_CHECKCHARGES  = "Displays low amount of\ncharges on a buff.\n0 = 
 SMARTBUFF_OFTT_BUFFINCITIES  = "Buffs also if you are in capital cities.\nIf you are PvP flagged, it buffs in any case.";
 SMARTBUFF_OFTT_BLDURATION    = "How many seconds, players will be blacklisted.\n0 = Deactivated";
 SMARTBUFF_OFTT_ANTIDAZE      = "Automatically cancels the\naspect of the cheetah/pack\nif someone gets dazed\n(self or group).";
-SMARTBUFF_OFTT_SPLASHSTYLE   = "Changes the fontstyle of\nthe buff messages.";
+SMARTBUFF_OFTT_SPLASHSTYLE   = "Changes the font style of\nthe buff messages.";
 SMARTBUFF_OFTT_HIDESABUTTON  = "Hides the SmartBuff action button.";
 SMARTBUFF_OFTT_INCOMBAT      = "At the moment it only works on yourself.\nThe first buff you mark as in combat,\nwill set on the button before combat\nand you can use it in combat.\n!!! Warning !!!\nAll logic is disabled in combat!";
 SMARTBUFF_OFTT_SMARTDEBUFF   = "Shows the SmartDebuff frame.";

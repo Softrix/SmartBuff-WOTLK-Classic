@@ -82,8 +82,8 @@ function SMARTBUFF_InitItemList()
   _,SMARTBUFF_SPELLSMASTER                  = GetItemInfo(41194);       --"Master Spellstone"
   _,SMARTBUFF_SPELLSDEMONIC                 = GetItemInfo(41195);       --"Demonic Spellstone"
   _,SMARTBUFF_SPELLSGRAND                   = GetItemInfo(41196);       --"Grand Spellstone"  
-  _,SMARTBUFF_MANAGEM                       = GetItemInfo(36799);       --"Mana Gem"
-  _,SMARTBUFF_BRILLIANTMANAGEM              = GetItemInfo(81901);       --"Brilliant Mana Gem"
+--  _,SMARTBUFF_MANAGEM                       = GetItemInfo(36799);       --"Mana Gem"
+--  _,SMARTBUFF_BRILLIANTMANAGEM              = GetItemInfo(81901);       --"Brilliant Mana Gem"
   _,SMARTBUFF_SSROUGH                       = GetItemInfo(2862);        --"Rough Sharpening Stone"
   _,SMARTBUFF_SSCOARSE                      = GetItemInfo(2863);        --"Coarse Sharpening Stone"
   _,SMARTBUFF_SSHEAVY                       = GetItemInfo(2871);        --"Heavy Sharpening Stone"
@@ -217,6 +217,12 @@ function SMARTBUFF_InitItemList()
   _,SMARTBUFF_ANESTHETICPOISON1			    = GetItemInfo(21835);	    -- Anesthetic Poison  
   _,SMARTBUFF_ANESTHETICPOISON2			    = GetItemInfo(43237);	    -- Anesthetic Poison II 
 
+  -- ignored under wotlk
+  SMARTBUFF_MANAAGATE			            = GetItemInfo(5514);	    -- Mana Agate 
+  SMARTBUFF_MANACITRINE		                = GetItemInfo(8007);	    -- Mana Citrine 
+  SMARTBUFF_MANAJADE			            = GetItemInfo(5513);	    -- Mana Jade
+  SMARTBUFF_MANARUBY			            = GetItemInfo(8008);	    -- Mana Ruby 
+  
   -- Food item IDs
   S.FoodItems = GetItems({39691, 34125, 42997, 42998, 42999, 43000, 43015, 34767, 42995, 34769, 34753, 34754, 
                         34758, 34766, 42994, 42996, 34756, 34768, 42993, 34755, 43001, 34757, 34752, 34751, 
@@ -321,7 +327,7 @@ function SMARTBUFF_InitItemList()
   _,SMARTBUFF_ELIXIR15            = GetItemInfo(9187);   --"Elixir of Greater Agility"
   _,SMARTBUFF_ELIXIR16            = GetItemInfo(28103);  --"Adept's Elixir"
   _,SMARTBUFF_ELIXIR17            = GetItemInfo(40070);  --"Spellpower Elixir"
-
+ 
   -- fishing pole
   _, _, _, _, _, _, S.FishingPole = GetItemInfo(6256);  --"Fishing Pole"
   SMARTBUFF_AddMsgD("Item list initialized");
@@ -407,7 +413,14 @@ function SMARTBUFF_InitSpellIDs()
   SMARTBUFF_CONJWATER           = GetSpellInfo(5504);       --"Conjure Water"
   SMARTBUFF_CONJREFRESHMENT     = GetSpellInfo(42955);      --"Conjure Refreshment"
   SMARTBUFF_RITUALREFRESHMENT   = GetSpellInfo(43987);      --"Ritual Refreshment"
-  SMARTBUFF_CREATEMGEM		    = GetSpellInfo(759);        --"Conjure Mana Gem"
+  
+  -- separated for the purpose of classic era where multiple gems can be created,
+  -- but under wrath the highest is always created.
+  SMARTBUFF_CREATEMGEM_AGATE    = GetSpellInfo(759);        --"Conjure Mana Agate under classic era but Conjure Mana Gem in WOTLK"
+  SMARTBUFF_CREATEMGEM_CITRINE  = GetSpellInfo(10053);      --"Conjure Mana Citrine - ignored in Wrath"
+  SMARTBUFF_CREATEMGEM_JADE     = GetSpellInfo(3552);       --"Conjure Mana Jade - ignored in wrath"
+  SMARTBUFF_CREATEMGEM_RUBY     = GetSpellInfo(10054);      --"Conjure Mana Ruby - ignored in wrath"
+  
   -- Mage buff links
   S.ChainMageArmor = { SMARTBUFF_ICEARMOR, SMARTBUFF_FROSTARMOR, SMARTBUFF_MAGEARMOR, SMARTBUFF_MOLTENARMOR };
   S.ChainMageBuffs = { SMARTBUFF_AI, SMARTBUFF_AB, SMARTBUFF_DALI, SMARTBUFF_DALARANB }
@@ -861,8 +874,11 @@ function SMARTBUFF_InitSpellList()
       {SMARTBUFF_CONJFOOD, -1, SMARTBUFF_CONST_SELF},
       {SMARTBUFF_CONJWATER, -1, SMARTBUFF_CONST_SELF},
       {SMARTBUFF_CONJREFRESHMENT, -1, SMARTBUFF_CONST_SELF},
-      {SMARTBUFF_RITUALREFRESHMENT, -1, SMARTBUFF_CONST_SELF},
-      {SMARTBUFF_CREATEMGEM, -1, SMARTBUFF_CONST_SELF},
+      {SMARTBUFF_RITUALREFRESHMENT, -1, SMARTBUFF_CONST_SELF},	  
+      {SMARTBUFF_CREATEMGEM_AGATE, -1, SMARTBUFF_CONST_SELF},
+      {SMARTBUFF_CREATEMGEM_CITRINE, -1, SMARTBUFF_CONST_SELF},
+      {SMARTBUFF_CREATEMGEM_JADE, -1, SMARTBUFF_CONST_SELF},
+      {SMARTBUFF_CREATEMGEM_RUBY, -1, SMARTBUFF_CONST_SELF},
     };
   end
 

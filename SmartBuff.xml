@@ -1578,7 +1578,7 @@
 						end
 					</OnShow>
 					<OnLoad>
-						SmartBuffOptionsFrameSlider_OnLoad(self, 1, 23, 1);
+						SmartBuffOptionsFrameSlider_OnLoad(self, 1, 39, 1);
 						BackdropTemplateMixin.OnBackdropLoaded(self);
 					</OnLoad>
 					<OnEnter>

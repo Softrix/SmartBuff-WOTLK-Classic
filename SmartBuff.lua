@@ -7,10 +7,10 @@
 -- Cast the most important buffs on you, tanks or party/raid members/pets.
 -------------------------------------------------------------------------------
 
-SMARTBUFF_DATE          = "091023";
+SMARTBUFF_DATE          = "111023";
 
-SMARTBUFF_VERSION       = "r52."..SMARTBUFF_DATE;
-SMARTBUFF_VERSIONNR     = 30402;
+SMARTBUFF_VERSION       = "r53."..SMARTBUFF_DATE;
+SMARTBUFF_VERSIONNR     = 30403;
 SMARTBUFF_VERWOTLK      = false;
 SMARTBUFF_TITLE         = "SmartBuff";
 SMARTBUFF_SUBTITLE      = "Supports you in casting buffs";
@@ -26,7 +26,7 @@ local SmartbuffCommands = { "SBCVER", "SBCCMD", "SBCSYC" }
 local SmartbuffSession = true;
 local SmartbuffVerCheck = false;					-- for my use when checking guild users/testers versions  :)
 local buildInfo = select(4, GetBuildInfo())
-local SmartbuffRevision = 51;
+local SmartbuffRevision = 53;
 local SmartbuffVerNotifyList = {}
 
 -- Using LibRangeCheck-2.0 by Mitchnull
@@ -169,7 +169,7 @@ local Icons = {
 
 local tracker = ""
 
--- available sounds (20)
+-- available sounds (39)
 local soundPath = "Interface\\AddOns\\SmartBuff\\Sounds\\";
 local Sounds = {
     "igPlayerBind.ogg",
@@ -180,9 +180,25 @@ local Sounds = {
     "FX_SONIC_SPHEREPULSE_01.ogg",
     "EyeOfKilroggDeath.ogg",
     "GM_ChatWarning.ogg",
+    "Bloodlust_player_cast_head.ogg",
+    "collectfruit.ogg",
+    "collectgold.ogg",
+    "collectspud.ogg",
+    "collectwings.ogg",
+    "EnlargeCast.ogg",
+    "exitlevelunlocked.ogg",
+    "GO_7LF_Lightforged_Barrier_Death.ogg",
+    "RTC_80_ARD_Anvil_Strike.ogg",
+    "RTC_80_KAG_TransitionFX_In.ogg",
+    "SPELL_MK_BREW_DRINK01.ogg",
+    "SPELL_ShadowStrike_Cast.ogg",
+    "witchflyaway.ogg",
     "gruntling_horn_bb.ogg",
     "WispPissed3.ogg",
-    "UR_Kologarn_Slay02.ogg",
+    "FluteRun.ogg",                     -- just for you Emmalee  ;-)
+    "GnomeFemaleMainJump.ogg",
+    "ShaysBell.ogg",
+	"UR_Kologarn_Slay02.ogg",
     "UI_PetBattle_Victory02.ogg",
     "PVPWarning.ogg",
     "PVPFlagTakenHordeMono.ogg",
@@ -1932,24 +1948,56 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
 
       -- check for mage conjured items
       if (bUsable and sPlayerClass == "MAGE") then
-	    local lookupData
-        if (buffnS == SMARTBUFF_CONJFOOD or buffnS == SMARTBUFF_CONJREFRESHMENT) then lookupData = ConjuredMageFood
-		elseif (buffnS == SMARTBUFF_CONJWATER or buffnS == SMARTBUFF_CONJREFRESHMENT) then lookupData = ConjuredMageWater
-		elseif buffnS == SMARTBUFF_CREATEMGEM then lookupData = ConjuredMageGems end
-        if lookupData and isPlayerMoving == false then
-	        for count, value in next, lookupData do  
-		        if value then 
-                    itemInfo = GetItemInfo(value)
-                    if SMARTBUFF_CheckBagItem(itemInfo) then
-				        bUsable = false;
-				    end
+        if SMARTBUFF_VERWOTLK then
+	        local lookupData
+            if (buffnS == SMARTBUFF_CONJFOOD or buffnS == SMARTBUFF_CONJREFRESHMENT) then lookupData = ConjuredMageFood
+		    elseif (buffnS == SMARTBUFF_CONJWATER or buffnS == SMARTBUFF_CONJREFRESHMENT) then lookupData = ConjuredMageWater
+		    elseif buffnS == SMARTBUFF_CREATEMGEM_AGATE then lookupData = ConjuredMageGems end
+            if lookupData and isPlayerMoving == false then
+	            for count, value in next, lookupData do  
+		            if value then             
+                        itemInfo = GetItemInfo(value)
+                        if SMARTBUFF_CheckBagItem(itemInfo) then
+				            bUsable = false;
+                            break
+				        end
+		            end
+	            end
+            elseif lookupData and isPlayerMoving then
+                bUsable = false;
+		    end
+        else            
+            -- classic era / hardcore mana gems & food check, a little dirty but it works for now,
+            -- i'll come back to this later and tidy it up :)
+            if not isPlayerMoving then
+                local lookupData
+                if (buffnS == SMARTBUFF_CONJFOOD) then 
+					lookupData = ConjuredMageFood
+		        elseif (buffnS == SMARTBUFF_CONJWATER) then 
+					lookupData = ConjuredMageWater 
+				end
+                if lookupData then
+	                for count, value in next, lookupData do  
+		                if value then 
+                            itemInfo = GetItemInfo(value)
+                            if SMARTBUFF_CheckBagItem(itemInfo) then
+				                bUsable = false;
+				            end
+		                end
+	                end
 		        end
-	        end
-        elseif lookupData and isPlayerMoving then
-            bUsable = false;
+                if (buffnS == SMARTBUFF_CREATEMGEM_AGATE and SMARTBUFF_CheckBagItem(SMARTBUFF_MANAAGATE)) or
+                    (buffnS == SMARTBUFF_CREATEMGEM_CITRINE and SMARTBUFF_CheckBagItem(SMARTBUFF_MANACITRINE)) or
+                    (buffnS == SMARTBUFF_CREATEMGEM_JADE and SMARTBUFF_CheckBagItem(SMARTBUFF_MANAJADE)) or
+                    (buffnS == SMARTBUFF_CREATEMGEM_RUBY and SMARTBUFF_CheckBagItem(SMARTBUFF_MANARUBY)) then
+			        bUsable = false;
+			    end
+			else
+			    bUsable = false;
+			end
 		end
 	  end
-      
+    
       -- check for warlock conjured items
       if (bUsable and sPlayerClass == "WARLOCK") then
           local itemInfo, bag, slot, count, maxHealth, currentHealth, lookupData
