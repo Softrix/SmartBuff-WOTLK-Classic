@@ -614,7 +614,7 @@ function SMARTBUFF_InitSpellIDs()
   SMARTBUFF_WarStomp        = GetSpellInfo(20549); --"War Stomp"
 
   -- Food
-  SMARTBUFF_FOOD_AURA       = GetSpellInfo(46899); --"Well Fed"
+  SMARTBUFF_FOOD_AURA       = GetSpellInfo(19705); --"Well Fed"
   SMARTBUFF_FOOD_SPELL      = GetSpellInfo(433);   --"Food"
   SMARTBUFF_DRINK_SPELL     = GetSpellInfo(430);   --"Drink"
 

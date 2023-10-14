@@ -7,9 +7,9 @@
 -- Cast the most important buffs on you, tanks or party/raid members/pets.
 -------------------------------------------------------------------------------
 
-SMARTBUFF_DATE          = "111023";
+SMARTBUFF_DATE          = "141023";
 
-SMARTBUFF_VERSION       = "r53."..SMARTBUFF_DATE;
+SMARTBUFF_VERSION       = "r54."..SMARTBUFF_DATE;
 SMARTBUFF_VERSIONNR     = 30403;
 SMARTBUFF_VERWOTLK      = false;
 SMARTBUFF_TITLE         = "SmartBuff";
@@ -26,7 +26,7 @@ local SmartbuffCommands = { "SBCVER", "SBCCMD", "SBCSYC" }
 local SmartbuffSession = true;
 local SmartbuffVerCheck = false;					-- for my use when checking guild users/testers versions  :)
 local buildInfo = select(4, GetBuildInfo())
-local SmartbuffRevision = 53;
+local SmartbuffRevision = 54;
 local SmartbuffVerNotifyList = {}
 
 -- Using LibRangeCheck-2.0 by Mitchnull
@@ -136,7 +136,7 @@ local currentSpell = nil;
 local currentTemplate = nil;
 local currentSpec = nil;
 
-local imgSB      = "Interface\\Icons\\Spell_Nature_Purge";
+local imgSB      = "Interface\\Icons\\WoW_Token01";
 local imgIconOn  = "Interface\\AddOns\\SmartBuff\\Icons\\MiniMapButtonEnabled";
 local imgIconOff = "Interface\\AddOns\\SmartBuff\\Icons\\MiniMapButtonDisabled";
 
@@ -1276,6 +1276,7 @@ function SMARTBUFF_SetBuff(buff, i, ia)
         cBuffs[i] = nil;
         return i;
       end
+
     elseif (ia or cBuffs[i].Type == SMARTBUFF_CONST_ITEMGROUP) then
       local _, _, _, _, minLevel, _, _, _, _, texture = GetItemInfo(cBuffs[i].BuffS);
       if (not IsMinLevel(minLevel)) then
@@ -1967,8 +1968,6 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
                 bUsable = false;
 		    end
         else            
-            -- classic era / hardcore mana gems & food check, a little dirty but it works for now,
-            -- i'll come back to this later and tidy it up :)
             if not isPlayerMoving then
                 local lookupData
                 if (buffnS == SMARTBUFF_CONJFOOD) then 
@@ -1992,7 +1991,7 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
                     (buffnS == SMARTBUFF_CREATEMGEM_RUBY and SMARTBUFF_CheckBagItem(SMARTBUFF_MANARUBY)) then
 			        bUsable = false;
 			    end
-			else
+			elseif (buffnS == SMARTBUFF_CONJFOOD or buffnS == SMARTBUFF_CONJWATER) and isPlayerMoving then
 			    bUsable = false;
 			end
 		end
@@ -3194,7 +3193,7 @@ function SMARTBUFF_Options_Init(self)
   if (O.RebuffTimer == nil) then O.RebuffTimer = 20; end
   if (O.SplashDuration == nil) then O.SplashDuration = 2; end
   if (O.SplashIconSize == nil) then O.SplashIconSize = 16; end
-  if (O.BuffTarget == nil) then O.BuffTarget = true; end
+  if (O.BuffTarget == nil) then O.BuffTarget = false; end
   if (O.BuffPvP == nil) then O.BuffPvP = false; end
   if (O.BuffInCities == nil) then O.BuffInCities = true; end
   if (O.LinkSelfBuffCheck == nil) then O.LinkSelfBuffCheck = true; end

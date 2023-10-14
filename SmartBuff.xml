@@ -458,7 +458,7 @@
 				SMARTBUFF_SetButtonPos(self);
 			</OnDragStop>
 		</Scripts>
-		<NormalTexture file="Interface\Icons\Spell_Nature_Purge" />
+		<NormalTexture file="Interface\ICONS\WoW_Token01" />
 	</Button>
 	<Frame name="SmartBuffOptionsFrame" hidden="true" parent="UIParent" toplevel="true" movable="true" frameStrata="DIALOG" enableMouse="true">
 		<Size>
