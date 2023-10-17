@@ -83,6 +83,10 @@ SMARTBUFF_NOTINTENDEDCLIENT	 = "Diese Version von Smartbuff ist nicht für diese
 
 -- Options Frame Text
 
+-- show action button only when pending actions exist.
+SMARTBUFF_OFT_HIDEABNOACTION = "Nur bei Bedarf anzeigen";
+SMARTBUFF_OFTT_HIDEABNOACTION = "Blenden Sie die Aktionsschaltfläche aus, wenn keine Buffs für Sie selbst, Gruppenmitglieder, Raids oder Haustiere fehlen. Beachten Sie, dass die\nAktionsschaltfläche aktiviert sein muss, damit diese Option funktioniert.";
+
 -- experimental feature - for testing.
 SMARTBUFF_OFT_FIXBUFF		 = "Gießen reparieren"
 SMARTBUFF_OFTT_FIXBUFF		 = "Ankreuzen, wenn Smartbuff keine Buffs wirkt."

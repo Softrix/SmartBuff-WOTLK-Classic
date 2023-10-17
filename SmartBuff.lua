@@ -7,9 +7,9 @@
 -- Cast the most important buffs on you, tanks or party/raid members/pets.
 -------------------------------------------------------------------------------
 
-SMARTBUFF_DATE          = "141023";
+SMARTBUFF_DATE          = "171023";
 
-SMARTBUFF_VERSION       = "r54."..SMARTBUFF_DATE;
+SMARTBUFF_VERSION       = "r57."..SMARTBUFF_DATE;
 SMARTBUFF_VERSIONNR     = 30403;
 SMARTBUFF_VERWOTLK      = false;
 SMARTBUFF_TITLE         = "SmartBuff";
@@ -26,7 +26,7 @@ local SmartbuffCommands = { "SBCVER", "SBCCMD", "SBCSYC" }
 local SmartbuffSession = true;
 local SmartbuffVerCheck = false;					-- for my use when checking guild users/testers versions  :)
 local buildInfo = select(4, GetBuildInfo())
-local SmartbuffRevision = 54;
+local SmartbuffRevision = 57;
 local SmartbuffVerNotifyList = {}
 
 -- Using LibRangeCheck-2.0 by Mitchnull
@@ -136,7 +136,7 @@ local currentSpell = nil;
 local currentTemplate = nil;
 local currentSpec = nil;
 
-local imgSB      = "Interface\\Icons\\WoW_Token01";
+local imgSB      = "Interface\\Icons\\inv_gizmo_goblinboombox_01";
 local imgIconOn  = "Interface\\AddOns\\SmartBuff\\Icons\\MiniMapButtonEnabled";
 local imgIconOff = "Interface\\AddOns\\SmartBuff\\Icons\\MiniMapButtonDisabled";
 
@@ -1383,7 +1383,14 @@ function SMARTBUFF_PreCheck(mode, force)
     SMARTBUFF_ShowSAButton();
   end
 
-  SMARTBUFF_SetButtonTexture(SmartBuff_KeyButton, imgSB);
+  -- if we have nothing to do and the option is set then just hide the action button.
+  if O.HideSAButtonNoAction and not InCombatLockdown() then
+    SmartBuff_KeyButton:Hide()
+  end
+
+  if not O.HideSAButtonNoAction and not O.HideSAButton then
+    SMARTBUFF_SetButtonTexture(SmartBuff_KeyButton, imgSB);
+  end
   if (SmartBuffOptionsFrame:IsVisible()) then return false; end
 
   -- check for mount-spells
@@ -1925,6 +1932,10 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
       if (bUsable and cBuff.Params == SG.CheckPet and UnitExists("pet")) then bUsable = false end
       if (bUsable and cBuff.Params == SG.CheckPetNeeded and not UnitExists("pet")) then bUsable = false end
 
+      if O.HideSAButtonNoAction and not O.HideSAButton and not InCombatLockdown() then
+	    SmartBuff_KeyButton:Show();
+	  end
+
       -- Check for mount auras
       if (bUsable and (sPlayerClass == "PALADIN" or sPlayerClass == "DEATHKNIGHT")) then
         isMounted = false;
@@ -1967,14 +1978,18 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
             elseif lookupData and isPlayerMoving then
                 bUsable = false;
 		    end
-        else            
-            if not isPlayerMoving then
+        else 
+            -- is this food or water and im moving, if so just ignore it.
+            if (buffnS == SMARTBUFF_CONJFOOD or buffnS == SMARTBUFF_CONJWATER) and isPlayerMoving then
+		        bUsable = false;
+			else
+                -- im not moving.
                 local lookupData
                 if (buffnS == SMARTBUFF_CONJFOOD) then 
-					lookupData = ConjuredMageFood
+				    lookupData = ConjuredMageFood
 		        elseif (buffnS == SMARTBUFF_CONJWATER) then 
-					lookupData = ConjuredMageWater 
-				end
+				    lookupData = ConjuredMageWater 
+			    end
                 if lookupData then
 	                for count, value in next, lookupData do  
 		                if value then 
@@ -1985,14 +2000,18 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
 		                end
 	                end
 		        end
+            end
+            -- is it a mana gem while im moving?
+            if (buffnS == SMARTBUFF_CREATEMGEM_AGATE or buffnS == SMARTBUFF_CREATEMGEM_CITRINE or buffnS == SMARTBUFF_CREATEMGEM_JADE 
+                    or buffnS == SMARTBUFF_CREATEMGEM_RUBY) and isPlayerMoving then 
+                bUsable = false;
+			else
                 if (buffnS == SMARTBUFF_CREATEMGEM_AGATE and SMARTBUFF_CheckBagItem(SMARTBUFF_MANAAGATE)) or
                     (buffnS == SMARTBUFF_CREATEMGEM_CITRINE and SMARTBUFF_CheckBagItem(SMARTBUFF_MANACITRINE)) or
                     (buffnS == SMARTBUFF_CREATEMGEM_JADE and SMARTBUFF_CheckBagItem(SMARTBUFF_MANAJADE)) or
                     (buffnS == SMARTBUFF_CREATEMGEM_RUBY and SMARTBUFF_CheckBagItem(SMARTBUFF_MANARUBY)) then
 			        bUsable = false;
 			    end
-			elseif (buffnS == SMARTBUFF_CONJFOOD or buffnS == SMARTBUFF_CONJWATER) and isPlayerMoving then
-			    bUsable = false;
 			end
 		end
 	  end
@@ -2520,6 +2539,9 @@ function SMARTBUFF_BuffUnit(unit, subgroup, mode, spell)
         end -- group or self
       end
     end -- for buff
+  end
+  if O.HideSAButtonNoAction and not O.HideSAButton and not InCombatLockdown() then
+    SmartBuff_KeyButton:Hide();
   end
   isPrompting = false
   return 3;
@@ -3216,6 +3238,7 @@ function SMARTBUFF_Options_Init(self)
   if (O.ToggleMsgError == nil) then  O.ToggleMsgError = false; end
   if (O.HideMmButton == nil) then  O.HideMmButton = false; end
   if (O.HideSAButton == nil) then  O.HideSAButton = true; end
+  if (O.HideSAButtonNoAction == nil) then O.HideSAButtonNoAction = true; end
   -- tracking switcher, only works for herbs and minerals
   if (O.TrackSwitchActive == nil) then O.TrackSwitchActive = false; end
   if (O.TrackSwitchFish == nil) then O.TrackSwitchFish = false; end
@@ -3645,6 +3668,12 @@ function SMARTBUFF_OTrackDisableGrp()
         cDisableTrackSwitch = false;
     end
 end
+function SMARTBUFF_OHideSAButtonNoAction()
+    O.HideSAButtonNoAction = not O.HideSAButtonNoAction;
+    if not O.HideSAButtonNoAction and not O.HideSAButtonNoAction then
+	    SMARTBUFF_ShowSAButton();
+	end
+end
 
 function SMARTBUFF_OToggleBuff(s, i)
   local bs = GetBuffSettings(cBuffs[i].BuffS);
@@ -3967,6 +3996,7 @@ function SMARTBUFF_Options_OnShow()
   SmartBuffOptionsFrame_cbMsgError:SetChecked(O.ToggleMsgError);
   SmartBuffOptionsFrame_cbHideMmButton:SetChecked(O.HideMmButton);
   SmartBuffOptionsFrame_cbHideSAButton:SetChecked(O.HideSAButton);
+  SmartBuffOptionsFrame_cbHideSAButtonNoAction:SetChecked(O.HideSAButtonNoAction);
 
   SmartBuffOptionsFrame_cbGatherAutoSwitch:SetChecked(O.TrackSwitchActive);
   SmartBuffOptionsFrame_cbGatherAutoSwitchFish:SetChecked(O.TrackSwitchFish);
@@ -4501,7 +4531,9 @@ function SMARTBUFF_OnPostClick(self, button, down)
   self:SetAttribute("macrotext", nil);
   self:SetAttribute("action", nil);
 
-  SMARTBUFF_SetButtonTexture(SmartBuff_KeyButton, imgSB);
+  if not O.HideSAButtonNoAction and not O.HideSAButton then
+    SMARTBUFF_SetButtonTexture(SmartBuff_KeyButton, imgSB);
+  end
 
   -- ensure we reset the cvar back to the original players setting
   -- if it was previously changed due to casting issues.

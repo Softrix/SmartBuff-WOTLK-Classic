@@ -441,6 +441,8 @@ function SMARTBUFF_InitSpellIDs()
   SMARTBUFF_DRUID_DIREBEAR      = GetSpellInfo(9634);       --"Dire Bear Form"
   -- track humanoids
   SMARTBUFF_DRUID_TRACK         = GetSpellInfo(5225);       --"Track Humanoids"
+  -- other
+  SMARTBUFF_OMENOFCLARITY       = GetSpellInfo(16864)       --"Omen of Clarity"
   
   S.ChainDruidBuffs = { SMARTBUFF_MOTW, SMARTBUFF_GOTW }; 
 
@@ -898,8 +900,11 @@ function SMARTBUFF_InitSpellList()
       {SSMARTBUFF_DRUID_BEAR, -1, SMARTBUFF_CONST_SELF},
       {SMARTBUFF_DRUID_DIREBEAR, -1, SMARTBUFF_CONST_SELF},
       -- tracking.
-      {SMARTBUFF_DRUID_TRACK, -1, SMARTBUFF_CONST_SELF, nil, SMARTBUFF_DRUID_CAT}
+      {SMARTBUFF_DRUID_TRACK, -1, SMARTBUFF_CONST_SELF, nil, SMARTBUFF_DRUID_CAT},
+	  -- other
+	  {SMARTBUFF_OMENOFCLARITY, 10, SMARTBUFF_CONST_SELF},
     };
+	
   end
 
   -- Priest

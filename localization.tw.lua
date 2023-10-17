@@ -85,6 +85,10 @@ SMARTBUFF_NOTINTENDEDCLIENT	= "此版本的 Smartbuff 不適用於此客戶端�
 
 -- Options Frame Text
 
+-- show action button only when pending actions exist.
+SMARTBUFF_OFT_HIDEABNOACTION = "僅在需要時顯示";
+SMARTBUFF_OFTT_HIDEABNOACTION = "當您自己、團隊成員、團隊或寵物沒有失去增益時，請隱藏操作按鈕。 請注意，必須啟用\n操作按鈕才能使此選項發揮作用。";
+
 -- experimental feature - for testing.
 SMARTBUFF_OFT_FIXBUFF		 = "修復演員表"
 SMARTBUFF_OFTT_FIXBUFF		 = "如果施放增益失败，请勾选。"

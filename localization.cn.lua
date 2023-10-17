@@ -312,6 +312,10 @@ BINDING_NAME_SMARTBUFF_BIND_RESETBUFFTIMERS = "重新设定BUFF定时器";
 
 -- 设置窗口
 
+-- show action button only when pending actions exist.
+SMARTBUFF_OFT_HIDEABNOACTION = "仅在需要时显示";
+SMARTBUFF_OFTT_HIDEABNOACTION = "当您自己、队伍成员、团队或宠物没有丢失增益时，隐藏操作按钮。 请注意，必须启用\n操作按钮才能使此选项发挥作用。";
+
 -- experimental feature - for testing.
 SMARTBUFF_OFT_FIXBUFF		 = "修复 铸造"
 SMARTBUFF_OFTT_FIXBUFF		 = "如果施放 buff 失败，请勾选此选项。"

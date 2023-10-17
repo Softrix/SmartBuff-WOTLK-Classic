@@ -6,14 +6,8 @@
 SMARTBUFF_WHATSNEW = "\n\n"
   .."          |cff00e0ffClassic & Retail versions by Codermik with additional\n"
   .."          retail coding by Speedwaystar.\n\n"
-  .."          |cffffffffChanges in r54.141023 (Classic):\n\n"
-  .."             * Fixed Well Fed SpellId - Thanks EmmaLee \n\n"
-  .."             * Reverted back 'Buff Target' setting to off.\n\n"
-  .."             * Changed the default action button graphic\n"
-  .."                that shows when no action is needed to a\n"
-  .."                World of Warcraft logo.\n\n"
-  .."             * Fixed bug under Classic ERA preventing buffs \n"
-  .."                when running with your character. \n"
+  .."          |cffffffffChanges in r57.171023 (Classic):\n\n"
+  .."             * Fixed a LUA error caused while in combat.\n\n"
   .."\n\n"
   .."          |cffffff00I currently play on the Mirage Raceway EU classic\n"
   .."          WOTLK server as Alliance, I play on Mik, Gabella,\n"
@@ -94,6 +88,10 @@ SMARTBUFF_OFTT_AUTOGATHOFF	 = "Automatically switch this feature OFF when in a p
 SMARTBUFF_OFT_MOUNTEDWARN	 = "Prompt while mounted";
 SMARTBUFF_OFTT_MOUNTEDWARN	 = "Continue to remind me of missing buffs or abilities while I am mounted and automatically dismount to buff.";
 
+-- show action button only when pending actions exist.
+SMARTBUFF_OFT_HIDEABNOACTION = "Show only when needed";
+SMARTBUFF_OFTT_HIDEABNOACTION = "Hide the action button when there are no missing buffs\non yourself, party members, raid or pets. Note that the\nAction Button must be enabled for this option to work.";
+
 SMARTBUFF_OFT                = "SmartBuff On/Off";
 SMARTBUFF_OFT_MENU           = "Show/hide options menu";
 SMARTBUFF_OFT_AUTO           = "Reminder";
@@ -132,7 +130,7 @@ SMARTBUFF_OFT_RBT            = "Reset BT";
 SMARTBUFF_OFT_BUFFINCITIES   = "Buff in cities";
 SMARTBUFF_OFT_BLDURATION     = "Blacklisted";
 SMARTBUFF_OFT_ANTIDAZE       = "Anti daze";
-SMARTBUFF_OFT_HIDESABUTTON   = "Hide action button";
+SMARTBUFF_OFT_HIDESABUTTON   = "Disable Action Button";
 SMARTBUFF_OFT_INCOMBAT       = "in combat";
 SMARTBUFF_OFT_SMARTDEBUFF    = "SmartDebuff";
 SMARTBUFF_OFT_INSHAPESHIFT   = "Shapeshift";

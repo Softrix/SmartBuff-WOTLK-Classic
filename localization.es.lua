@@ -81,6 +81,11 @@ SMARTBUFF_NOTINTENDEDCLIENT	 = "Esta versión de Smartbuff no está diseñada para 
 
 -- Options Frame Text
 
+-- show action button only when pending actions exist.
+SMARTBUFF_OFT_HIDEABNOACTION = "Mostrar solo cuando sea necesario";
+SMARTBUFF_OFTT_HIDEABNOACTION = "Oculta el botón de acción cuando no falten beneficios\n para ti, los miembros del grupo, la banda o las mascotas. Tenga en cuenta que el botón\nAcción debe estar habilitado para que esta opción funcione.";
+
+
 -- experimental feature - for testing.
 SMARTBUFF_OFT_FIXBUFF		 = "Corregir fundición"
 SMARTBUFF_OFTT_FIXBUFF		 = "Marque si Smartbuff falla al lanzar beneficios."

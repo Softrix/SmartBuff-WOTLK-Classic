@@ -1,6 +1,6 @@
 ## Interface: 11404
 ## Title: |TInterface\Addons\Smartbuff\Icons\IconEnabled:0|t SmartBuff |cffffffff(ERA, HC)|r
-## Version: 52.11404
+## Version: 57.11404
 ## Author: |cff20d2ffCodermik & Aeldra|r (EU-Proudmoore)
 ## Contributing Author: |cff20d2ffSpeedwaystar
 ## Notes: Automatically cast buffs on yourself, your party or raid members and their pets. Use /sbm for the options menu.

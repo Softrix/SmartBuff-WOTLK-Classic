@@ -81,6 +81,10 @@ SMARTBUFF_NOTINTENDEDCLIENT	 = "Cette version de Smartbuff n'est pas destinée �
 
 -- Options Frame Text
 
+-- show action button only when pending actions exist.
+SMARTBUFF_OFT_HIDEABNOACTION = "Afficher uniquement en cas de besoin";
+SMARTBUFF_OFTT_HIDEABNOACTION = "Masquez le bouton d'action lorsqu'il ne manque aucun buff\non vous-même, les membres du groupe, le raid ou les animaux de compagnie. Notez que le\nbouton d'action doit être activé pour que cette option fonctionne.";
+
 -- experimental feature - for testing.
 SMARTBUFF_OFT_FIXBUFF		 = "buff Correctif "
 SMARTBUFF_OFTT_FIXBUFF		 = "Cochez si Smartbuff ne parvient pas à lancer des buffs."
